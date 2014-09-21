@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="JogoDoNilsonModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="JogoDoNilsonModelStoreContainer">
+          <EntitySet Name="jdn_cartas" EntityType="JogoDoNilsonModel.Store.jdn_cartas" store:Type="Tables" Schema="dbo" />
+        </EntityContainer>
+        <EntityType Name="jdn_cartas">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Custo" Type="int" Nullable="false" />
+          <Property Name="Ataque" Type="int" Nullable="false" />
+          <Property Name="Defesa" Type="int" Nullable="false" />
+          <Property Name="Descricao" Type="varchar" MaxLength="400" />
+          <Property Name="Classe" Type="varchar" MaxLength="50" />
+          <Property Name="Raça" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="JogoDoNilsonModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+        <EntityContainer Name="JogoDoNilsonEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="jdn_cartas" EntityType="JogoDoNilsonModel.Carta" />
+        </EntityContainer>
+        <EntityType Name="Carta">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+          <Property Name="Custo" Type="Int32" Nullable="false" />
+          <Property Name="Ataque" Type="Int32" Nullable="false" />
+          <Property Name="Defesa" Type="Int32" Nullable="false" />
+          <Property Name="Descricao" Type="String" MaxLength="400" Unicode="false" FixedLength="false" />
+          <Property Name="Classe" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="Raça" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="DataInclusao" Type="DateTime" Nullable="false" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="JogoDoNilsonModelStoreContainer" CdmEntityContainer="JogoDoNilsonEntities">
+          <EntitySetMapping Name="jdn_cartas">
+            <EntityTypeMapping TypeName="JogoDoNilsonModel.Carta">
+              <MappingFragment StoreEntitySet="jdn_cartas">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Nome" ColumnName="Nome" />
+                <ScalarProperty Name="Custo" ColumnName="Custo" />
+                <ScalarProperty Name="Ataque" ColumnName="Ataque" />
+                <ScalarProperty Name="Defesa" ColumnName="Defesa" />
+                <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+                <ScalarProperty Name="Classe" ColumnName="Classe" />
+                <ScalarProperty Name="Raça" ColumnName="Raça" />
+                <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram Name="Database">
+        <EntityTypeShape EntityType="JogoDoNilsonModel.Carta" Width="1.5" PointX="0.625" PointY="0.875" Height="2.7494921874999996" IsExpanded="true" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

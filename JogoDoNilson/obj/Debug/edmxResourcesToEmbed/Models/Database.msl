@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2008/09/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="JogoDoNilsonModelStoreContainer" CdmEntityContainer="JogoDoNilsonEntities">
+    <EntitySetMapping Name="jdn_cartas">
+      <EntityTypeMapping TypeName="JogoDoNilsonModel.Carta">
+        <MappingFragment StoreEntitySet="jdn_cartas">
+          <ScalarProperty Name="Id" ColumnName="Id" />
+          <ScalarProperty Name="Nome" ColumnName="Nome" />
+          <ScalarProperty Name="Custo" ColumnName="Custo" />
+          <ScalarProperty Name="Ataque" ColumnName="Ataque" />
+          <ScalarProperty Name="Defesa" ColumnName="Defesa" />
+          <ScalarProperty Name="Descricao" ColumnName="Descricao" />
+          <ScalarProperty Name="Classe" ColumnName="Classe" />
+          <ScalarProperty Name="Raça" ColumnName="Raça" />
+          <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

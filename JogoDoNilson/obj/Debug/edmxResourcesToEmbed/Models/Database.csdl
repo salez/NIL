@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="JogoDoNilsonModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
+  <EntityContainer Name="JogoDoNilsonEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="jdn_cartas" EntityType="JogoDoNilsonModel.Carta" />
+  </EntityContainer>
+  <EntityType Name="Carta">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Nome" Type="String" Nullable="false" MaxLength="100" Unicode="false" FixedLength="false" />
+    <Property Name="Custo" Type="Int32" Nullable="false" />
+    <Property Name="Ataque" Type="Int32" Nullable="false" />
+    <Property Name="Defesa" Type="Int32" Nullable="false" />
+    <Property Name="Descricao" Type="String" MaxLength="400" Unicode="false" FixedLength="false" />
+    <Property Name="Classe" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="Raça" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="DataInclusao" Type="DateTime" Nullable="false" />
+  </EntityType>
+</Schema>
