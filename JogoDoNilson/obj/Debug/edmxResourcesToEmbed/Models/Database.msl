@@ -4,6 +4,8 @@
     <EntitySetMapping Name="jdn_cartas">
       <EntityTypeMapping TypeName="JogoDoNilsonModel.Carta">
         <MappingFragment StoreEntitySet="jdn_cartas">
+          <ScalarProperty Name="classificacao" ColumnName="classificacao" />
+          <ScalarProperty Name="Active" ColumnName="Active" />
           <ScalarProperty Name="Id" ColumnName="Id" />
           <ScalarProperty Name="Nome" ColumnName="Nome" />
           <ScalarProperty Name="Custo" ColumnName="Custo" />
@@ -13,6 +15,14 @@
           <ScalarProperty Name="Classe" ColumnName="Classe" />
           <ScalarProperty Name="Raça" ColumnName="Raça" />
           <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="jdn_ClassificacaoCarta">
+      <EntityTypeMapping TypeName="JogoDoNilsonModel.ClassificacaoCarta">
+        <MappingFragment StoreEntitySet="jdn_ClassificacaoCarta">
+          <ScalarProperty Name="nome" ColumnName="nome" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

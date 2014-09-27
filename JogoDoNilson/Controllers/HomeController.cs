@@ -32,5 +32,17 @@ namespace JogoDoNilson.Controllers
 
             return View();
         }
+
+
+        public ActionResult PreviewDeck(string P)
+        {
+            Models.GameEngine Engine = new Models.GameEngine(Session);
+            Engine.StartGame();
+            if(P == "2")
+                return View("Index", Engine.PlayerTwo.Deck.AllCards());
+
+            return View("Index", Engine.PlayerOne.Deck.AllCards());
+
+        }
     }
 }

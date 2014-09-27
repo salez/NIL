@@ -2,6 +2,11 @@
 <Schema Namespace="JogoDoNilsonModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
   <EntityContainer Name="JogoDoNilsonEntities" annotation:LazyLoadingEnabled="true">
     <EntitySet Name="jdn_cartas" EntityType="JogoDoNilsonModel.Carta" />
+    <EntitySet Name="jdn_ClassificacaoCarta" EntityType="JogoDoNilsonModel.ClassificacaoCarta" />
+    <AssociationSet Name="FK__jdn_carta__class__4AB81AF0" Association="JogoDoNilsonModel.FK__jdn_carta__class__4AB81AF0">
+      <End Role="jdn_ClassificacaoCarta" EntitySet="jdn_ClassificacaoCarta" />
+      <End Role="Carta" EntitySet="jdn_cartas" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="Carta">
     <Key>
@@ -15,6 +20,29 @@
     <Property Name="Descricao" Type="String" MaxLength="400" Unicode="false" FixedLength="false" />
     <Property Name="Classe" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
     <Property Name="Raça" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-    <Property Name="DataInclusao" Type="DateTime" Nullable="false" />
+    <Property Name="DataInclusao" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Active" Type="Boolean" Nullable="false" />
+    <Property Name="classificacao" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="jdn_ClassificacaoCarta" Relationship="JogoDoNilsonModel.FK__jdn_carta__class__4AB81AF0" FromRole="Carta" ToRole="jdn_ClassificacaoCarta" />
   </EntityType>
+  <EntityType Name="ClassificacaoCarta">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="jdn_cartas" Relationship="JogoDoNilsonModel.FK__jdn_carta__class__4AB81AF0" FromRole="jdn_ClassificacaoCarta" ToRole="Carta" />
+  </EntityType>
+  <Association Name="FK__jdn_carta__class__4AB81AF0">
+    <End Type="JogoDoNilsonModel.ClassificacaoCarta" Role="jdn_ClassificacaoCarta" Multiplicity="1" />
+    <End Type="JogoDoNilsonModel.Carta" Role="Carta" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="jdn_ClassificacaoCarta">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="Carta">
+        <PropertyRef Name="classificacao" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

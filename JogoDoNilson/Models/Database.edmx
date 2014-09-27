@@ -4,31 +4,61 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="JogoDoNilsonModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
-        <EntityContainer Name="JogoDoNilsonModelStoreContainer">
-          <EntitySet Name="jdn_cartas" EntityType="JogoDoNilsonModel.Store.jdn_cartas" store:Type="Tables" Schema="dbo" />
-        </EntityContainer>
+    <Schema Namespace="JogoDoNilsonModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
         <EntityType Name="jdn_cartas">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="Nome" Type="varchar" Nullable="false" MaxLength="100" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
           <Property Name="Custo" Type="int" Nullable="false" />
           <Property Name="Ataque" Type="int" Nullable="false" />
           <Property Name="Defesa" Type="int" Nullable="false" />
           <Property Name="Descricao" Type="varchar" MaxLength="400" />
           <Property Name="Classe" Type="varchar" MaxLength="50" />
-          <Property Name="Raça" Type="varchar" Nullable="false" MaxLength="50" />
+          <Property Name="Raça" Type="varchar" MaxLength="50" Nullable="false" />
           <Property Name="DataInclusao" Type="datetime" Nullable="false" />
+          <Property Name="Active" Type="bit" Nullable="false" />
+          <Property Name="classificacao" Type="int" Nullable="false" />
         </EntityType>
-      </Schema>
-    </edmx:StorageModels>
+        <EntityType Name="jdn_ClassificacaoCarta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nome" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK__jdn_carta__class__4AB81AF0">
+          <End Role="jdn_ClassificacaoCarta" Type="Self.jdn_ClassificacaoCarta" Multiplicity="1" />
+          <End Role="jdn_cartas" Type="Self.jdn_cartas" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="jdn_ClassificacaoCarta">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="jdn_cartas">
+              <PropertyRef Name="classificacao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="JogoDoNilsonModelStoreContainer">
+          <EntitySet Name="jdn_cartas" EntityType="Self.jdn_cartas" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="jdn_ClassificacaoCarta" EntityType="Self.jdn_ClassificacaoCarta" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__jdn_carta__class__4AB81AF0" Association="Self.FK__jdn_carta__class__4AB81AF0">
+            <End Role="jdn_ClassificacaoCarta" EntitySet="jdn_ClassificacaoCarta" />
+            <End Role="jdn_cartas" EntitySet="jdn_cartas" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="JogoDoNilsonModel" Alias="Self" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2008/09/edm">
         <EntityContainer Name="JogoDoNilsonEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="jdn_cartas" EntityType="JogoDoNilsonModel.Carta" />
+          <EntitySet Name="jdn_ClassificacaoCarta" EntityType="JogoDoNilsonModel.ClassificacaoCarta" />
+          <AssociationSet Name="FK__jdn_carta__class__4AB81AF0" Association="JogoDoNilsonModel.FK__jdn_carta__class__4AB81AF0">
+            <End Role="jdn_ClassificacaoCarta" EntitySet="jdn_ClassificacaoCarta" />
+            <End Role="Carta" EntitySet="jdn_cartas" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="Carta">
           <Key>
@@ -42,8 +72,31 @@
           <Property Name="Descricao" Type="String" MaxLength="400" Unicode="false" FixedLength="false" />
           <Property Name="Classe" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="Raça" Type="String" Nullable="false" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="DataInclusao" Type="DateTime" Nullable="false" />
+          <Property Name="DataInclusao" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Active" Type="Boolean" Nullable="false" />
+          <Property Name="classificacao" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="jdn_ClassificacaoCarta" Relationship="JogoDoNilsonModel.FK__jdn_carta__class__4AB81AF0" FromRole="Carta" ToRole="jdn_ClassificacaoCarta" />
         </EntityType>
+        <EntityType Name="ClassificacaoCarta">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="jdn_cartas" Relationship="JogoDoNilsonModel.FK__jdn_carta__class__4AB81AF0" FromRole="jdn_ClassificacaoCarta" ToRole="Carta" />
+        </EntityType>
+        <Association Name="FK__jdn_carta__class__4AB81AF0">
+          <End Type="JogoDoNilsonModel.ClassificacaoCarta" Role="jdn_ClassificacaoCarta" Multiplicity="1" />
+          <End Type="JogoDoNilsonModel.Carta" Role="Carta" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="jdn_ClassificacaoCarta">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="Carta">
+              <PropertyRef Name="classificacao" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -53,6 +106,8 @@
           <EntitySetMapping Name="jdn_cartas">
             <EntityTypeMapping TypeName="JogoDoNilsonModel.Carta">
               <MappingFragment StoreEntitySet="jdn_cartas">
+                <ScalarProperty Name="classificacao" ColumnName="classificacao" />
+                <ScalarProperty Name="Active" ColumnName="Active" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
                 <ScalarProperty Name="Nome" ColumnName="Nome" />
                 <ScalarProperty Name="Custo" ColumnName="Custo" />
@@ -62,6 +117,14 @@
                 <ScalarProperty Name="Classe" ColumnName="Classe" />
                 <ScalarProperty Name="Raça" ColumnName="Raça" />
                 <ScalarProperty Name="DataInclusao" ColumnName="DataInclusao" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="jdn_ClassificacaoCarta">
+            <EntityTypeMapping TypeName="JogoDoNilsonModel.ClassificacaoCarta">
+              <MappingFragment StoreEntitySet="jdn_ClassificacaoCarta">
+                <ScalarProperty Name="nome" ColumnName="nome" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -81,12 +144,16 @@
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
         <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram Name="Database">
         <EntityTypeShape EntityType="JogoDoNilsonModel.Carta" Width="1.5" PointX="0.625" PointY="0.875" Height="2.7494921874999996" IsExpanded="true" />
+        <EntityTypeShape EntityType="JogoDoNilsonModel.ClassificacaoCarta" Width="1.5" PointX="2.75" PointY="0.875" />
+        <AssociationConnector Association="JogoDoNilsonModel.FK__jdn_carta__class__4AB81AF0" />
       </Diagram>
     </Diagrams>
   </Designer>
