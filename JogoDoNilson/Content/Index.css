@@ -1,0 +1,58 @@
+﻿html {
+    width: 100%;
+    height: 100%;
+}
+
+body, #body {
+    background-image: url('/Images/background-init.jpg');
+    background-size: 130%;
+    background-repeat: no-repeat;
+    background-position-y:-290px;
+    width: 100%;
+    height: 100%;
+}
+
+.gameNameWrapper {
+    width: 25%;
+    margin: auto;
+    padding-top: 10%;
+}
+
+.menuWrapper{
+    margin-top:4%;
+}
+
+.initialMenu {
+    list-style: none;
+    height: 300px;
+    width: 900px;
+    margin: auto;
+}
+
+    .initialMenu a:hover {
+        text-decoration: none;
+        border:none;
+    }
+
+    .initialMenu li {
+        width: 255px;
+        height: 255px;
+        float: left;
+        margin: 15px 15px;
+    }
+
+    .initialMenu div {
+        width: 100%;
+        height: 100%;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+
+    .initialMenu .newGame {
+        background-image: url('/Images/new_game2.png');
+    }
+
+    .initialMenu .settings {
+        background-image: url('/Images/nil_config2.png');
+    }

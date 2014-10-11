@@ -1,1 +1,26 @@
-﻿Inicial
+﻿@{
+    ViewBag.Title = "Nil Game";
+}
+@section header{
+    <link href="~/Content/Index.css" rel="stylesheet" />
+}
+<div class="gameNameWrapper">
+    <img src="@Url.Content("~/Images/logo.png")" />
+</div>
+<div class="menuWrapper">
+    <ul class="initialMenu">
+        <li>
+            <a href="@Url.Action("battle","battle")"><div class="newGame"></div></a>
+        </li>
+        <li>
+            <a href="@Url.Action("settings")">
+                <div class="settings"></div>
+            </a>
+        </li>
+        <li>
+            <a href="@Url.Action("settings")">
+                <div class="credits"></div>
+            </a>
+        </li>
+    </ul>
+</div>
