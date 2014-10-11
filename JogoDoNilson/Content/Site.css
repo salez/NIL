@@ -95,6 +95,13 @@ h5, h6 {
 }
 /* main layout
 ----------------------------------------------------------*/
+
+.geral
+{
+    width: 1366px;
+    height: 768px;
+}
+
     .carta
     {
         width: 350px;
@@ -104,8 +111,6 @@ h5, h6 {
         border: 2px solid black;
         border-radius: 10px;
         page-break-inside: avoid;
-	
-        
     }
     
     .carta .conteudo_topo

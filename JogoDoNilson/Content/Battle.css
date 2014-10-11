@@ -1,0 +1,44 @@
+﻿.battleWrapper
+{
+    width: 1345px;
+    height:640px;
+    overflow: hidden;
+}
+
+.statusPlayer
+{
+    width: 200px;
+    height:768px;
+    float:left;
+    background: green;
+}
+
+.field
+{
+    width: 945px;
+    background: yellow;
+    float: left;
+    height: 663px;
+}
+
+
+.statusPlayer .deck
+{
+    width: 200px;
+    height: 250px;
+    background: red;
+}
+
+
+.statusPlayer .graveyard
+{
+    width: 200px;
+    height: 250px;
+    background: narrow;
+}
+
+.statusPlayer .status
+{
+    width: 200px;
+    height: 168px;
+}
