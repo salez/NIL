@@ -96,83 +96,74 @@ h5, h6 {
 /* main layout
 ----------------------------------------------------------*/
 
-.geral
-{
+.geral {
     width: 1366px;
     height: 768px;
 }
 
-    .carta
-    {
-        width: 350px;
-        height: 500px;
-        float:left;
-        background: #FFFF99 url(background2.jpg);
-        border: 2px solid black;
-        border-radius: 10px;
-        page-break-inside: avoid;
-    }
-    
-    .carta .conteudo_topo
-    {
+.carta {
+    width: 350px;
+    height: 500px;
+    float: left;
+    background: #FFFF99 url(background2.jpg);
+    border: 2px solid black;
+    border-radius: 10px;
+    page-break-inside: avoid;
+}
+
+    .carta .conteudo_topo {
         width: 350px;
         height: 50px;
         float: left;
         border-radius: 10px;
         color: #000;
         position: absolute;
-	
     }
-    
-    .carta .conteudo_topo .carta_nome
-    {
-        float: left;
-        height:35px;
-        line-height:35px;
-        padding: 0 15px;
-        font-weight: bold;
-        font-size: 20px;
-        text-transform: capitalize;
-        position: absolute;
-	    left: 0;
-	    font-family: font1;
-	    text-align: left;
-	    border-radius: 10px;
-	    top: 0px;
-	    z-index: 999;
-    }
-    
-    .carta .conteudo_topo .custo
-    {
-        font-size: 25px;
-        font-weight: bold;
-        line-height: 30px;
-        text-align: center;
-        padding: 10px;
-        float: right;
-        color: #000;
-        background: url(../../images/mana.png) center 8px no-repeat;
-        background-size: 30px;
-    }
-    
-    .carta .conteudo_topo .custo_num
-    {
-        position: relative;
-	    left:-20px;
-	    top: -2px;
-    }
-    
-    .carta .conteudo_topo .custo img
-    {
-        width: 20px;
-    }
-    
-    .carta .conteudo_imagem
-    {
+
+        .carta .conteudo_topo .carta_nome {
+            float: left;
+            height: 35px;
+            line-height: 35px;
+            padding: 0 15px;
+            font-weight: bold;
+            font-size: 20px;
+            text-transform: capitalize;
+            position: absolute;
+            left: 0;
+            font-family: font1;
+            text-align: left;
+            border-radius: 10px;
+            top: 0px;
+            z-index: 999;
+        }
+
+        .carta .conteudo_topo .custo {
+            font-size: 25px;
+            font-weight: bold;
+            line-height: 30px;
+            text-align: center;
+            padding: 10px;
+            float: right;
+            color: #000;
+            background: url(../../images/mana.png) center 8px no-repeat;
+            background-size: 30px;
+        }
+
+        .carta .conteudo_topo .custo_num {
+            position: relative;
+            left: -20px;
+            top: -2px;
+        }
+
+        .carta .conteudo_topo .custo img {
+            width: 20px;
+        }
+
+    .carta .conteudo_imagem {
         width: 300px;
         height: 330px;
         background-image: url(nilsao.jpg);
-        background-repeat:no-repeat;
+        background-repeat: no-repeat;
         margin: 0 24px;
         float: left;
         clear: both;
@@ -184,85 +175,83 @@ h5, h6 {
         border: 3px solid;
         z-index: 2;
     }
-    
-    .carta .conteudo_baixo
-    {
+
+    .carta .conteudo_baixo {
         width: 350px;
-        float:left;
+        float: left;
         clear: both;
         position: absolute;
     }
-    
-    .carta .conteudo_baixo .tipo
-    {
-        float:left;
-        clear: both;
-        width: 350px;
-        height: 40px;
-        line-height: 40px;
-        position: absolute;
-        top: 50px;
-        z-index: 1;
-        font-size:14px;
-        color:#666600;
-    }
-    
-    .carta .conteudo_baixo .tipo .classe
-    {
-        float:left;
-        margin: 0 0 0 15px;
-    }
-    
-    .carta .conteudo_baixo .tipo .raca
-    {
-        float:right;
-        margin: 0 15px 0 0;
-    }
-    
-    .carta .conteudo_baixo .descricao
-    {
-        float:left;
-        clear: both;
-        margin: 0 20px;
-        width: 290px;
-        text-align: center;
-        height: 100px;
-        padding: 10px;
-        border-radius: 10px;
-        background-color:rgba(255,255,255,0.9);
-        position: absolute;
-        margin-top: 300px;
-        z-index: 3;
-    }
-    
-    .carta .conteudo_baixo .forca
-    {
-        float:left;
-        clear: both;
-        width: 350px;
-        font-weight: bold;
-        font-size: 40px;
-        position: absolute;
-        margin-top: 430px;
-        font-family: font1;
-    }
-    
-    .carta .conteudo_baixo .forca .ataque
-    {
-        float:left;
-        width: 100px;
-        height: 60px;
-        line-height:60px;
-        text-align:center;
-        background: url(ataque.png) center center no-repeat;
-    }
-    
-    .carta .conteudo_baixo .forca .defesa
-    {
-        float:right;
-        width: 100px;
-        height: 60px;
-        line-height:60px;
-        text-align:center;
-        background: url(escudo.png) 20px center no-repeat;
-    }
+
+        .carta .conteudo_baixo .tipo {
+            float: left;
+            clear: both;
+            width: 350px;
+            height: 40px;
+            line-height: 40px;
+            position: absolute;
+            top: 50px;
+            z-index: 1;
+            font-size: 14px;
+            color: #666600;
+        }
+
+            .carta .conteudo_baixo .tipo .classe {
+                float: left;
+                margin: 0 0 0 15px;
+            }
+
+            .carta .conteudo_baixo .tipo .raca {
+                float: right;
+                margin: 0 15px 0 0;
+            }
+
+        .carta .conteudo_baixo .descricao {
+            float: left;
+            clear: both;
+            margin: 0 20px;
+            width: 290px;
+            text-align: center;
+            height: 100px;
+            padding: 10px;
+            border-radius: 10px;
+            background-color: rgba(255,255,255,0.9);
+            position: absolute;
+            margin-top: 300px;
+            z-index: 3;
+        }
+
+        .carta .conteudo_baixo .forca {
+            float: left;
+            clear: both;
+            width: 350px;
+            font-weight: bold;
+            font-size: 40px;
+            position: absolute;
+            margin-top: 430px;
+            font-family: font1;
+        }
+
+            .carta .conteudo_baixo .forca .ataque {
+                float: left;
+                width: 100px;
+                height: 60px;
+                line-height: 60px;
+                text-align: center;
+                background: url(ataque.png) center center no-repeat;
+            }
+
+            .carta .conteudo_baixo .forca .defesa {
+                float: right;
+                width: 100px;
+                height: 60px;
+                line-height: 60px;
+                text-align: center;
+                background: url(escudo.png) 20px center no-repeat;
+            }
+
+
+.content-list {
+    list-style:none;
+}
+

@@ -8,7 +8,7 @@ using System.Web;
 
 namespace JogoDoNilson.Models
 {
- public class Race
+    public class Race
     {
         public int Id { get; set; }
         public string Name { get; set; }
@@ -31,13 +31,14 @@ namespace JogoDoNilson.Models
 
     public class Player
     {
-        public Player(Deck deck, int number, bool IsAI)
+        public Player(Deck deck, int number, bool IsAI,string Avatar = "")
         {
             this.Deck = deck;
             this.Number = number;
+            this.AvatarImage = Avatar;
             this.Life = GameSettings.PlayerSettings.InitialLife;
             this.Mana = GameSettings.PlayerSettings.InitialMana;
-            //this.Hands = this.Deck.GetInitialHands();
+            this.Hands = this.Deck.GetInitialHands();
             this.IsAIControlled = IsAI;
         }
 
@@ -45,6 +46,7 @@ namespace JogoDoNilson.Models
         public Deck Deck { get; private set; }
         public List<Carta> Hands { get; private set; }
         public int Number { get; private set; }
+        public string AvatarImage { get; private set; }
         public bool IsAIControlled { get; private set; }
 
         public int Life { get; set; }
@@ -132,7 +134,7 @@ namespace JogoDoNilson.Models
             // TODO: Complete member initialization
             GameState = new GameSession(Session);
         }
-        
+
         public Player PlayerOne
         {
             get
@@ -148,13 +150,13 @@ namespace JogoDoNilson.Models
             }
         }
 
-        public void StartGame()
+        public void StartGame(string PlayerAvatar)
         {
             if (!GameState.IsStarted)
             {
                 var Decks = Deck.BuildDecks(Carta.GetAllCards());
                 GameState.PlayerOne = new Player(Decks[0], 1, true);
-                GameState.PlayerTwo = new Player(Decks[1], 2, false);
+                GameState.PlayerTwo = new Player(Decks[1], 2, false, PlayerAvatar);
             }
         }
 

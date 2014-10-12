@@ -201,6 +201,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Images\StartIcon.png" />
     <Content Include="Content\ataque.png" />
     <Content Include="Content\background.jpg" />
     <Content Include="Content\Battle.css" />
@@ -357,6 +358,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Battle\battle.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Characters.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
