@@ -8,9 +8,9 @@
             width: 150px;
             height: 200px;
             border-radius: 90px 30px;
-            background-position: center;
-            background-size: cover !important;
-            background-repeat: no-repeat;
+            background-position: center!important;
+            background-size: 120% 110% !important;
+            background-repeat: no-repeat!important;
             margin: 15px;
             border-style: ridge;
             border-color: transparent;
@@ -65,10 +65,10 @@
 
 <div>
     <ul class="content-list">
-        @for (int i = 1; i <= 10; i++)
+        @for (int i = 1; i <= 8; i++)
         {
             <li data-charid="@(i)"
-                style="background:url('@Url.Content(string.Format("~/Images/Cartas/{0}.jpg", i < 10 ? "0" + i.ToString() : i.ToString()))')"
+                style="background:url('@Url.Content(string.Format("~/Images/Avatars/{0}.jpg", i))')"
                 class="picFrame float-left  jsAvatar">
             </li>
         }

@@ -28,7 +28,7 @@ namespace JogoDoNilson.Controllers
         public ActionResult StartGame(string CharacterId)
         {
             Models.GameEngine Engine = new Models.GameEngine(Session);
-            Engine.StartGame(string.Format("~/Images/Cartas/{0}.jpg", Convert.ToInt32(CharacterId) < 10 ? "0" + CharacterId.ToString() : CharacterId.ToString()));
+            Engine.StartGame(string.Format("~/Images/Avatars/{0}.jpg", CharacterId));
             return RedirectToAction("Battle", "Battle");
         }
 

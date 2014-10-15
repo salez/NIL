@@ -7,7 +7,7 @@ body, #body {
     background-image: url('/Images/background-init.jpg');
     background-size: 130%;
     background-repeat: no-repeat;
-    background-position-y:-290px;
+    background-position-y: -290px;
     width: 100%;
     height: 100%;
 }
@@ -18,8 +18,8 @@ body, #body {
     padding-top: 10%;
 }
 
-.menuWrapper{
-    margin-top:4%;
+.menuWrapper {
+    margin-top: 4%;
 }
 
 .initialMenu {
@@ -31,7 +31,7 @@ body, #body {
 
     .initialMenu a:hover {
         text-decoration: none;
-        border:none;
+        border: none;
     }
 
     .initialMenu li {
@@ -56,3 +56,30 @@ body, #body {
     .initialMenu .settings {
         background-image: url('/Images/nil_config2.png');
     }
+
+    .initialMenu .credits {
+        background-image: url('/Images/CreditsIcon.png');
+    }
+
+
+.bgBlack {
+    background-color:black;
+    opacity:0.8;
+    width:100%;
+    height:100%;
+    position:absolute;
+    z-index:15;
+    top:0px;
+    display:none;
+}
+.CreditsContent{
+    position:relative;
+    top:105%;
+    z-index:20;
+    display:none;
+    color:white;
+    font-size:40px;
+    line-height:80px;
+    width:30%;
+    margin:auto;
+}
