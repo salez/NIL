@@ -201,6 +201,18 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Audio\CardDown.wav" />
+    <Content Include="Audio\Nav.WAV" />
+    <Content Include="Images\Avatars\1.jpg" />
+    <Content Include="Images\Avatars\2.jpg" />
+    <Content Include="Images\Avatars\3.jpg" />
+    <Content Include="Images\Avatars\4.jpg" />
+    <Content Include="Images\Avatars\5.jpg" />
+    <Content Include="Images\Avatars\6.jpg" />
+    <Content Include="Images\Avatars\7.jpg" />
+    <Content Include="Images\Avatars\8.jpg" />
+    <Content Include="Images\CreditsIcon.png" />
+    <Content Include="Images\StartIcon.png" />
     <Content Include="Content\ataque.png" />
     <Content Include="Content\background.jpg" />
     <Content Include="Content\Battle.css" />
@@ -357,6 +369,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Battle\battle.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Home\Characters.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

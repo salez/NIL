@@ -10,7 +10,7 @@
 <div class="menuWrapper">
     <ul class="initialMenu">
         <li>
-            <a href="@Url.Action("battle","battle")"><div class="newGame"></div></a>
+            <a href="@Url.Action("ChooseAvatar", "Home")"><div class="newGame"></div></a>
         </li>
         <li>
             <a href="@Url.Action("settings")">
@@ -18,9 +18,60 @@
             </a>
         </li>
         <li>
-            <a href="@Url.Action("settings")">
+            <a href="#">
                 <div class="credits"></div>
             </a>
         </li>
     </ul>
 </div>
+
+<div class="bgBlack"></div>
+<div class="CreditsContent jsCrContentName">
+
+    Lais Domingues<br />
+    Nilson Araujo<br />
+    Pedro Gama<br />
+    Phillipe Matos<br />
+    Rodrigo Salles<br />
+    Tatiana Gomes<br />
+    
+</div>
+
+<div class="CreditsContent jsCrContentImage">
+     Uma Produção de<br /><br />
+    <img src="@Url.Content("~/Images/nilsaogames2.png")" />
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".credits").click(function () {
+                var $CreditsNames = $(".jsCrContentName");
+                var $CreditsImages = $(".jsCrContentImage");
+                var scrollHeight = ($(document).height() + $CreditsNames.height()) * -1;
+                var ImageScroll = (($(document).height() / 2) + ($CreditsImages.height() / 2)) * -1;
+                $(".menuWrapper").fadeOut();
+                $(".bgBlack").fadeIn();
+                $CreditsNames.css("display", "block");
+                $CreditsNames.animate({ top: scrollHeight }, 9000, "linear", function () {
+                    $CreditsImages.css("display", "block");
+                    $CreditsImages.animate({ top: ImageScroll }, 8000, "linear", function () {
+                        setTimeout(function () {
+                            $(".menuWrapper").fadeIn();
+                            $(".bgBlack").fadeOut();
+                            $CreditsNames.css("display", "none");
+                            $CreditsImages.css("display", "none");
+                        }, 4000);
+                    })
+                });
+                
+            });
+
+            $(".initialMenu li").click(function () {
+                alert('click');
+                var audioSound = document.getElementById('mdSfxNav');
+                audioSound.play();
+            })
+        })
+    </script>
+}

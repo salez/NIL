@@ -14,6 +14,12 @@
     <body>
         <div id="body">
                 @RenderBody()
+            <audio id="mdSfxCard" preload="auto">
+                <source src="@Url.Content("~/Audio/CardDown.wav")" />
+            </audio>
+            <audio id="mdSfxNav" preload="auto">
+                <source src="@Url.Content("~/Audio/Nav.wav")" />
+            </audio>
         </div>
 
         @Scripts.Render("~/bundles/jquery")

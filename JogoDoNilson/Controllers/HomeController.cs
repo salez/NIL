@@ -10,13 +10,26 @@ namespace JogoDoNilson.Controllers
     {
         public ActionResult Index()
         {
-            ViewBag.Message = "Modifique este modelo para iniciar rapidamente seu aplicativo ASP.NET MVC.";
+            //ViewBag.Message = "Modifique este modelo para iniciar rapidamente seu aplicativo ASP.NET MVC.";
 
-            Models.JogoDoNilsonEntities db = new Models.JogoDoNilsonEntities();
+            //Models.JogoDoNilsonEntities db = new Models.JogoDoNilsonEntities();
 
-            var cartas = db.jdn_cartas;
+            //var cartas = db.jdn_cartas;
 
-            return View(cartas);
+            return View();
+        }
+
+        public ActionResult ChooseAvatar()
+        {
+            return View("Characters");
+        }
+
+        [HttpPost]
+        public ActionResult StartGame(string CharacterId)
+        {
+            Models.GameEngine Engine = new Models.GameEngine(Session);
+            Engine.StartGame(string.Format("~/Images/Avatars/{0}.jpg", CharacterId));
+            return RedirectToAction("Battle", "Battle");
         }
 
         public ActionResult About()
@@ -34,15 +47,15 @@ namespace JogoDoNilson.Controllers
         }
 
 
-        public ActionResult PreviewDeck(string P)
-        {
-            Models.GameEngine Engine = new Models.GameEngine(Session);
-            Engine.StartGame();
-            if(P == "2")
-                return View("Index", Engine.PlayerTwo.Deck.AllCards());
+        //public ActionResult PreviewDeck(string P)
+        //{
+        //    //Models.GameEngine Engine = new Models.GameEngine(Session);
+        //    //Engine.StartGame();
+        //    //if(P == "2")
+        //    //    return View("Index", Engine.PlayerTwo.Deck.AllCards());
 
-            return View("Index", Engine.PlayerOne.Deck.AllCards());
+        //    //return View("Index", Engine.PlayerOne.Deck.AllCards());
 
-        }
+        //}
     }
 }

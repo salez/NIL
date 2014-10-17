@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Characters";
+}
+
+@section header{
+    <style>
+        .picFrame {
+            width: 150px;
+            height: 200px;
+            border-radius: 90px 30px;
+            background-position: center!important;
+            background-size: 120% 110% !important;
+            background-repeat: no-repeat!important;
+            margin: 15px;
+            border-style: ridge;
+            border-color: transparent;
+            border-width: 4px;
+        }
+
+            .picFrame:hover {
+                box-shadow: 3px 3px 5px 6px silver;
+            }
+
+            .picFrame.active {
+                border-style: ridge;
+                border-color: gold;
+                border-width: 4px;
+            }
+
+        .active:hover {
+            box-shadow: 0px 0px 0px 0px silver;
+        }
+
+        .btnStart {
+            margin-right: 50px;
+            margin-top: 150px;
+            cursor:pointer;
+        }
+
+            .btnStart img {
+                width: 75px;
+                height: 75px;
+            }
+    </style>
+    <link href="~/Content/Index.css" rel="stylesheet" />
+}
+
+@section scripts{
+    <script>
+        $(document).ready(function () {
+            $(".jsAvatar").click(function () {
+                $(".jsAvatar").removeClass("active");
+                $(this).addClass("active");
+                $("#hfCharacterId").val($(this).data("charid"));
+            })
+        });
+
+        $(".jsStart").click(function () {
+            var frm = document.forms[0];
+            frm.submit();
+        });
+    </script>
+}
+<div>Choose Your Avatar</div>
+
+<div>
+    <ul class="content-list">
+        @for (int i = 1; i <= 8; i++)
+        {
+            <li data-charid="@(i)"
+                style="background:url('@Url.Content(string.Format("~/Images/Avatars/{0}.jpg", i))')"
+                class="picFrame float-left  jsAvatar">
+            </li>
+        }
+    </ul>
+    <div class="btnStart float-right jsStart">
+        <img src="@Url.Content("~/Images/StartIcon.png")">
+        <form action="@Url.Action("StartGame")" method="post">
+            <input type="hidden" name="CharacterId" id="hfCharacterId" />
+            <input type="submit" id="btnStart" style="display:none" formaction="@Url.Action("StartGame")" value="Iniciar" />
+        </form>
+</div>
+
+</div>
