@@ -15,6 +15,7 @@
             border-style: ridge;
             border-color: transparent;
             border-width: 4px;
+            cursor: pointer;
         }
 
             .picFrame:hover {
@@ -52,6 +53,7 @@
                 $(".jsAvatar").removeClass("active");
                 $(this).addClass("active");
                 $("#hfCharacterId").val($(this).data("charid"));
+                $(".jsStart").click();
             })
         });
 
@@ -68,8 +70,8 @@
         @for (int i = 1; i <= 8; i++)
         {
             <li data-charid="@(i)"
-                style="background:url('@Url.Content(string.Format("~/Images/Avatars/{0}.jpg", i))')"
-                class="picFrame float-left  jsAvatar">
+                style="background:url('@Url.Content(string.Format("~/Images/Avatars/{0}.jpg", i))');@((i == 5) ? "clear:left;\"" : "")"
+                class="picFrame float-left  jsAvatar" >
             </li>
         }
     </ul>

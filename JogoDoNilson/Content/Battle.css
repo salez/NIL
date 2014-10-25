@@ -1,8 +1,9 @@
 ﻿.battleWrapper
 {
-    width: 1345px;
-    height:640px;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
+    background: url(../images/battle/field_background.jpg);
 }
 
 .statusPlayer
@@ -10,35 +11,68 @@
     width: 200px;
     height:768px;
     float:left;
-    background: green;
+    
 }
 
 .field
 {
     width: 945px;
-    background: yellow;
     float: left;
     height: 663px;
+    
 }
 
 
 .statusPlayer .deck
 {
-    width: 200px;
-    height: 250px;
-    background: red;
+    width: 150px;
+    height: 200px;
+    background: red url(../images/battle/card_background.jpg) center center;
+    border-radius: 15px;
+    margin: 10px 10px 10px 30px;
+    border: 3px solid;
 }
 
 
 .statusPlayer .graveyard
 {
-    width: 200px;
-    height: 250px;
-    background: narrow;
+    width: 150px;
+    height: 200px;
+    background: red url(../images/battle/card_background.jpg) center center;
+    border-radius: 15px;
+    margin: 10px 10px 10px 30px;
 }
 
 .statusPlayer .status
 {
-    width: 200px;
-    height: 168px;
+    width: 180px;
+height: 208px;
+border-radius: 50%;
+margin: 10px;
+background-size: 120% 110% !important;
+border: 3px solid;
+}
+
+.field .computerHand
+{
+    border: 3px solid black;
+    height: 50px;
+}
+
+.field .atackField
+{
+    height: 120px;
+    border: 1px solid red;
+}
+
+.field .defenseField
+{
+    height: 120px;
+    border: 1px solid yellow;
+}
+
+.field .playerHand
+{
+    border: 3px solid black;
+    height: 100px;
 }

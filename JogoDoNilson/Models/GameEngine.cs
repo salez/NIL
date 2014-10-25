@@ -155,7 +155,9 @@ namespace JogoDoNilson.Models
             if (!GameState.IsStarted)
             {
                 var Decks = Deck.BuildDecks(Carta.GetAllCards());
-                GameState.PlayerOne = new Player(Decks[0], 1, true);
+                Random rd = new Random();
+                
+                GameState.PlayerOne = new Player(Decks[0], 1, true, string.Format("~/Images/Avatars/{0}.jpg", rd.Next(1,8)));
                 GameState.PlayerTwo = new Player(Decks[1], 2, false, PlayerAvatar);
             }
         }

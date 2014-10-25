@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using JogoDoNilson.Models;
 
 namespace JogoDoNilson.Controllers
 {
@@ -13,7 +14,9 @@ namespace JogoDoNilson.Controllers
 
         public ActionResult battle()
         {
-            return View();
+            GameEngine engine = new GameEngine(Session);
+
+            return View(engine);
         }
 
     }

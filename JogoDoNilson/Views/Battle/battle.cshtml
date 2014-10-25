@@ -1,4 +1,6 @@
-﻿@{
+﻿@model JogoDoNilson.Models.GameEngine
+
+@{
     ViewBag.Title = "battle";
 }
 
@@ -16,17 +18,33 @@
         <div class="deck">
             
         </div>
-        <div class="status">
+        <div class="status" style="background: url(@Url.Content(Model.PlayerTwo.AvatarImage))">
             
         </div>
     </div>
     <div class="field">
-        Field
+        <div class="computerHand">
+        
+        </div>
+        
+        <div class="computerField">
+            <div class="defenseField"></div>
+            <div class="atackField"></div>
+        </div>
+        
+        <div class="playerField">
+            <div class="atackField"></div>
+            <div class="defenseField"></div>
+        </div>
+
+        <div class="playerHand">
+            
+        </div>
     </div>
 
     <div class="statusPlayer player2">
         
-        <div class="status">
+        <div class="status" style="background: url(@Url.Content(Model.PlayerOne.AvatarImage))">
             
         </div>
         <div class="deck">
