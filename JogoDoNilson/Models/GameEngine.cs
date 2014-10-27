@@ -55,7 +55,17 @@ namespace JogoDoNilson.Models
 
     public class Battle
     {
-        public Battle(Carta AttackerCard, Carta DefenderCard)
+        public Turn turn { get; private set; }
+    }
+
+    public class Turn{
+        public int Count{get; private set;}
+        public Player PlayerTurn{get;private set;}
+    }
+
+    public class BattleAtack
+    {
+        public BattleAtack(Carta AttackerCard, Carta DefenderCard)
         {
             this.Attacker = AttackerCard;
             this.Defender = DefenderCard;
@@ -63,8 +73,8 @@ namespace JogoDoNilson.Models
         public Carta Attacker { get; private set; }
         public Carta Defender { get; private set; }
 
-        private BattleResult _result;
-        public BattleResult Result
+        private AtackResult _result;
+        public AtackResult Result
         {
             get
             {
@@ -73,12 +83,12 @@ namespace JogoDoNilson.Models
         }
 
 
-        private BattleResult CalculateResult()
+        private AtackResult CalculateResult()
         {
             if (Attacker == null)
-                return new BattleResult(null, Defender, 0);
+                return new AtackResult(null, Defender, 0);
             if (Defender == null)
-                return new BattleResult(Attacker, null, Attacker.Ataque);
+                return new AtackResult(Attacker, null, Attacker.Ataque);
 
             int ResultDamage = Math.Abs(Defender.Defesa - Attacker.Ataque);
             Defender.Defesa = ResultDamage;
@@ -88,31 +98,31 @@ namespace JogoDoNilson.Models
             {
                 if (!Defender.IsDead)
                 {
-                    return new BattleResult(null, Defender, 0);
+                    return new AtackResult(null, Defender, 0);
                 }
                 else
                 {
-                    return new BattleResult(null, null, 0);
+                    return new AtackResult(null, null, 0);
                 }
             }
             else
             {
                 if (!Defender.IsDead)
                 {
-                    return new BattleResult(Attacker, Defender, 0);
+                    return new AtackResult(Attacker, Defender, 0);
                 }
                 else
                 {
-                    return new BattleResult(Attacker, null, ResultDamage);
+                    return new AtackResult(Attacker, null, ResultDamage);
                 }
             }
         }
 
     }
 
-    public class BattleResult
+    public class AtackResult
     {
-        public BattleResult(Carta Atacker, Carta Defender, int DelledDamage)
+        public AtackResult(Carta Atacker, Carta Defender, int DelledDamage)
         {
             this.Atacker = Atacker;
             this.Defender = Defender;
@@ -150,6 +160,14 @@ namespace JogoDoNilson.Models
             }
         }
 
+        public BattleAtack Battle
+        {
+            get
+            {
+                return GameState.Battle;
+            }
+        }
+
         public void StartGame(string PlayerAvatar)
         {
             if (!GameState.IsStarted)
@@ -172,6 +190,18 @@ namespace JogoDoNilson.Models
             {
                 // TODO: Complete member initialization
                 this.Session = Session;
+            }
+
+            public BattleAtack Battle
+            {
+                get
+                {
+                    return (BattleAtack)Session["BATTLE"];
+                }
+                set
+                {
+                    Session["BATTLE"] = value;
+                }
             }
 
             public Player PlayerOne
