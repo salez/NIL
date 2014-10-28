@@ -40,6 +40,7 @@ namespace JogoDoNilson.Models
             this.Mana = GameSettings.PlayerSettings.InitialMana;
             this.Hands = this.Deck.GetInitialHands();
             this.IsAIControlled = IsAI;
+            this.Turn = new PlayerTurn();
         }
 
 
@@ -48,41 +49,92 @@ namespace JogoDoNilson.Models
         public int Number { get; private set; }
         public string AvatarImage { get; private set; }
         public bool IsAIControlled { get; private set; }
+        public PlayerTurn Turn { get; private set; }
 
         public int Life { get; set; }
         public int Mana { get; set; }
+    }
+
+    public enum BattlePhase
+    {
+        Draw = 1,
+        Main = 2,
+        Atack = 3,
+        Defense = 4,
+        End = 5
     }
 
     public class Battle
     {
         public Battle()
         {
-
+            this.Turn = new BattleTurn();
+            this.Turn.SetCount(0);
+            this.Phase = BattlePhase.Draw;
         }
 
-        public enum Phase
-        {
-            Draw = 1,
-            Main = 2,
-            Atack = 3,
-            Defense = 4,
-            End = 5
-        }
+        public Player player1 { get; private set; }
 
-        public Turn Turn { get; private set; }
+        public Player player2 { get; private set; }
 
-        public Phase Phase { get; private set; }
+        public BattleTurn Turn { get; private set; }
+
+        public BattlePhase Phase { get; private set; }
 
         public bool isStarted { get; private set; }
 
-        
+        public void NewTurn()
+        {
+            if (this.Turn.Player == player1)
+            {
+                this.Turn.SetPlayer(player2);
+            }
+            else
+            {
+                this.Turn.SetPlayer(player1);
+            }
+
+            this.Turn.IncrementCount();
+        }
     }
 
-    
 
-    public class Turn{
+    public class BattleTurn{
         public int Count{get; private set;}
-        public Player PlayerTurn{get;private set;}
+        public Player Player{get;private set;}
+
+        public void SetCount(int count){
+            this.Count = count;
+        }
+
+        public void IncrementCount()
+        {
+            this.Count++;
+        }
+
+        public void IncrementCount(int count)
+        {
+            this.Count = count;
+        }
+
+        public void SetPlayer(Player player)
+        {
+            this.Player = player;
+            this.Player.Turn.IncrementCount();
+        }
+    }
+
+    public class PlayerTurn
+    {
+        public PlayerTurn(){
+            this.Count = 0;
+        }
+
+        public int Count { get; private set; }
+
+        public void IncrementCount(){
+            this.Count++;
+        }
     }
 
     public class BattleFight
@@ -95,8 +147,8 @@ namespace JogoDoNilson.Models
         public Carta Attacker { get; private set; }
         public Carta Defender { get; private set; }
 
-        private AtackResult _result;
-        public AtackResult Result
+        private BattleFightResult _result;
+        public BattleFightResult Result
         {
             get
             {
@@ -105,12 +157,12 @@ namespace JogoDoNilson.Models
         }
 
 
-        private AtackResult CalculateResult()
+        private BattleFightResult CalculateResult()
         {
             if (Attacker == null)
-                return new AtackResult(null, Defender, 0);
+                return new BattleFightResult(null, Defender, 0);
             if (Defender == null)
-                return new AtackResult(Attacker, null, Attacker.Ataque);
+                return new BattleFightResult(Attacker, null, Attacker.Ataque);
 
             int ResultDamage = Math.Abs(Defender.Defesa - Attacker.Ataque);
             Defender.Defesa = ResultDamage;
@@ -120,31 +172,31 @@ namespace JogoDoNilson.Models
             {
                 if (!Defender.IsDead)
                 {
-                    return new AtackResult(null, Defender, 0);
+                    return new BattleFightResult(null, Defender, 0);
                 }
                 else
                 {
-                    return new AtackResult(null, null, 0);
+                    return new BattleFightResult(null, null, 0);
                 }
             }
             else
             {
                 if (!Defender.IsDead)
                 {
-                    return new AtackResult(Attacker, Defender, 0);
+                    return new BattleFightResult(Attacker, Defender, 0);
                 }
                 else
                 {
-                    return new AtackResult(Attacker, null, ResultDamage);
+                    return new BattleFightResult(Attacker, null, ResultDamage);
                 }
             }
         }
 
     }
 
-    public class AtackResult
+    public class BattleFightResult
     {
-        public AtackResult(Carta Atacker, Carta Defender, int DelledDamage)
+        public BattleFightResult(Carta Atacker, Carta Defender, int DelledDamage)
         {
             this.Atacker = Atacker;
             this.Defender = Defender;
@@ -202,22 +254,28 @@ namespace JogoDoNilson.Models
             }
         }
 
-        public void StartBattle()
+        public Battle StartBattle()
         {
-            if (!this.isStarted)
+            if (this.Battle != null)
             {
-                this.isStarted = true;
+                GameState.Battle = new Models.Battle();
 
-                //todo: inicializar batalha
-                this.Turn = new Turn();
-                this.Turn.Count = 1;
+                var battle = this.Battle;
 
+                //inicializa primeiro turno
                 Random rd = new Random();
-                
-                if(rd.Next(1,2) == 1){
-                    this.Turn.PlayerTurn = this.
+
+                if (rd.Next(1, 2) == 1)
+                {
+                    battle.Turn.SetPlayer(this.PlayerOne);
+                }
+                else
+                {
+                    battle.Turn.SetPlayer(this.PlayerTwo);
                 }
             }
+
+            return this.Battle;
         }
 
         private class GameSession

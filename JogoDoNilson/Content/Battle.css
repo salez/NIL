@@ -107,5 +107,47 @@ border: 3px solid;
 .field .playerHand
 {
     border: 3px solid black;
-    height: 100px;
+    position: absolute;
+    height: 504px;
+    width: 1350px;
+    top: 200px;
+    left: 0;
+}
+
+.field .playerHand .cardWrapper
+{
+    width: 150px;
+}
+
+.carta {
+	perspective: 1000px;
+}
+.carta {
+	display: block;
+	/*disabling the translucent black bg on the main image*/
+	/*3d space for children*/
+	transform-style: preserve-3d;
+	transition: all 0.5s;
+	transform: scale(0.4, 0.4);
+	transform-origin: bottom center;
+	
+}
+
+.cardWrapper:hover .carta {
+	display: block;
+	/*disabling the translucent black bg on the main image*/
+	/*3d space for children*/
+	transform-style: preserve-3d;
+	transition: all 0.5s;
+	transform: scale(0.7, 0.7);
+	z-index: 9999;
+	position: absolute;
+	
+}
+
+.cardWrapper
+{
+    position: absolute;
+    width:150px;
+    height: 300px;
 }
