@@ -55,17 +55,39 @@ namespace JogoDoNilson.Models
 
     public class Battle
     {
-        public Turn turn { get; private set; }
+        public Battle()
+        {
+
+        }
+
+        public enum Phase
+        {
+            Draw = 1,
+            Main = 2,
+            Atack = 3,
+            Defense = 4,
+            End = 5
+        }
+
+        public Turn Turn { get; private set; }
+
+        public Phase Phase { get; private set; }
+
+        public bool isStarted { get; private set; }
+
+        
     }
+
+    
 
     public class Turn{
         public int Count{get; private set;}
         public Player PlayerTurn{get;private set;}
     }
 
-    public class BattleAtack
+    public class BattleFight
     {
-        public BattleAtack(Carta AttackerCard, Carta DefenderCard)
+        public BattleFight(Carta AttackerCard, Carta DefenderCard)
         {
             this.Attacker = AttackerCard;
             this.Defender = DefenderCard;
@@ -160,7 +182,7 @@ namespace JogoDoNilson.Models
             }
         }
 
-        public BattleAtack Battle
+        public Battle Battle
         {
             get
             {
@@ -180,6 +202,23 @@ namespace JogoDoNilson.Models
             }
         }
 
+        public void StartBattle()
+        {
+            if (!this.isStarted)
+            {
+                this.isStarted = true;
+
+                //todo: inicializar batalha
+                this.Turn = new Turn();
+                this.Turn.Count = 1;
+
+                Random rd = new Random();
+                
+                if(rd.Next(1,2) == 1){
+                    this.Turn.PlayerTurn = this.
+                }
+            }
+        }
 
         private class GameSession
         {
@@ -192,11 +231,11 @@ namespace JogoDoNilson.Models
                 this.Session = Session;
             }
 
-            public BattleAtack Battle
+            public Battle Battle
             {
                 get
                 {
-                    return (BattleAtack)Session["BATTLE"];
+                    return (Battle)Session["BATTLE"];
                 }
                 set
                 {

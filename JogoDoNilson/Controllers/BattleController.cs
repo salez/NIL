@@ -16,7 +16,14 @@ namespace JogoDoNilson.Controllers
         {
             GameEngine engine = new GameEngine(Session);
 
+            engine.Battle.StartBattle(engine);
+
             return View(engine);
+        }
+
+        public int drawCard()
+        {
+            return 0; 
         }
 
     }
