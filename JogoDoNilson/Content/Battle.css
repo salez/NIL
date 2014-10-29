@@ -71,7 +71,9 @@
 {
     width: 150px;
     height: 200px;
-    background: red url(../images/battle/card_background.jpg) center center;
+    /*background: red url(../images/battle/card_background.jpg) center center;*/
+    border: 2px solid gray;
+    background: rgba(0,0,0,0.5);
     border-radius: 15px;
     margin: 10px 10px 10px 30px;
 }
@@ -79,11 +81,24 @@
 .statusPlayer .status
 {
     width: 180px;
-height: 208px;
-border-radius: 50%;
-margin: 10px;
-background-size: 120% 110% !important;
-border: 3px solid;
+    height: 208px;
+    border-radius: 50%;
+    margin: 10px;
+    background-size: 120% 110% !important;
+    border: 3px solid;
+}
+
+.statusPlayer .status .playerLifeBar
+{
+       height: 25px;
+       width: 170px;
+       color: White;
+       font-weight: bold;
+	   text-align: right;
+	   padding: 0 5px;
+       background-color: Red;
+       line-height: 25px;
+       margin: 150px 0 0 0;
 }
 
 .field .computerHand
@@ -116,13 +131,13 @@ border: 3px solid;
 
 .field .playerHand .cardWrapper
 {
-    width: 150px;
+
 }
 
 .carta {
 	perspective: 1000px;
 }
-.carta {
+.cardWrapper {
 	display: block;
 	/*disabling the translucent black bg on the main image*/
 	/*3d space for children*/
@@ -133,13 +148,13 @@ border: 3px solid;
 	
 }
 
-.cardWrapper:hover .carta {
+.cardWrapper:hover {
 	display: block;
 	/*disabling the translucent black bg on the main image*/
 	/*3d space for children*/
 	transform-style: preserve-3d;
 	transition: all 0.5s;
-	transform: scale(0.7, 0.7);
+	transform: scale(0.7, 0.7) translate(0,-70px);
 	z-index: 9999;
 	position: absolute;
 	
@@ -148,6 +163,4 @@ border: 3px solid;
 .cardWrapper
 {
     position: absolute;
-    width:150px;
-    height: 300px;
 }
