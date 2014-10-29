@@ -10,7 +10,9 @@
 <div class="menuWrapper">
     <ul class="initialMenu">
         <li>
-            <a href="@Url.Action("ChooseAvatar", "Home")"><div class="newGame"></div></a>
+            <a href="#" data-url="@Url.Action("ChooseAvatar", "Home")">
+            <div class="newGame"></div>
+            </a>
         </li>
         <li>
             <a href="@Url.Action("settings")">
@@ -44,6 +46,7 @@
 
 @section scripts{
     <script>
+        var clickSound = document.getElementById('mdSfxNav');
         $(document).ready(function () {
             $(".credits").click(function () {
                 var $CreditsNames = $(".jsCrContentName");
@@ -68,9 +71,12 @@
             });
 
             $(".initialMenu li").click(function () {
-                alert('click');
-                var audioSound = document.getElementById('mdSfxNav');
-                audioSound.play();
+                
+                clickSound.play();
+                var url = $(this).parent().find('a').attr("data-url");
+                setTimeout(function () {
+                    location.replace(url);
+                },200);
             })
         })
     </script>

@@ -48,13 +48,17 @@
 
 @section scripts{
     <script>
+        var clickSound = document.getElementById('mdSfxNav');
         $(document).ready(function () {
             $(".jsAvatar").click(function () {
+                clickSound.play();
                 $(".jsAvatar").removeClass("active");
                 $(this).addClass("active");
                 $("#hfCharacterId").val($(this).data("charid"));
-                $(".jsStart").click();
-            })
+                setTimeout(function () {
+                    $(".jsStart").click();
+                }, 150);
+            });
         });
 
         $(".jsStart").click(function () {
