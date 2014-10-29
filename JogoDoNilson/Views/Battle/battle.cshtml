@@ -1,4 +1,6 @@
-﻿@{
+﻿@model JogoDoNilson.Models.GameEngine
+
+@{
     ViewBag.Title = "battle";
 }
 
@@ -7,8 +9,12 @@
     @Styles.Render("~/content/battle.css")
 
 }
+<div class="battleWrapperAbsolute">
+    <div class="battleTitle">INICIO</div>
+</div>
 
 <div class="battleWrapper">
+    
     <div class="statusPlayer player1">
         <div class="graveyard">
             
@@ -16,17 +22,72 @@
         <div class="deck">
             
         </div>
-        <div class="status">
+        <div class="status" style="background: url(@Url.Content(Model.PlayerTwo.AvatarImage))">
             
         </div>
     </div>
     <div class="field">
-        Field
+        <div class="computerHand">
+        
+        </div>
+        
+        <div class="computerField">
+            <div class="defenseField"></div>
+            <div class="atackField"></div>
+        </div>
+        
+        <div class="playerField">
+            <div class="atackField"></div>
+            <div class="defenseField"></div>
+        </div>
+
+        <div class="playerHand">
+            
+            @{
+                int left = 200;
+                int rotate = -10;
+            }
+            @foreach (var carta in Model.PlayerTwo.Hands)
+            { 
+                <div class="cardWrapper" style="left: @(left)px;">
+                    <div class="carta">
+                        <div class="conteudo_topo">
+                            <div class="carta_nome">@carta.Nome</div>
+                            <div class="custo">
+                                <div class="custo_num">
+                                @carta.Custo
+                                </div>
+                
+                            </div>
+                        </div>
+                        <div class="conteudo_imagem" style="background-image: url(@Url.Content("~/images/cartas/" + (@carta.Id).ToString().PadLeft(2, '0') + ".jpg"))"></div>
+                        <div class="conteudo_baixo">
+                            <div class="tipo">
+                                <div class="classe">
+                                    @carta.Classe
+                                </div>
+                                <div class="raca">
+                                    <b>@carta.Raça</b>
+                                </div>
+                            </div>
+                            <div class="descricao">
+                                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a maximus lorem, id imperdiet orci. Integer congue lorem euismod erat interdum, eget porttitor lorem malesuada.
+                            </div>
+                            <div class="forca">
+                                <div class="ataque">@carta.Ataque</div>
+                                <div class="defesa">@carta.Defesa</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                left = left + 150;
+            }
+        </div>
     </div>
 
     <div class="statusPlayer player2">
         
-        <div class="status">
+        <div class="status" style="background: url(@Url.Content(Model.PlayerOne.AvatarImage))">
             
         </div>
         <div class="deck">
