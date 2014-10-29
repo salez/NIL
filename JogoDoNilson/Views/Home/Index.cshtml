@@ -10,16 +10,16 @@
 <div class="menuWrapper">
     <ul class="initialMenu">
         <li>
-            <a href="@Url.Action("ChooseAvatar", "Home")"><div class="newGame"></div></a>
+            <a href="#"><div class="newGame" data-url="@Url.Action("ChooseAvatar", "Home")"></div></a>
         </li>
         <li>
-            <a href="@Url.Action("settings")">
-                <div class="settings"></div>
+            <a href="#">
+                <div class="settings" data-url="@Url.Action("settings")"></div>
             </a>
         </li>
         <li>
             <a href="#">
-                <div class="credits"></div>
+                <div class="credits" data-url=""></div>
             </a>
         </li>
     </ul>
@@ -44,6 +44,8 @@
 
 @section scripts{
     <script>
+        var audioSound = document.getElementById('mdSfxNav');
+        var debug;
         $(document).ready(function () {
             $(".credits").click(function () {
                 var $CreditsNames = $(".jsCrContentName");
@@ -68,9 +70,13 @@
             });
 
             $(".initialMenu li").click(function () {
-                alert('click');
-                var audioSound = document.getElementById('mdSfxNav');
                 audioSound.play();
+                debug = this;
+                var _url = $(this).find("div").attr("data-url");
+                if (_url != "") {
+                    setTimeout(function () { location.replace(_url); }, 200);
+                    
+                }
             })
         })
     </script>

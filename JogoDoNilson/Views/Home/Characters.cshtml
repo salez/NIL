@@ -47,17 +47,23 @@
 
 @section scripts{
     <script>
+        var audioSound = document.getElementById('mdSfxNav');
         $(document).ready(function () {
             $(".jsAvatar").click(function () {
                 $(".jsAvatar").removeClass("active");
                 $(this).addClass("active");
                 $("#hfCharacterId").val($(this).data("charid"));
+                audioSound.play();
             })
         });
 
         $(".jsStart").click(function () {
-            var frm = document.forms[0];
-            frm.submit();
+            audioSound.play();
+            setTimeout(function () {
+                var frm = document.forms[0];
+                frm.submit();
+            }, 200)
+            
         });
     </script>
 }
