@@ -29,14 +29,13 @@
 .battleWrapper
 {
     width: 1366px;
-    height: 100%;
     overflow: hidden;
     position: absolute;
     left: 50%;
     margin-left: -683px;
     top: 50%;
     margin-top: -300px;
-    
+    background-image: url(../images/battle/field_background2.png);
 }
 
 .statusPlayer
