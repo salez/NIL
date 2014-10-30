@@ -282,6 +282,7 @@
     <Content Include="Images\mana.png" />
     <Content Include="Images\new_game2.png" />
     <Content Include="Images\nil_config2.png" />
+    <Content Include="Scripts\Battle.js" />
     <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />

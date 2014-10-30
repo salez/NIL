@@ -14,10 +14,10 @@
 </div>
 
 <div class="battleWrapper">
-    
+
     <div class="statusPlayer player1">
         <div class="graveyard">
-            
+
         </div>
         <div class="deck">
             <div class="cardsCount">
@@ -28,40 +28,43 @@
             <div class="playerLifeBar">
                 @Model.PlayerTwo.Life
             </div>
+            <div class="playerManaBar">
+                @Model.PlayerTwo.Mana
+            </div>
         </div>
     </div>
     <div class="field">
         <div class="computerHand">
-        
+
         </div>
-        
+
         <div class="computerField">
             <div class="defenseField"></div>
             <div class="atackField"></div>
         </div>
-        
+
         <div class="playerField">
             <div class="atackField"></div>
             <div class="defenseField"></div>
         </div>
 
         <div class="playerHand">
-            
+
             @{
                 int left = 200;
                 int rotate = -10;
             }
             @foreach (var carta in Model.PlayerTwo.Hands)
-            { 
-                <div class="cardWrapper" style="left: @(left)px;">
+            {
+                <div class="cardWrapper" data-id="@carta.Id" style="left: @(left)px;">
                     <div class="carta">
                         <div class="conteudo_topo">
                             <div class="carta_nome">@carta.Nome</div>
                             <div class="custo">
                                 <div class="custo_num">
-                                @carta.Custo
+                                    @carta.Custo
                                 </div>
-                
+
                             </div>
                         </div>
                         <div class="conteudo_imagem" style="background-image: url(@Url.Content("~/images/cartas/" + (@carta.Id).ToString().PadLeft(2, '0') + ".jpg"))"></div>
@@ -90,10 +93,13 @@
     </div>
 
     <div class="statusPlayer player2">
-        
+
         <div class="status" style="background: url(@Url.Content(Model.PlayerOne.AvatarImage))">
             <div class="playerLifeBar">
                 @Model.PlayerOne.Life
+            </div>
+            <div class="playerManaBar">
+                @Model.PlayerOne.Mana
             </div>
         </div>
         <div class="deck">
@@ -102,7 +108,17 @@
             </div>
         </div>
         <div class="graveyard">
-            
+
         </div>
     </div>
 </div>
+<div class="modalMenu">
+    <ul>
+        <li onclick="putCard(this)">Baixar carta</li>
+        <li>Cancelar</li>
+    </ul>
+</div>
+
+@section Scripts{
+    @Scripts.Render("~/Scripts/battle.js");
+}
