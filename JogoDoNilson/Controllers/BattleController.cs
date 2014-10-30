@@ -12,7 +12,7 @@ namespace JogoDoNilson.Controllers
         //
         // GET: /Battle/
 
-        public ActionResult battle()
+        public ActionResult Battle()
         {
             GameEngine engine = new GameEngine(Session);
 
@@ -21,14 +21,39 @@ namespace JogoDoNilson.Controllers
             return View(engine);
         }
 
-        public int computerAction()
+        public int ComputerAction()
         {
             return 0;
         }
 
-        public int drawCard()
+        public int DrawCard()
         {
             return 0; 
+        }
+
+        public int PutCardInField()
+        {
+            return 0;
+        }
+
+        public int MoveCardToAtackField()
+        {
+            return 0;
+        }
+
+        public int MoveCardToDefenseField()
+        {
+            return 0;
+        }
+
+        public int ChooseAtackers()
+        {
+            return 0;
+        }
+
+        public int ChooseDefenders()
+        {
+            return 0;
         }
 
     }
