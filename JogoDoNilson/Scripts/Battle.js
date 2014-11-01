@@ -40,8 +40,8 @@ function putCard(sender) {
     $.ajax({
         url: "/battle/PutCardInField/",
         data: { cardId: creature.id },
-        sucess: function (result) {
-            if (result == 1) {
+        success: function (result) {
+            if (result == '1') {
                 $(".player1 .playerManaBar").html(playerMana);
                 field.append(buildCreatureHtml(creature));
                 card.fadeOut();
@@ -74,7 +74,7 @@ function finishAttack() {
     $.ajax({
         url: "/battle/ChooseAttackers/",
         data: JSON.stringify({ cardIds: attackIds }),
-        sucess: function (result) {
+        success: function (result) {
             if (result == 1) {
                 //todo wait for defense;
             }
@@ -98,7 +98,7 @@ function forward(id) {
     $.ajax({
         url: "/battle/MoveCardToAtackField/",
         data: { cardId: targetid },
-        sucess: function (result) {
+        success: function (result) {
             if (result == 1) {
                 $(".playerField .atackField").append(creature);
             }
@@ -119,7 +119,7 @@ function retreat(id) {
     $.ajax({
         url: "/battle/MoveCardToDefenseField/",
         data: { cardId: targetid },
-        sucess: function (result) {
+        success: function (result) {
             if (result == 1) {
                 creature.removeClass("used");
                 $(".playerField .defenseField").append(creature);
