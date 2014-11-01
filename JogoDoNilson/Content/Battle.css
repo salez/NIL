@@ -135,8 +135,8 @@
 {
     border: 3px solid black;
     position: absolute;
-    height: 504px;
-    width: 1350px;
+    /*height: 504px;
+    width: 1350px;*/
     top: 200px;
     left: 0;
 }
@@ -200,3 +200,40 @@
     cursor:pointer;
     
 }
+
+.field .creature{
+    width:50px;
+    height:50px;
+    border-radius:40%;
+    background: no-repeat center;
+    background-size:cover;
+    margin:25px;
+    float:left;
+}
+
+.field .creature .fieldAttribute{
+    width:25px;
+    height:25px;
+    position:relative;
+    border-radius:50%;
+    color:black;
+    float:left;
+    text-align: center;
+    vertical-align: middle;
+    bottom:-40px;
+    color:white;
+}
+
+    .creature .fieldAttribute.atk {
+        background-color:darkblue;
+        background:url(ataque.png) no-repeat center;
+        background-size:contain;
+        left:-5px;
+
+    }
+    .creature .fieldAttribute.def {
+        background-color:firebrick;
+        background:url(escudo.png) no-repeat center;
+        background-size:contain;
+        left:5px;
+    }
