@@ -1,7 +1,14 @@
-﻿var debug;
+﻿var player = {
+    isTurn: false,
+    turnPhase: 0
+}
 
 
 function showMenu(X, Y, target, menuTypeClass) {
+
+    if (!player.isTurn || player.turnPhase > 2)
+        return;
+
     var menu = $(".modalMenu");
     menu.find("li").each(function (i, obj) {
         if ($(obj).hasClass(menuTypeClass))
@@ -87,8 +94,9 @@ function finishAttack() {
 function attack(id) {
     var targetid = id != undefined ? id : $(".modalMenu").data("target");
     var creature = $(".creature[data-id=" + targetid + "]");
-    forward(id);
-    creature.addClass("used");
+    if(forward(id)){
+        creature.addClass("used");
+    }
 }
 function forward(id) {
     var creature;
@@ -101,12 +109,15 @@ function forward(id) {
         success: function (result) {
             if (result == 1) {
                 $(".playerField .atackField").append(creature);
+                return true;
             }
         },
         error: function (data) {
             console.log(data);
+            return false;
         }
     });
+    return false;
 
 }
 function retreat(id) {
@@ -114,7 +125,6 @@ function retreat(id) {
     var targetid = id != undefined ? id : $(".modalMenu").data("target");
     var creature = $(".creature[data-id=" + targetid + "]");
 
-    //todo ajax
 
     $.ajax({
         url: "/battle/MoveCardToDefenseField/",
@@ -124,6 +134,17 @@ function retreat(id) {
                 creature.removeClass("used");
                 $(".playerField .defenseField").append(creature);
             }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
+function drawCard() {
+    $.ajax({
+        url: "/battle/DrawCard/",
+        success: function (result) {
+            $(".playerHand").append(result);
         },
         error: function (data) {
             console.log(data);
@@ -158,11 +179,39 @@ $(document).ready(function () {
             src = src.parent();
         }
 
-        var menuType = src.parent().hasClass(".defenseField") ? "jsDef" : "jsAtk";
+        var menuType = src.parent().hasClass("defenseField") ? "jsDef" : "jsAtk";
         showMenu(posX, posY, src.attr("data-id"), menuType);
 
     })
     $(".modalMenu li").click(function () {
         hideMenu();
     });
+    $(".finishButton").click(function () {
+        finishAttack();
+    });
+    setInterval(function () {
+        if (player.isTurn || player.turnPhase > 2);
+            return;
+
+        $.ajax({
+            url: "/battle/VerifyPhase/",
+            type: "POST",
+            success: function (result) {
+                player.isTurn = result.isYourTurn;
+                player.turnPhase = result.phase;
+
+                if (result.isYourTurn) {
+                    switch (result.phase) {
+                        case 1:
+                            drawCard();
+                        default:
+                            break;
+                    }
+                }
+            },
+            error: function (result) {
+
+            }
+        })
+    }, 6000);
 });

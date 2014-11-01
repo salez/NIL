@@ -24,7 +24,7 @@ namespace JogoDoNilson.Controllers
             if (player.IsAIControlled)
                 battle.EndTurn();
 
-            
+
 
             return View(engine);
         }
@@ -32,7 +32,7 @@ namespace JogoDoNilson.Controllers
         public int ComputerAction()
         {
             GameEngine engine = new GameEngine(Session);
-            
+
             Battle battle = engine.Battle;
             Player player = battle.Turn.Player;
 
@@ -90,8 +90,8 @@ namespace JogoDoNilson.Controllers
 
             Carta card = player.DrawCard();
             battle.EndPhase();
-
-            return PartialView("card",card); 
+            ViewBag.Left = ((player.Hands.Count - 1) * 150) + 200;
+            return PartialView("card", card);
         }
 
         public int PutCardInField(int cardId)
@@ -181,12 +181,12 @@ namespace JogoDoNilson.Controllers
             return 1;
         }
 
-        public int ChooseDefenders(int atkCardId, int[]defCardIds)
+        public int ChooseDefenders(int atkCardId, int[] defCardIds)
         {
             GameEngine engine = new GameEngine(Session);
 
             Battle battle = engine.Battle;
-            Player defPlayer = (battle.Turn.Player == battle.player1)?battle.player2:battle.player1;
+            Player defPlayer = (battle.Turn.Player == battle.player1) ? battle.player2 : battle.player1;
 
             if (defPlayer.IsAIControlled || defCardIds.Count() > 2)
                 return 0;
@@ -204,6 +204,20 @@ namespace JogoDoNilson.Controllers
             //todo: battleResult
 
             return 1;
+        }
+
+        public JsonResult VerifyPhase()
+        {
+            GameEngine engine = new GameEngine(Session);
+
+            Battle battle = engine.Battle;
+            Player player = battle.Turn.Player;
+            return Json(new
+            {
+                phase = battle.Phase,
+                isYourTurn = battle.Turn.Player == engine.PlayerTwo,
+                data = ""
+            });
         }
     }
 }
