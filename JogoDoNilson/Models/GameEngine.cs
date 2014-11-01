@@ -205,6 +205,7 @@ namespace JogoDoNilson.Models
 
         public void EndPhase()
         {
+            //todo: ações de fim de turno baseado na fase?
             switch (this.Phase)
             {
                 case BattlePhase.Draw:
