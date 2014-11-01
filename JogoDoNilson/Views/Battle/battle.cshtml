@@ -29,7 +29,7 @@
                 @Model.PlayerTwo.Life
             </div>
             <div class="playerManaBar">
-                @Model.PlayerTwo.Mana
+                @Model.PlayerTwo.ManaCurrent
             </div>
         </div>
     </div>
@@ -99,7 +99,7 @@
                 @Model.PlayerOne.Life
             </div>
             <div class="playerManaBar">
-                @Model.PlayerOne.Mana
+                @Model.PlayerOne.ManaCurrent
             </div>
         </div>
         <div class="deck">
@@ -114,11 +114,11 @@
 </div>
 <div class="modalMenu">
     <ul>
-        <li onclick="putCard(this)">Baixar carta</li>
-        <li onclick="attack()">Attacar</li>
-        <li onclick="forward()">Avançar</li>
-        <li onclick="retreat()">Recoar</li>
-        <li>Cancelar</li>
+        <li onclick="putCard(this)" class="jsHand">Baixar carta</li>
+        <li onclick="attack()" class="jsDef jsAtk">Atacar</li>
+        <li onclick="forward()" class="jsDef">Avançar</li>
+        <li onclick="retreat()" class="jsAtk">Recoar</li>
+        <li class="jsHand jsDef jsAtk">Cancelar</li>
     </ul>
 </div>
 

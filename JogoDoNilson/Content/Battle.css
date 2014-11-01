@@ -211,6 +211,10 @@
     float:left;
 }
 
+.field .creature.used{
+    opacity:0.5;
+}
+
 .field .creature .fieldAttribute{
     width:25px;
     height:25px;

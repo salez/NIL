@@ -149,11 +149,8 @@ C:\Projetos\NIL\NIL\JogoDoNilson\bin\Microsoft.Web.Infrastructure.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\Microsoft.Web.WebPages.OAuth.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\Newtonsoft.Json.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.Formatting.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.WebRequest.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Helpers.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.WebHost.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Mvc.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Optimization.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Razor.dll
@@ -166,11 +163,8 @@ C:\Projetos\NIL\NIL\JogoDoNilson\bin\WebMatrix.WebData.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\EntityFramework.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\Newtonsoft.Json.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.xml
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.Formatting.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.WebRequest.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Helpers.xml
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.xml
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.WebHost.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Mvc.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Razor.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.WebPages.xml
@@ -186,11 +180,8 @@ C:\Projetos\NIL\NIL\JogoDoNilson\bin\DotNetOpenAuth.OAuth.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\DotNetOpenAuth.OpenId.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\DotNetOpenAuth.OpenId.RelyingParty.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Net.Http.resources.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Net.Http.Formatting.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Net.Http.WebRequest.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Helpers.resources.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Http.resources.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Http.WebHost.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Mvc.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Optimization.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Razor.resources.dll
