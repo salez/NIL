@@ -24,7 +24,7 @@ namespace JogoDoNilson.Controllers
             if (player.IsAIControlled)
                 battle.EndTurn();
 
-            DrawCard();
+            
 
             return View(engine);
         }
@@ -75,7 +75,7 @@ namespace JogoDoNilson.Controllers
             return 1;
         }
 
-        public int DrawCard()
+        public ActionResult DrawCard()
         {
             GameEngine engine = new GameEngine(Session);
 
@@ -83,15 +83,15 @@ namespace JogoDoNilson.Controllers
             Player player = battle.Turn.Player;
 
             if (player.IsAIControlled)
-                return 0;
+                return Content("0");
 
             if (battle.Phase != BattlePhase.Draw)
-                return 0;
+                return Content("0");
 
-            player.DrawCard();
+            Carta card = player.DrawCard();
             battle.EndPhase();
 
-            return 1; 
+            return PartialView("card",card); 
         }
 
         public int PutCardInField(int cardId)

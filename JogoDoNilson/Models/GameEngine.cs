@@ -84,9 +84,12 @@ namespace JogoDoNilson.Models
         public int ManaCurrent { get; set; }
         public int ManaTotal { get; set; }
 
-        public void DrawCard()
+        public Carta DrawCard()
         {
-            this.Hands.Add(this.Deck.RetrieveCard());
+            var card = this.Deck.RetrieveCard();
+
+            this.Hands.Add(card);
+            return card;
         }
 
         public ReturnStatus PutCardInField(int cardId)

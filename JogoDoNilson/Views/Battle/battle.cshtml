@@ -54,11 +54,11 @@
                 int left = 200;
                 int rotate = -10;
             }
-            @foreach (var carta in Model.PlayerTwo.Hands)
+            @foreach (var card in Model.PlayerTwo.Hands)
             {
-                <div class="cardWrapper" data-id="@carta.Id" style="left: @(left)px;">
+                <div class="cardWrapper" data-id="@card.Id" style="left: @(left)px;">
 
-                    @Html.Partial("carta.cshtml", carta)
+                    @Html.Partial("card", card)
                     
                 </div>
                 left = left + 150;
