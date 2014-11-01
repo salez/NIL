@@ -61,10 +61,13 @@ namespace JogoDoNilson.Models
             this.Number = number;
             this.AvatarImage = Avatar;
             this.Life = GameSettings.PlayerSettings.InitialLife;
-            this.Mana = GameSettings.PlayerSettings.InitialMana;
+            this.ManaCurrent = this.ManaTotal = GameSettings.PlayerSettings.InitialMana;
             this.Hands = this.Deck.GetInitialHands();
             this.IsAIControlled = IsAI;
             this.Turn = new PlayerTurn();
+            this.AtackField = new List<Carta>();
+            this.DefenseField = new List<Carta>();
+            this.Graveyard = new List<Carta>();
         }
 
         public Deck Deck { get; private set; }
@@ -78,7 +81,8 @@ namespace JogoDoNilson.Models
         public PlayerTurn Turn { get; private set; }
 
         public int Life { get; set; }
-        public int Mana { get; set; }
+        public int ManaCurrent { get; set; }
+        public int ManaTotal { get; set; }
 
         public void DrawCard()
         {
@@ -92,8 +96,13 @@ namespace JogoDoNilson.Models
             if(card == null)
                 return new ReturnStatus(EnumResult.Error,"Invalid Card");
 
+            if (this.ManaCurrent < card.Custo)
+                return new ReturnStatus(EnumResult.Error, "Insuficcient Mana");
+
             this.DefenseField.Add(card);
             this.Hands.Remove(card);
+
+            this.ManaCurrent = this.ManaCurrent - card.Custo;
 
             card.CanBeMoved = false;
 
@@ -272,9 +281,16 @@ namespace JogoDoNilson.Models
         public void EndTurn(Player player1, Player player2)
         {
             if (this.Player == player1)
+            {
                 this.Player = player2;
+            }
             else if (this.Player == player2)
+            {
                 this.Player = player1;
+            }
+
+            this.Player.ManaTotal++;
+            this.Player.ManaCurrent = this.Player.ManaTotal;
 
             this.IncrementCount();
         }

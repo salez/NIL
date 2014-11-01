@@ -18,6 +18,14 @@ namespace JogoDoNilson.Controllers
 
             var battle = engine.StartBattle();
 
+            //gambi pra passar turno
+            Player player = battle.Turn.Player;
+
+            if (player.IsAIControlled)
+                battle.EndTurn();
+
+            DrawCard();
+
             return View(engine);
         }
 
@@ -196,20 +204,6 @@ namespace JogoDoNilson.Controllers
             //todo: battleResult
 
             return 1;
-        }
-
-
-        public void checkActions()
-        {
-            GameEngine engine = new GameEngine(Session);
-
-            Battle battle = engine.Battle;
-            Player player = battle.Turn.Player;
-
-            if (player.IsAIControlled)
-                battle.EndTurn();
-
-            return;
         }
     }
 }
