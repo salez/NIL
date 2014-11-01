@@ -177,6 +177,18 @@ namespace JogoDoNilson.Models
             this.Turn = new BattleTurn();
             this.Turn.SetCount(0);
             this.Phase = BattlePhase.Draw;
+
+
+        }
+
+        public Battle(Player player1, Player player2)
+        {
+            this.Turn = new BattleTurn();
+            this.Turn.SetCount(0);
+            this.Phase = BattlePhase.Draw;
+
+            this.player1 = player1;
+            this.player2 = player2;
         }
 
         public Player player1 { get; private set; }
@@ -411,9 +423,9 @@ namespace JogoDoNilson.Models
 
         public Battle StartBattle()
         {
-            if (this.Battle != null)
+            if (this.Battle == null)
             {
-                GameState.Battle = new Models.Battle();
+                GameState.Battle = new Models.Battle(this.PlayerOne, this.PlayerTwo);
 
                 var battle = this.Battle;
 

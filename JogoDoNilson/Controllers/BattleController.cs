@@ -198,5 +198,18 @@ namespace JogoDoNilson.Controllers
             return 1;
         }
 
+
+        public void checkActions()
+        {
+            GameEngine engine = new GameEngine(Session);
+
+            Battle battle = engine.Battle;
+            Player player = battle.Turn.Player;
+
+            if (player.IsAIControlled)
+                battle.EndTurn();
+
+            return;
+        }
     }
 }
