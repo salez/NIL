@@ -8,6 +8,30 @@ using System.Web;
 
 namespace JogoDoNilson.Models
 {
+    public enum EnumResult
+    {
+        Error = 0,
+        Ok = 1
+    }
+
+    public class ReturnStatus
+    {
+        public ReturnStatus(EnumResult result)
+        {
+            this.Status = result;
+            this.Message = null;
+        }
+
+        public ReturnStatus(EnumResult result, string msg)
+        {
+            this.Status = result;
+            this.Message = msg;
+        }
+
+        public EnumResult Status { get; set; }
+
+        public string Message { get; set; }
+    }
     public class Race
     {
         public int Id { get; set; }
@@ -43,9 +67,11 @@ namespace JogoDoNilson.Models
             this.Turn = new PlayerTurn();
         }
 
-
         public Deck Deck { get; private set; }
         public List<Carta> Hands { get; private set; }
+        public List<Carta> AtackField { get; private set; }
+        public List<Carta> DefenseField { get; private set; }
+        public List<Carta> Graveyard { get; private set; }
         public int Number { get; private set; }
         public string AvatarImage { get; private set; }
         public bool IsAIControlled { get; private set; }
@@ -53,13 +79,93 @@ namespace JogoDoNilson.Models
 
         public int Life { get; set; }
         public int Mana { get; set; }
+
+        public void DrawCard()
+        {
+            this.Hands.Add(this.Deck.RetrieveCard());
+        }
+
+        public ReturnStatus PutCardInField(int cardId)
+        {
+            Carta card = this.Hands.FirstOrDefault(c => c.Id == cardId);
+
+            if(card == null)
+                return new ReturnStatus(EnumResult.Error,"Invalid Card");
+
+            this.DefenseField.Add(card);
+            this.Hands.Remove(card);
+
+            card.CanBeMoved = false;
+
+            return new ReturnStatus(EnumResult.Ok);
+        }
+
+        public List<Carta> ChooseAttackers(int[] cardIds)
+        {
+            List<Carta> cards = this.AtackField.Where(x => cardIds.Contains(x.Id)).ToList();
+
+            if (cards.Count() == 0)
+                throw new Exception("No cards selected");
+
+            return cards;
+        }
+
+        public List<Carta> ChooseDefenders(int[] cardIds)
+        {
+            List<Carta> cards = this.DefenseField.Where(x => cardIds.Contains(x.Id)).ToList();
+
+            if (cards.Count() == 0)
+                throw new Exception("No cards selected");
+
+            return cards;
+        }
+
+        public ReturnStatus MoveCardToAtackField(int cardId)
+        {
+            Carta card = this.DefenseField.FirstOrDefault(c => c.Id == cardId);
+
+            if (card == null)
+                return new ReturnStatus(EnumResult.Error, "Invalid card");
+
+            if(!card.CanBeMoved)
+                return new ReturnStatus(EnumResult.Error, "Card can't be moved");
+
+            this.AtackField.Add(card);
+            this.DefenseField.Remove(card);
+
+            card.CanBeMoved = false;
+
+            return new ReturnStatus(EnumResult.Ok);
+        }
+
+        public ReturnStatus MoveCardToDefenseField(int cardId)
+        {
+            Carta card = this.AtackField.FirstOrDefault(c => c.Id == cardId);
+
+            if (card == null)
+                return new ReturnStatus(EnumResult.Error, "Invalid card");
+
+            if (!card.CanBeMoved)
+                return new ReturnStatus(EnumResult.Error, "Card can't be moved");
+
+            this.DefenseField.Add(card);
+            this.AtackField.Remove(card);
+
+            card.CanBeMoved = false;
+
+            return new ReturnStatus(EnumResult.Ok);
+        }
+
+        public void IncrementTurnCount(){
+            this.Turn.IncrementCount();
+        }
     }
 
     public enum BattlePhase
     {
         Draw = 1,
         Main = 2,
-        Atack = 3,
+        Attack = 3,
         Defense = 4,
         End = 5
     }
@@ -96,12 +202,44 @@ namespace JogoDoNilson.Models
 
             this.Turn.IncrementCount();
         }
+
+        public void EndPhase()
+        {
+            switch (this.Phase)
+            {
+                case BattlePhase.Draw:
+                    break;
+                case BattlePhase.Main:
+                    break;
+                case BattlePhase.Attack:
+                    break;
+                case BattlePhase.Defense:
+                    break;
+                case BattlePhase.End:
+                    break;
+                default:
+                    break;
+            }
+
+            this.Phase++;
+            if ((int)this.Phase == 5)
+            {
+                this.Phase = BattlePhase.Draw;
+                EndTurn();
+            }
+        }
+
+        public void EndTurn()
+        {
+            this.Turn.EndTurn(player1,player2);
+        }
     }
 
 
     public class BattleTurn{
         public int Count{get; private set;}
         public Player Player{get;private set;}
+        public List<Carta> Atackers { get; private set; }
 
         public void SetCount(int count){
             this.Count = count;
@@ -112,15 +250,26 @@ namespace JogoDoNilson.Models
             this.Count++;
         }
 
-        public void IncrementCount(int count)
-        {
-            this.Count = count;
-        }
-
         public void SetPlayer(Player player)
         {
             this.Player = player;
             this.Player.Turn.IncrementCount();
+            this.IncrementCount();
+        }
+
+        public void EndTurn(Player player1, Player player2)
+        {
+            if (this.Player == player1)
+                this.Player = player2;
+            else if (this.Player == player2)
+                this.Player = player1;
+
+            this.IncrementCount();
+        }
+
+        public void SetAttackers(List<Carta> cards)
+        {
+            this.Atackers = cards;
         }
     }
 
@@ -139,13 +288,13 @@ namespace JogoDoNilson.Models
 
     public class BattleFight
     {
-        public BattleFight(Carta AttackerCard, Carta DefenderCard)
+        public BattleFight(Carta AttackerCard, List<Carta> DefenderCards)
         {
             this.Attacker = AttackerCard;
-            this.Defender = DefenderCard;
+            this.Defenders = DefenderCards;
         }
         public Carta Attacker { get; private set; }
-        public Carta Defender { get; private set; }
+        public List<Carta> Defenders { get; private set; }
 
         private BattleFightResult _result;
         public BattleFightResult Result
@@ -160,50 +309,56 @@ namespace JogoDoNilson.Models
         private BattleFightResult CalculateResult()
         {
             if (Attacker == null)
-                return new BattleFightResult(null, Defender, 0);
-            if (Defender == null)
+                return new BattleFightResult(null, Defenders, 0);
+            if (Defenders == null)
                 return new BattleFightResult(Attacker, null, Attacker.Ataque);
 
-            int ResultDamage = Math.Abs(Defender.Defesa - Attacker.Ataque);
-            Defender.Defesa = ResultDamage;
-            Attacker.Defesa = Attacker.Defesa - Defender.Ataque;
+            foreach (var defender in Defenders)
+            {
+                int ResultDamage = Math.Abs(defender.Defesa - Attacker.Ataque);
+                defender.Defesa = ResultDamage;
+            }
+
+            Attacker.Defesa = Attacker.Defesa - Defenders.Sum(d => d.Ataque);
 
             if (Attacker.IsDead)
             {
-                if (!Defender.IsDead)
-                {
-                    return new BattleFightResult(null, Defender, 0);
-                }
-                else
-                {
-                    return new BattleFightResult(null, null, 0);
-                }
+                //if (!Defenders.IsDead)
+                //{
+                //    return new BattleFightResult(null, Defenders, 0);
+                //}
+                //else
+                //{
+                //    return new BattleFightResult(null, null, 0);
+                //}
             }
             else
             {
-                if (!Defender.IsDead)
-                {
-                    return new BattleFightResult(Attacker, Defender, 0);
-                }
-                else
-                {
-                    return new BattleFightResult(Attacker, null, ResultDamage);
-                }
+                //if (!Defenders.IsDead)
+                //{
+                //    return new BattleFightResult(Attacker, Defenders, 0);
+                //}
+                //else
+                //{
+                //    return new BattleFightResult(Attacker, null, ResultDamage);
+                //}
             }
+
+            return new BattleFightResult(null, null, 0);
         }
 
     }
 
     public class BattleFightResult
     {
-        public BattleFightResult(Carta Atacker, Carta Defender, int DelledDamage)
+        public BattleFightResult(Carta Atacker, List<Carta> Defenders, int DelledDamage)
         {
             this.Atacker = Atacker;
-            this.Defender = Defender;
+            this.Defender = Defenders;
             this.DelledDamage = DelledDamage;
         }
         public Carta Atacker { get; private set; }
-        public Carta Defender { get; private set; }
+        public List<Carta> Defender { get; private set; }
         public int DelledDamage { get; private set; }
     }
 

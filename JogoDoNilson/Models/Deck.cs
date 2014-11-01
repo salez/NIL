@@ -34,6 +34,7 @@ namespace JogoDoNilson.Models
                 return db.jdn_cartas.ToList();
             }
         }
+        public bool CanBeMoved { get; set; }
     }
 
 
