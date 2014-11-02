@@ -177,7 +177,10 @@ $(document).ready(function () {
         var cardWrapper = card.parent().parent();
 
         setTimeout(function () {
-            card.removeClass('flipped');
+
+            setTimeout(function () {
+                card.removeClass('flipped')}, 50
+            );
 
             cardWrapper.css('top', '200px');
             cardWrapper.css('left', cardLeft + 'px');
