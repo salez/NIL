@@ -340,11 +340,6 @@ namespace JogoDoNilson.Models
 
         private BattleFightResult CalculateResult()
         {
-            if (Attacker == null)
-                return new BattleFightResult(null, Defenders, 0);
-            if (Defenders == null)
-                return new BattleFightResult(Attacker, null, Attacker.Ataque);
-
             foreach (var defender in Defenders)
             {
                 int ResultDamage = Math.Abs(defender.Defesa - Attacker.Ataque);
@@ -353,45 +348,20 @@ namespace JogoDoNilson.Models
 
             Attacker.Defesa = Attacker.Defesa - Defenders.Sum(d => d.Ataque);
 
-            if (Attacker.IsDead)
-            {
-                //if (!Defenders.IsDead)
-                //{
-                //    return new BattleFightResult(null, Defenders, 0);
-                //}
-                //else
-                //{
-                //    return new BattleFightResult(null, null, 0);
-                //}
-            }
-            else
-            {
-                //if (!Defenders.IsDead)
-                //{
-                //    return new BattleFightResult(Attacker, Defenders, 0);
-                //}
-                //else
-                //{
-                //    return new BattleFightResult(Attacker, null, ResultDamage);
-                //}
-            }
-
-            return new BattleFightResult(null, null, 0);
+            return new BattleFightResult(Attacker,Defenders);
         }
 
     }
 
     public class BattleFightResult
     {
-        public BattleFightResult(Carta Atacker, List<Carta> Defenders, int DelledDamage)
+        public BattleFightResult(Carta Atacker, List<Carta> Defenders)
         {
             this.Atacker = Atacker;
             this.Defender = Defenders;
-            this.DelledDamage = DelledDamage;
         }
         public Carta Atacker { get; private set; }
         public List<Carta> Defender { get; private set; }
-        public int DelledDamage { get; private set; }
     }
 
     /// <summary>

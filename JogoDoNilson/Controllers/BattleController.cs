@@ -202,6 +202,7 @@ namespace JogoDoNilson.Controllers
             BattleFight battleFight = new BattleFight(atkCard, defCards);
 
             //todo: battleResult
+            var result = battleFight.Result;
 
             return 1;
         }
