@@ -194,7 +194,9 @@ namespace JogoDoNilson.Controllers
             GameEngine engine = new GameEngine(Session);
 
             Battle battle = engine.Battle;
+            Player atkPlayer = battle.Turn.Player;
             Player defPlayer = (battle.Turn.Player == battle.player1) ? battle.player2 : battle.player1;
+            
 
             if (defPlayer.IsAIControlled || defCardIds.Count() > 2)
                 return 0;
@@ -209,7 +211,22 @@ namespace JogoDoNilson.Controllers
 
             BattleFight battleFight = new BattleFight(atkCard, defCards);
 
+            if (atkCard.IsDead)
+            {
+                atkPlayer.Graveyard.Add(atkCard);
+                atkPlayer.AtackField.Remove(atkCard);
+            }
+
+            foreach (var defCard in defCards)
+            {
+                if (defCard.IsDead)
+                    defPlayer.Graveyard.Add(defCard);
+
+                defPlayer.DefenseField.Remove(defCard);
+            }
+
             //todo: battleResult
+            var result = battleFight.Result;
 
             return 1;
         }

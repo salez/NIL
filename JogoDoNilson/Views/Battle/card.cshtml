@@ -4,34 +4,43 @@
     ViewBag.Title = "battle";
     var carta = Model;
 }
-<div class="cardWrapper" data-id="@carta.Id" style="left: @(ViewBag.Left)px;">
-    <div class="carta">
-        <div class="conteudo_topo">
-            <div class="carta_nome">@carta.Nome</div>
-            <div class="custo">
-                <div class="custo_num">
-                    @carta.Custo
-                </div>
+<div class="cardWrapper" data-id="@carta.Id" @*style="left: @(ViewBag.Left)px;"*@>
 
-            </div>
-        </div>
-        <div class="conteudo_imagem" style="background-image: url(@Url.Content("~/images/cartas/" + (@carta.Id).ToString().PadLeft(2, '0') + ".jpg"))"></div>
-        <div class="conteudo_baixo">
-            <div class="tipo">
-                <div class="classe">
-                    @carta.Classe
+    <section class="cardContainer">
+      <div class="cardFlip flipped">
+            <div class="carta front">
+                <div class="conteudo_topo">
+                    <div class="carta_nome">@carta.Nome</div>
+                    <div class="custo">
+                        <div class="custo_num">
+                            @carta.Custo
+                        </div>
+
+                    </div>
                 </div>
-                <div class="raca">
-                    <b>@carta.Raça</b>
+                <div class="conteudo_imagem" style="background-image: url(@Url.Content("~/images/cartas/" + (@carta.Id).ToString().PadLeft(2, '0') + ".jpg"))"></div>
+                <div class="conteudo_baixo">
+                    <div class="tipo">
+                        <div class="classe">
+                            @carta.Classe
+                        </div>
+                        <div class="raca">
+                            <b>@carta.Raça</b>
+                        </div>
+                    </div>
+                    <div class="descricao">
+                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a maximus lorem, id imperdiet orci. Integer congue lorem euismod erat interdum, eget porttitor lorem malesuada.
+                    </div>
+                    <div class="forca">
+                        <div class="ataque">@carta.Ataque</div>
+                        <div class="defesa">@carta.Defesa</div>
+                    </div>
                 </div>
             </div>
-            <div class="descricao">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam a maximus lorem, id imperdiet orci. Integer congue lorem euismod erat interdum, eget porttitor lorem malesuada.
+            <div class="back">
+                
             </div>
-            <div class="forca">
-                <div class="ataque">@carta.Ataque</div>
-                <div class="defesa">@carta.Defesa</div>
-            </div>
-        </div>
-    </div>
+      </div>
+    </section>
+    
 </div>
