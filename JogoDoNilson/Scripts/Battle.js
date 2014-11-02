@@ -171,7 +171,7 @@ function putComputerCards(data) {
             id: obj.Id,
             atk: obj.Ataque,
             def: obj.Defesa,
-            image: ''
+            image: "url('/images/cartas/" + obj.Id + ".jpg')"
         });
         $(".computerField .defenseField").append(html);
     });

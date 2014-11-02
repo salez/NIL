@@ -188,7 +188,9 @@ namespace JogoDoNilson.Models
 
         public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
         {
-            return notifications.OrderBy(x => x.Key).First();
+            var notification = notifications.OrderBy(x => x.Key).First();
+            notifications.Remove(notification.Key);
+            return notification;
         }
     }
 

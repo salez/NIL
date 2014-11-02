@@ -241,6 +241,7 @@ namespace JogoDoNilson.Controllers
             if (player.IsAIControlled)
             {
                 var notification = player.RetrieveFirstNotification();
+
                 return Json(new
                 {
                     phase = notification.Key,
