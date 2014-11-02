@@ -70,11 +70,17 @@ namespace JogoDoNilson.Models
             this.Graveyard = new List<Carta>();
         }
 
+        private Dictionary<BattlePhase, string> notifications = new Dictionary<BattlePhase,string>();
+
+
         public Deck Deck { get; private set; }
         public List<Carta> Hands { get; private set; }
         public List<Carta> AtackField { get; private set; }
         public List<Carta> DefenseField { get; private set; }
         public List<Carta> Graveyard { get; private set; }
+
+        
+
         public int Number { get; private set; }
         public string AvatarImage { get; private set; }
         public bool IsAIControlled { get; private set; }
@@ -171,6 +177,19 @@ namespace JogoDoNilson.Models
         public void IncrementTurnCount(){
             this.Turn.IncrementCount();
         }
+
+        public void AddNotification(BattlePhase Phase, string Data)
+        {
+            if(notifications.Count(x => x.Key == Phase)>0)
+                return;
+
+            notifications.Add(Phase, Data);
+        }
+
+        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
+        {
+            return notifications.OrderBy(x => x.Key).First();
+        }
     }
 
     public enum BattlePhase
@@ -193,38 +212,37 @@ namespace JogoDoNilson.Models
 
         }
 
-        public Battle(Player player1, Player player2)
+        public Battle(GameEngine Engine)
         {
             this.Turn = new BattleTurn();
             this.Turn.SetCount(0);
             this.Phase = BattlePhase.Draw;
 
-            this.player1 = player1;
-            this.player2 = player2;
+            this.player1 = Engine.PlayerOne;
+            this.player2 = Engine.PlayerTwo;
         }
+
+        private GameEngine _engine;
 
         public Player player1 { get; private set; }
 
         public Player player2 { get; private set; }
 
+        
         public BattleTurn Turn { get; private set; }
 
         public BattlePhase Phase { get; private set; }
 
         public bool isStarted { get; private set; }
 
-        public void NewTurn()
+        public void InitNewTurn()
         {
-            if (this.Turn.Player == player1)
+            Phase = BattlePhase.Draw;
+            if (this.Turn.Player.IsAIControlled)
             {
-                this.Turn.SetPlayer(player2);
+                AIPlayer _player = new AIPlayer(this.Turn.Player, this);
+                _player.PrepareOffense();
             }
-            else
-            {
-                this.Turn.SetPlayer(player1);
-            }
-
-            this.Turn.IncrementCount();
         }
 
         public void EndPhase()
@@ -257,6 +275,7 @@ namespace JogoDoNilson.Models
         public void EndTurn()
         {
             this.Turn.EndTurn(player1,player2);
+            InitNewTurn();
         }
     }
 
@@ -297,6 +316,8 @@ namespace JogoDoNilson.Models
             this.Player.ManaCurrent = this.Player.ManaTotal;
 
             this.IncrementCount();
+
+
         }
 
         public void SetAttackers(List<Carta> cards)
@@ -415,7 +436,7 @@ namespace JogoDoNilson.Models
         {
             if (this.Battle == null)
             {
-                GameState.Battle = new Models.Battle(this.PlayerOne, this.PlayerTwo);
+                GameState.Battle = new Models.Battle(this);
 
                 var battle = this.Battle;
 
@@ -430,6 +451,7 @@ namespace JogoDoNilson.Models
                 {
                     battle.Turn.SetPlayer(this.PlayerTwo);
                 }
+                
             }
 
             return this.Battle;

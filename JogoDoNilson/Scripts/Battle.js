@@ -153,6 +153,19 @@ function drawCard() {
 }
 
 
+function putComputerCards(data) {
+    $(data).each(function (i, obj) {
+        var html = buildCreatureHtml(new {
+            id: obj.Id,
+            atk: obj.Ataque,
+            def: obj.Defesa,
+            image: ''
+        });
+        $(".computerField .defenseField").append(html);
+    });
+}
+
+
 $(document).ready(function () {
     $(".playerHand").click(function (ev) {
         var src = $(ev.srcElement);
@@ -204,6 +217,15 @@ $(document).ready(function () {
                     switch (result.phase) {
                         case 1:
                             drawCard();
+                        default:
+                            break;
+                    }
+                }
+                else {
+                    switch (result.phase) {
+                        case 2:
+                            putComputerCards(result.data);
+                            break;
                         default:
                             break;
                     }
