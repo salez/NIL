@@ -167,6 +167,19 @@ function putComputerCards(data) {
 
 
 $(document).ready(function () {
+
+
+    var flipTimer = 500;
+
+    $('.cardFlip').each(function () {
+        var card = $(this);
+        setTimeout(function () {
+            card.removeClass('flipped');
+        }, flipTimer);
+
+        flipTimer += 300;
+    });
+
     $(".playerHand").click(function (ev) {
         var src = $(ev.srcElement);
         var posX = ev.pageX;
@@ -203,7 +216,7 @@ $(document).ready(function () {
         finishAttack();
     });
     setInterval(function () {
-        if (player.isTurn || (player.turnPhase > 2 && !player.isTurn) )
+        if (player.isTurn || (player.turnPhase > 2 && !player.isTurn))
             return;
 
         $.ajax({
