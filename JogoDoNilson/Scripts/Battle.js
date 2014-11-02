@@ -203,7 +203,7 @@ $(document).ready(function () {
         finishAttack();
     });
     setInterval(function () {
-        if (player.isTurn || player.turnPhase > 2);
+        if (player.isTurn || (player.turnPhase > 2 && !player.isTurn) )
             return;
 
         $.ajax({
