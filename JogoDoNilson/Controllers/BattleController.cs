@@ -231,6 +231,16 @@ namespace JogoDoNilson.Controllers
             return 1;
         }
 
+
+        public void EndComputerTurn()
+        {
+            GameEngine g = new GameEngine(Session);
+            if (g.Battle.Turn.Player.IsAIControlled)
+            {
+                g.Battle.EndTurn();
+            }
+        }
+
         public JsonResult VerifyPhase()
         {
             GameEngine engine = new GameEngine(Session);

@@ -1,6 +1,7 @@
 ﻿var player = {
     isTurn: false,
-    turnPhase: 0
+    turnPhase: 0,
+    isDefenseSet: false,
 }
 
 
@@ -32,6 +33,28 @@ function flipCard(left, card, cardWrapper) {
     cardWrapper.css('left', left + 'px');
 }
 
+function drawCard() {
+    var left = 200;
+    $(".playerHand .cardWrapper").each(function (i, obj) {
+        $(obj).css("left", left + "px");
+        left += 150;
+    });
+    $.ajax({
+        url: "/battle/DrawCard/",
+        success: function (result) {
+            $(".playerHand").append(result);
+            var card = $(".cardFlip.flipped");
+            var cardWrapper = card.parent().parent();
+            var left = (($(".playerHand .cardWrapper").length - 1) * 150) + 200;
+            setTimeout(function () {
+                flipCard(left, card, cardWrapper);
+            }, 300)
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
 function putCard(sender) {
     var card = $(".cardWrapper[data-id=" + $(".modalMenu").data("target") + "]");
     var cost = parseInt(card.find(".custo_num").html());
@@ -57,7 +80,7 @@ function putCard(sender) {
             if (result == '1') {
                 $(".player1 .playerManaBar").html(playerMana);
                 field.append(buildCreatureHtml(creature));
-                card.fadeOut();
+                card.remove();
             }
         },
         error: function (data) {
@@ -146,23 +169,9 @@ function retreat(id) {
         }
     });
 }
-function drawCard() {
-    $.ajax({
-        url: "/battle/DrawCard/",
-        success: function (result) {
-            $(".playerHand").append(result);
-            var card = $(".cardFlip.flipped");
-            var cardWrapper = card.parent().parent();
-            var left = (($(".playerHand .cardWrapper").length - 1) * 150) + 200;
-            setTimeout(function () {
-                flipCard(left, card, cardWrapper);
-            }, 300)
-        },
-        error: function (data) {
-            console.log(data);
-        }
-    });
-}
+
+
+
 
 
 function putComputerCards(data) {
@@ -171,13 +180,33 @@ function putComputerCards(data) {
             id: obj.Id,
             atk: obj.Ataque,
             def: obj.Defesa,
-            image: "url('/images/cartas/" + obj.Id + ".jpg')"
+            image: 'url("/images/cartas/' + obj.Id.toString() + '.jpg")'
         });
         $(".computerField .defenseField").append(html);
     });
 }
-
-
+function computerFoward(id) {
+    var creature = $(".creature[data-id=" + id + "]");
+    $(".computerField .atackField").append(creature);
+}
+function computerRetreat(id) {
+    var creature = $(".creature[data-id=" + id + "]");
+    $(".computerField .defenseField").append(creature);
+}
+function endCpuTurn() {
+    //EndComputerTurn
+    $.ajax({
+        url: "/battle/EndComputerTurn/",
+        success: function (result) {
+            player.isDefenseSet = false;
+            player.turnPhase = 1;
+            player.isTurn = false;
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
 $(document).ready(function () {
 
 
@@ -255,6 +284,17 @@ $(document).ready(function () {
                         case 2:
                             putComputerCards($.parseJSON(result.data));
                             break;
+                        case 3:
+                            var attakers = $.parseJSON(result.data);
+
+                            if (attakers.length == 0) {
+                                endCpuTurn();
+                            }
+                            else {
+                                //move to attack 
+                                player.isDefenseSet = true;
+                            }
+                            break;
                         default:
                             break;
                     }
@@ -264,5 +304,5 @@ $(document).ready(function () {
 
             }
         })
-    }, 6000);
+    },2000);
 });

@@ -40,8 +40,18 @@ namespace JogoDoNilson.Models
 
             _battle.EndPhase();
 
-            //var Attackers = PrepareAttack();
-            //new JogoDoNilson.Controllers.BattleController().ChooseAttackers(Attackers);
+            var Attackers = (from item in PrepareAttack()
+                             select new
+                               {
+                                   item.Id,
+                                   item.Ataque,
+                                   item.Defesa,
+                                   Position = "defense"
+                               });
+
+            Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(Attackers));
+            _battle.EndPhase();
+
         }
 
         private List<Carta> PurCardsOnField()
@@ -64,20 +74,20 @@ namespace JogoDoNilson.Models
             return DrawCards;
         }
 
-        public int[] PrepareAttack()
+        public List<Carta> PrepareAttack()
         {
-            List<int> Attackers = new List<int>();
+            List<Carta> Attackers = new List<Carta>();
             this.Player.DefenseField.ForEach(c =>
             {
                 if (c.CanBeMoved)
                 {
-                    Attackers.Add(c.Id);
+                    Attackers.Add(c);
                 }
             });
 
-            Attackers.AddRange(this.Player.AtackField.Select(x => x.Id).ToList());
+            Attackers.AddRange(this.Player.AtackField);
 
-            return Attackers.ToArray();
+            return Attackers;
         }
 
 

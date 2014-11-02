@@ -188,6 +188,9 @@ namespace JogoDoNilson.Models
 
         public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
         {
+            if (notifications.Count == 0)
+                return new KeyValuePair<BattlePhase, string>(BattlePhase.Draw, "ERROR");
+     
             var notification = notifications.OrderBy(x => x.Key).First();
             notifications.Remove(notification.Key);
             return notification;
@@ -240,6 +243,8 @@ namespace JogoDoNilson.Models
         public void InitNewTurn()
         {
             Phase = BattlePhase.Draw;
+            this.Turn.Player.DefenseField.ForEach(c => c.CanBeMoved = true);
+            this.Turn.Player.AtackField.ForEach(c => c.CanBeMoved = true);
             if (this.Turn.Player.IsAIControlled)
             {
                 AIPlayer _player = new AIPlayer(this.Turn.Player, this);
