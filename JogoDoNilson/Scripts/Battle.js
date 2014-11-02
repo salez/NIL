@@ -170,11 +170,19 @@ $(document).ready(function () {
 
 
     var flipTimer = 500;
+    var cardLeft = 200;
 
     $('.cardFlip').each(function () {
         var card = $(this);
+        var cardWrapper = card.parent().parent();
+
         setTimeout(function () {
             card.removeClass('flipped');
+
+            cardWrapper.css('top', '200px');
+            cardWrapper.css('left', cardLeft + 'px');
+
+            cardLeft = cardLeft + 150;
         }, flipTimer);
 
         flipTimer += 300;
