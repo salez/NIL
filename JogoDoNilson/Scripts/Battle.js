@@ -25,6 +25,12 @@ function hideMenu() {
     var menu = $(".modalMenu");
     menu.fadeOut();
 }
+function flipCard(left, card, cardWrapper) {
+    card.removeClass('flipped');
+
+    cardWrapper.css('top', '200px');
+    cardWrapper.css('left', left + 'px');
+}
 
 function putCard(sender) {
     var card = $(".cardWrapper[data-id=" + $(".modalMenu").data("target") + "]");
@@ -145,6 +151,12 @@ function drawCard() {
         url: "/battle/DrawCard/",
         success: function (result) {
             $(".playerHand").append(result);
+            var card = $(".cardFlip.flipped");
+            var cardWrapper = card.parent().parent();
+            var left = (($(".playerHand .cardWrapper").length - 1) * 150) + 200;
+            setTimeout(function () {
+                flipCard(left, card, cardWrapper);
+            }, 300)
         },
         error: function (data) {
             console.log(data);
@@ -155,7 +167,7 @@ function drawCard() {
 
 function putComputerCards(data) {
     $(data).each(function (i, obj) {
-        var html = buildCreatureHtml(new {
+        var html = buildCreatureHtml({
             id: obj.Id,
             atk: obj.Ataque,
             def: obj.Defesa,
@@ -177,11 +189,7 @@ $(document).ready(function () {
         var cardWrapper = card.parent().parent();
 
         setTimeout(function () {
-            card.removeClass('flipped');
-
-            cardWrapper.css('top', '200px');
-            cardWrapper.css('left', cardLeft + 'px');
-
+            flipCard(cardLeft, card, cardWrapper);
             cardLeft = cardLeft + 150;
         }, flipTimer);
 
@@ -224,7 +232,7 @@ $(document).ready(function () {
         finishAttack();
     });
     setInterval(function () {
-        if (player.isTurn || (player.turnPhase > 2 && !player.isTurn))
+        if (player.isTurn && (player.turnPhase > 2 && !player.isTurn))
             return;
 
         $.ajax({
