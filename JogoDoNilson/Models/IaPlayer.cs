@@ -40,8 +40,8 @@ namespace JogoDoNilson.Models
 
             _battle.EndPhase();
 
-            var Attackers = PrepareAttack();
-            new JogoDoNilson.Controllers.BattleController().ChooseAttackers(Attackers);
+            //var Attackers = PrepareAttack();
+            //new JogoDoNilson.Controllers.BattleController().ChooseAttackers(Attackers);
         }
 
         private List<Carta> PurCardsOnField()

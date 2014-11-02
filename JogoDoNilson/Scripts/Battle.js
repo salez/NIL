@@ -83,7 +83,7 @@ function finishAttack() {
         data: JSON.stringify({ cardIds: attackIds }),
         success: function (result) {
             if (result == 1) {
-                //todo wait for defense;
+                player.turnPhase = 3;//todo wait for defense;
             }
         },
         error: function (data) {
@@ -203,7 +203,7 @@ $(document).ready(function () {
         finishAttack();
     });
     setInterval(function () {
-        if (player.isTurn || (player.turnPhase > 2 && !player.isTurn) )
+        if (player.isTurn && (player.turnPhase > 2 && !player.isTurn) )
             return;
 
         $.ajax({
@@ -224,7 +224,7 @@ $(document).ready(function () {
                 else {
                     switch (result.phase) {
                         case 2:
-                            putComputerCards(result.data);
+                            putComputerCards($.parseJSON(result.data));
                             break;
                         default:
                             break;
