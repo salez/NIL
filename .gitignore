@@ -11,6 +11,7 @@
 *.ilk
 *.log
 *.dll
+*.xml
 [Bb]in*/
 [Dd]ebug*/
 *.sbr
