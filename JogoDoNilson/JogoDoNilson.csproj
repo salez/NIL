@@ -198,6 +198,7 @@
     </Compile>
     <Compile Include="Models\Deck.cs" />
     <Compile Include="Models\GameEngine.cs" />
+    <Compile Include="Models\IaPlayer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

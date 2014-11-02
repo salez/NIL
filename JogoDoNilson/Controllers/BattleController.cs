@@ -12,6 +12,8 @@ namespace JogoDoNilson.Controllers
         //
         // GET: /Battle/
 
+        //Todo Init Game Engine and Battle on Controller Constructor
+
         public ActionResult Battle()
         {
             GameEngine engine = new GameEngine(Session);
@@ -212,12 +214,26 @@ namespace JogoDoNilson.Controllers
 
             Battle battle = engine.Battle;
             Player player = battle.Turn.Player;
-            return Json(new
+
+            if (player.IsAIControlled)
             {
-                phase = battle.Phase,
-                isYourTurn = battle.Turn.Player == engine.PlayerTwo,
-                data = ""
-            });
+
+                return Json(new
+                {
+                    phase = battle.Phase,
+                    isYourTurn = false,
+                    data = player.RetrieveFirstNotification().Value
+                });
+            }
+            else
+            {
+                return Json(new
+                {
+                    phase = battle.Phase,
+                    isYourTurn = battle.Turn.Player == engine.PlayerTwo,
+                    data = ""
+                });
+            }
         }
     }
 }
