@@ -4,6 +4,8 @@
     isDefenseSet: false,
 }
 
+var defenseMatchUps = [];
+
 
 function showMenu(X, Y, target, menuTypeClass) {
 
@@ -173,7 +175,12 @@ function retreat(id) {
 
 
 
-
+function computerAttack(attackers) {
+    $(attackers).each(function (i, obj) {
+        $(obj).addClass("used")
+        computerFoward(obj.Id);
+    })
+}
 function putComputerCards(data) {
     $(data).each(function (i, obj) {
         var html = buildCreatureHtml({
@@ -291,7 +298,7 @@ $(document).ready(function () {
                                 endCpuTurn();
                             }
                             else {
-                                //move to attack 
+                                computerAttack(attakers);
                                 player.isDefenseSet = true;
                             }
                             break;
