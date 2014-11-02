@@ -174,11 +174,17 @@ namespace JogoDoNilson.Controllers
 
             if (battle.Phase != BattlePhase.Attack)
                 return 0;
+            if (cardIds != null)
+            {
+                var cards = player.ChooseAttackers(cardIds);
 
-            var cards = player.ChooseAttackers(cardIds);
-
-            battle.Turn.SetAttackers(cards);
-            battle.EndPhase();
+                battle.Turn.SetAttackers(cards);
+                battle.EndPhase();
+            }
+            else
+            {
+                battle.EndTurn();
+            }
 
             return 1;
         }
@@ -225,6 +231,16 @@ namespace JogoDoNilson.Controllers
             return 1;
         }
 
+
+        public void EndComputerTurn()
+        {
+            GameEngine g = new GameEngine(Session);
+            if (g.Battle.Turn.Player.IsAIControlled)
+            {
+                g.Battle.EndTurn();
+            }
+        }
+
         public JsonResult VerifyPhase()
         {
             GameEngine engine = new GameEngine(Session);
@@ -234,12 +250,13 @@ namespace JogoDoNilson.Controllers
 
             if (player.IsAIControlled)
             {
+                var notification = player.RetrieveFirstNotification();
 
                 return Json(new
                 {
-                    phase = battle.Phase,
+                    phase = notification.Key,
                     isYourTurn = false,
-                    data = player.RetrieveFirstNotification().Value
+                    data = notification.Value
                 });
             }
             else

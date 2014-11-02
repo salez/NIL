@@ -10,7 +10,9 @@
 *.cache
 *.ilk
 *.log
-[Bb]in/*
+*.dll
+*.xml
+[Bb]in*/
 [Dd]ebug*/
 *.sbr
 obj/

@@ -1,7 +1,10 @@
 ﻿var player = {
     isTurn: false,
-    turnPhase: 0
+    turnPhase: 0,
+    isDefenseSet: false,
 }
+
+var defenseMatchUps = [];
 
 
 function showMenu(X, Y, target, menuTypeClass) {
@@ -25,7 +28,35 @@ function hideMenu() {
     var menu = $(".modalMenu");
     menu.fadeOut();
 }
+function flipCard(left, card, cardWrapper) {
+    card.removeClass('flipped');
 
+    cardWrapper.css('top', '200px');
+    cardWrapper.css('left', left + 'px');
+}
+
+function drawCard() {
+    var left = 200;
+    $(".playerHand .cardWrapper").each(function (i, obj) {
+        $(obj).css("left", left + "px");
+        left += 150;
+    });
+    $.ajax({
+        url: "/battle/DrawCard/",
+        success: function (result) {
+            $(".playerHand").append(result);
+            var card = $(".cardFlip.flipped");
+            var cardWrapper = card.parent().parent();
+            var left = (($(".playerHand .cardWrapper").length - 1) * 150) + 200;
+            setTimeout(function () {
+                flipCard(left, card, cardWrapper);
+            }, 300)
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
 function putCard(sender) {
     var card = $(".cardWrapper[data-id=" + $(".modalMenu").data("target") + "]");
     var cost = parseInt(card.find(".custo_num").html());
@@ -51,7 +82,7 @@ function putCard(sender) {
             if (result == '1') {
                 $(".player1 .playerManaBar").html(playerMana);
                 field.append(buildCreatureHtml(creature));
-                card.fadeOut();
+                card.remove();
             }
         },
         error: function (data) {
@@ -83,7 +114,7 @@ function finishAttack() {
         data: JSON.stringify({ cardIds: attackIds }),
         success: function (result) {
             if (result == 1) {
-                //todo wait for defense;
+                player.turnPhase = 3;//todo wait for defense;
             }
         },
         error: function (data) {
@@ -140,32 +171,49 @@ function retreat(id) {
         }
     });
 }
-function drawCard() {
+
+
+
+
+function computerAttack(attackers) {
+    $(attackers).each(function (i, obj) {
+        $(obj).addClass("used")
+        computerFoward(obj.Id);
+    })
+}
+function putComputerCards(data) {
+    $(data).each(function (i, obj) {
+        var html = buildCreatureHtml({
+            id: obj.Id,
+            atk: obj.Ataque,
+            def: obj.Defesa,
+            image: 'url("/images/cartas/' + obj.Id.toString() + '.jpg")'
+        });
+        $(".computerField .defenseField").append(html);
+    });
+}
+function computerFoward(id) {
+    var creature = $(".creature[data-id=" + id + "]");
+    $(".computerField .atackField").append(creature);
+}
+function computerRetreat(id) {
+    var creature = $(".creature[data-id=" + id + "]");
+    $(".computerField .defenseField").append(creature);
+}
+function endCpuTurn() {
+    //EndComputerTurn
     $.ajax({
-        url: "/battle/DrawCard/",
+        url: "/battle/EndComputerTurn/",
         success: function (result) {
-            $(".playerHand").append(result);
+            player.isDefenseSet = false;
+            player.turnPhase = 1;
+            player.isTurn = false;
         },
         error: function (data) {
             console.log(data);
         }
     });
 }
-
-
-function putComputerCards(data) {
-    $(data).each(function (i, obj) {
-        var html = buildCreatureHtml(new {
-            id: obj.Id,
-            atk: obj.Ataque,
-            def: obj.Defesa,
-            image: ''
-        });
-        $(".computerField .defenseField").append(html);
-    });
-}
-
-
 $(document).ready(function () {
 
 
@@ -181,10 +229,6 @@ $(document).ready(function () {
             setTimeout(function () {
                 card.removeClass('flipped')}, 50
             );
-
-            cardWrapper.css('top', '200px');
-            cardWrapper.css('left', cardLeft + 'px');
-
             cardLeft = cardLeft + 150;
         }, flipTimer);
 
@@ -227,7 +271,7 @@ $(document).ready(function () {
         finishAttack();
     });
     setInterval(function () {
-        if (player.isTurn || (player.turnPhase > 2 && !player.isTurn))
+        if (player.isTurn && (player.turnPhase > 2 && !player.isTurn))
             return;
 
         $.ajax({
@@ -248,7 +292,18 @@ $(document).ready(function () {
                 else {
                     switch (result.phase) {
                         case 2:
-                            putComputerCards(result.data);
+                            putComputerCards($.parseJSON(result.data));
+                            break;
+                        case 3:
+                            var attakers = $.parseJSON(result.data);
+
+                            if (attakers.length == 0) {
+                                endCpuTurn();
+                            }
+                            else {
+                                computerAttack(attakers);
+                                player.isDefenseSet = true;
+                            }
                             break;
                         default:
                             break;
@@ -259,5 +314,5 @@ $(document).ready(function () {
 
             }
         })
-    }, 6000);
+    },2000);
 });
