@@ -122,7 +122,6 @@ C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.WebPages.Razor.resources.d
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\WebMatrix.Data.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\Microsoft.Web.WebPages.OAuth.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\WebMatrix.WebData.resources.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\obj\Debug\JogoDoNilson.csprojResolveAssemblyReference.cache
 C:\Projetos\NIL\NIL\JogoDoNilson\obj\Debug\JogoDoNilson.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\obj\Debug\JogoDoNilson.pdb
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.Formatting.dll

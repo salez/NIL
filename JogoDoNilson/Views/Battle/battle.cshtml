@@ -7,6 +7,8 @@
 @section header{
 
     @Styles.Render("~/content/battle.css")
+    
+    @Html.Partial("script/battle");
 
 }
 <div class="battleWrapperAbsolute">
@@ -16,9 +18,9 @@
 <div class="battleWrapper">
 
     <div class="statusPlayer player1">
-        <div class="graveyard">
+        @*<div class="graveyard">
 
-        </div>
+        </div>*@
         <div class="deck">
             <div class="cardsCount">
                 @Model.PlayerTwo.Deck.CardsCount
@@ -85,9 +87,9 @@
         <div class="finishButton">
             Finalizar Ofensiva
         </div>
-        <div class="graveyard">
+       @* <div class="graveyard">
 
-        </div>
+        </div>*@
     </div>
 </div>
 <div class="modalMenu">
@@ -99,6 +101,10 @@
         <li class="jsHand jsDef jsAtk">Cancelar</li>
     </ul>
 </div>
+
+<audio autoplay loop>
+  <source src="@Url.Content("~/Content/audio/battle.mp3")" type="audio/mpeg">
+</audio>
 
 @section Scripts{
     @Scripts.Render("~/Scripts/battle.js");

@@ -4,7 +4,7 @@
 }
 
 body, #body {
-    background-image: url('/Images/background-init.jpg');
+    background-image: url('../Images/background-init.jpg');
     background-size: 130%;
     background-repeat: no-repeat;
     background-position-y: -290px;
@@ -50,15 +50,15 @@ body, #body {
     }
 
     .initialMenu .newGame {
-        background-image: url('/Images/new_game2.png');
+        background-image: url('../Images/new_game2.png');
     }
 
     .initialMenu .settings {
-        background-image: url('/Images/nil_config2.png');
+        background-image: url('../Images/nil_config2.png');
     }
 
     .initialMenu .credits {
-        background-image: url('/Images/CreditsIcon.png');
+        background-image: url('../Images/CreditsIcon.png');
     }
 
 

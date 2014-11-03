@@ -4,6 +4,9 @@
 @section header{
     <link href="~/Content/Index.css" rel="stylesheet" />
 }
+<audio autoplay loop>
+  <source src="@Url.Content("~/Content/audio/init.mp3")" type="audio/mpeg">
+</audio>
 <div class="gameNameWrapper">
     <img src="@Url.Content("~/Images/logo.png")" />
 </div>
@@ -72,7 +75,7 @@
 
             $(".initialMenu li").click(function () {
                 
-                clickSound.play();
+                //clickSound.play();
                 var url = $(this).parent().find('a').attr("data-url");
                 setTimeout(function () {
                     location.replace(url);

@@ -51,7 +51,7 @@
         var clickSound = document.getElementById('mdSfxNav');
         $(document).ready(function () {
             $(".jsAvatar").click(function () {
-                clickSound.play();
+                //clickSound.play();
                 $(".jsAvatar").removeClass("active");
                 $(this).addClass("active");
                 $("#hfCharacterId").val($(this).data("charid"));
@@ -59,12 +59,15 @@
                     $(".jsStart").click();
                 }, 150);
             });
+
+            $(".jsStart").click(function () {
+                var frm = $('form');
+                alert(frm.html());
+                frm.submit();
+            });
         });
 
-        $(".jsStart").click(function () {
-            var frm = document.forms[0];
-            frm.submit();
-        });
+        
     </script>
 }
 <div>Choose Your Avatar</div>
@@ -85,6 +88,6 @@
             <input type="hidden" name="CharacterId" id="hfCharacterId" />
             <input type="submit" id="btnStart" style="display:none" formaction="@Url.Action("StartGame")" value="Iniciar" />
         </form>
-</div>
+    </div>
 
 </div>

@@ -26,8 +26,6 @@ namespace JogoDoNilson.Controllers
             if (player.IsAIControlled)
                 battle.EndTurn();
 
-
-
             return View(engine);
         }
 
