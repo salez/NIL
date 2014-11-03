@@ -67,6 +67,10 @@
     margin: 10px 10px 10px 30px;
 }
 
+.statusPlayer.player1 .status {
+    margin: 200px 0 0 0;
+}
+
 .statusPlayer .status {
     width: 180px;
     height: 208px;
@@ -108,11 +112,14 @@
 .field .atackField {
     height: 120px;
     border: 1px solid red;
+    text-align: center;
 }
 
 .field .defenseField {
     height: 120px;
     border: 1px solid yellow;
+    text-align: center;
+	
 }
 
 .field .playerHand {
@@ -143,8 +150,8 @@
     transform: scale(0.4, 0.4);
     transform-origin: bottom center;
     position: absolute;
-    left: -68px;
-    top: -77px;
+    left: 1080px;
+    top: 119px;
 }
 
     .cardWrapper:hover {
@@ -187,7 +194,7 @@
     background: no-repeat center;
     background-size: cover;
     margin: 25px;
-    float: left;
+    display: inline-block;
 }
 
     .field .creature.used {
@@ -230,7 +237,7 @@
     vertical-align: middle;
     text-align: center;
     padding-top: 27px;
-    margin: 0 0 0 20px;
+    margin: 60px 0 60px 30px;
     color: white;
     font-weight: 500;
     background: url(../images/battle/atack_button.png) center center no-repeat;

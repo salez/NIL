@@ -23,9 +23,10 @@
         </div>*@
         <div class="deck">
             <div class="cardsCount">
-                @Model.PlayerTwo.Deck.CardsCount
+                @Model.PlayerOne.Deck.CardsCount
             </div>
         </div>
+
         <div class="status" style="background: url(@Url.Content(Model.PlayerTwo.AvatarImage))">
             <div class="playerLifeBar">
                 @Model.PlayerTwo.Life
@@ -79,14 +80,16 @@
                 @Model.PlayerOne.ManaCurrent
             </div>
         </div>
-        <div class="deck">
-            <div class="cardsCount">
-                @Model.PlayerOne.Deck.CardsCount
-            </div>
-        </div>
         <div class="finishButton">
             Finalizar Ofensiva
         </div>
+        <div class="deck">
+            <div class="cardsCount">
+                @Model.PlayerTwo.Deck.CardsCount
+            </div>
+        </div>
+        
+        
        @* <div class="graveyard">
 
         </div>*@
