@@ -8,6 +8,32 @@ var player = {
 
 var defenseMatchUps = [];
 
+function showTitle(title){
+    $('.battleTitle span').html(title);
+   
+    $('.battleTitle span').show();
+    $('.battleTitle').fadeIn();
+
+    setTimeout(function(){
+        $('.battleTitle').css('transform','scale(0.5)');
+    },100);
+
+    setTimeout(function(){
+        $('.battleTitle').css('transition','all 15s');
+        $('.battleTitle').css('transform','scale(0.3)');
+    },500);
+
+    setTimeout(function(){
+        $('.battleTitle span').fadeOut('fast', function(){
+            $('.battleTitle').hide();
+        });
+
+        setTimeout(function(){
+            $('.battleTitle').css('transition','all 0.5s');
+            $('.battleTitle').css('transform','scale(1)');
+        },100);
+    },2500);
+}
 
 function showMenu(X, Y, target, menuTypeClass) {
     
@@ -294,6 +320,7 @@ $(document).ready(function () {
                 if (result.isYourTurn) {
                     switch (result.phase) {
                         case 1:
+                            showTitle('SEU TURNO');
                             drawCard();
                         default:
                             break;

@@ -11,9 +11,7 @@
     @Html.Partial("script/battle");
 
 }
-<div class="battleWrapperAbsolute">
-    <div class="battleTitle">INICIO</div>
-</div>
+<div class="battleTitle"><span>SEU TURNO</span></div>
 
 <div class="battleWrapper">
 
@@ -56,11 +54,12 @@
             @{
                 int left = 200;
                 int rotate = -10;
+                int zindex = 5;
             }
             @foreach (var card in Model.PlayerTwo.Hands)
             {
                 ViewBag.Left = left;
-
+                ViewBag.ZIndex = zindex--;
 
                 @Html.Partial("card", card)
 
