@@ -78,7 +78,7 @@ function putCard(sender) {
     playerMana = playerMana - cost;
 
     $.ajax({
-        url: "/battle/PutCardInField/",
+        url: "@Url.Action("putcardinfield","battle")",
         data: { cardId: creature.id },
         success: function (result) {
             if (result == '1') {
@@ -112,7 +112,7 @@ function finishAttack() {
     });
 
     $.ajax({
-        url: "/battle/ChooseAttackers/",
+        url: "@Url.Action("chooseattackers","battle")",
         data: JSON.stringify({ cardIds: attackIds }),
         success: function (result) {
             if (result == 1) {
@@ -137,7 +137,7 @@ function forward(id) {
     var creature = $(".creature[data-id=" + targetid + "]");
 
     $.ajax({
-        url: "/battle/MoveCardToAtackField/",
+        url: "@Url.Action("movecardtoatackfield","battle")",
         data: { cardId: targetid },
         success: function (result) {
             if (result == 1) {
@@ -160,7 +160,7 @@ function retreat(id) {
 
 
     $.ajax({
-        url: "/battle/MoveCardToDefenseField/",
+        url: "@Url.Action("movecardtodefensevield","battle")",
         data: { cardId: targetid },
         success: function (result) {
             if (result == 1) {
@@ -174,9 +174,6 @@ function retreat(id) {
     });
 }
 
-
-
-
 function computerAttack(attackers) {
     $(attackers).each(function (i, obj) {
         $(obj).addClass("used")
@@ -189,7 +186,7 @@ function putComputerCards(data) {
             id: obj.Id,
             atk: obj.Ataque,
             def: obj.Defesa,
-            image: 'url("/images/cartas/' + obj.Id.toString() + '.jpg")'
+            image: 'url("@Url.Content("~/images/cartas/")' + obj.Id.toString() + '.jpg")'
         });
         $(".computerField .defenseField").append(html);
     });
@@ -205,7 +202,7 @@ function computerRetreat(id) {
 function endCpuTurn() {
     //EndComputerTurn
     $.ajax({
-        url: "/battle/EndComputerTurn/",
+        url: "@Url.Action("endcomputerturn","battle")",
         success: function (result) {
             player.isDefenseSet = false;
             player.turnPhase = 1;
@@ -242,23 +239,25 @@ $(document).ready(function () {
         flipTimer += 300;
     });
 
-    $(".creature").click(function (ev) {
-        //var src = $(ev.srcElement);
-        var src = $(this);
+    $(".playerField").click(function (ev) {
+        var src = $(ev.srcElement);
+
         debug = src;
         var posX = ev.pageX;
         var posY = ev.pageY;
 
-//        while (!src.hasClass("creature")) {
-//            if (src.hasClass(".playerField") || src.find(".creature").length > 0)
-//                return;
-//            src = src.parent();
-//        }
+        while (!src.hasClass("creature")) {
+            src = src.parent();
+
+            if(src.html() == 'null' || src.html() == null || src == null)
+                return;
+        }
 
         var menuType = src.parent().hasClass("defenseField") ? "jsDef" : "jsAtk";
         showMenu(posX, posY, src.attr("data-id"), menuType);
 
-    })
+    });
+
     $(".modalMenu li").click(function () {
         hideMenu();
     });
@@ -266,10 +265,17 @@ $(document).ready(function () {
         finishAttack();
     });
 
-    $(".cardWrapper").click(function (ev) {
-        var src = $(this);
+    $(".playerHand").click(function (ev) {
+        var src = $(ev.srcElement);
         var posX = ev.pageX;
         var posY = ev.pageY;
+
+        while (!src.hasClass("cardWrapper")) {
+            src = src.parent();
+
+            if(src.html() == 'null' || src.html() == null || src == null)
+                return;
+        }
 
         showMenu(posX, posY, src.attr("data-id"), "jsHand");
     });
