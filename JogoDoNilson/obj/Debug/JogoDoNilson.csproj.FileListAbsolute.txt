@@ -201,3 +201,4 @@ E:\Projects\IA\JogoDoNilson\bin\pt-br\Microsoft.Web.WebPages.OAuth.resources.dll
 E:\Projects\IA\JogoDoNilson\bin\pt-br\WebMatrix.WebData.resources.dll
 E:\Projects\IA\JogoDoNilson\obj\Debug\JogoDoNilson.dll
 E:\Projects\IA\JogoDoNilson\obj\Debug\JogoDoNilson.pdb
+E:\Projects\IA\JogoDoNilson\obj\Debug\JogoDoNilson.csprojResolveAssemblyReference.cache
