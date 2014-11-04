@@ -109,8 +109,25 @@ function putCard(sender) {
         success: function (result) {
             if (result == '1') {
                 $(".player1 .playerManaBar").html(playerMana);
-                field.append(buildCreatureHtml(creature));
-                card.remove();
+
+                var creatureObj = buildCreatureHtml(creature);
+
+                field.append(creatureObj);
+
+                card.css('transform-origin','center center');
+                card.css('margin-top','150px');
+                
+                card.css('transform','scale(0.6)');
+                card.css('opacity','0');
+                
+                setTimeout(function(){
+                    card.remove();
+
+                    creatureObj.css('transform','scale(1)');
+                    creatureObj.css('opacity','1');
+                    organizeCreatures();
+                },500);
+
             }
         },
         error: function (data) {
@@ -120,13 +137,31 @@ function putCard(sender) {
 
 }
 
+function organizeCreatures(){
+    var creatures = $(".playerField .defenseField .creature");
+
+    var countTotal = creatures.length;
+    var totalSpace = 150 * countTotal;
+    var spaceForEach = totalSpace / countTotal;
+
+    var countAtual = creatures.length;
+    
+    var space = -((countAtual / 2) * spaceForEach);
+
+    creatures.each(function(){
+        $(this).css('margin-left',space + 'px');
+
+        space = space + spaceForEach;
+    });
+}
+
 function buildCreatureHtml(creature) {
-    var creatureHtml = "<div class='creature' data-id=" + creature.id + " style='background-image:" + creature.image + "'>";
+    var creatureHtml = "<div class='creature' data-id=" + creature.id + " style='opacity: 0; transform: scale(2); background-image:" + creature.image + "'>";
     creatureHtml += "<div class='fieldAttribute atk'>" + creature.atk + "</div>";
     creatureHtml += "<div class='fieldAttribute def'>" + creature.def + "</div>";
     creatureHtml += "</div>";
 
-    return creatureHtml;
+    return $(creatureHtml);
 }
 
 function finishAttack() {

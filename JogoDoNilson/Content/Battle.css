@@ -186,6 +186,17 @@
         z-index: 100 !important;
         position: absolute;
     }
+    
+    .creature
+    {
+        transition: all 0.5s;
+        position: absolute;
+    }
+    
+    .creature:hover
+    {
+        transform: scale(1.5, 1.5) !important;
+    }
 
 .modalMenu {
     position: absolute;
@@ -210,12 +221,12 @@
     }
 
 .field .creature {
-    width: 50px;
-    height: 50px;
-    border-radius: 40%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
     background: no-repeat center;
     background-size: cover;
-    margin: 25px;
+    margin: 5px;
     display: inline-block;
 }
 
@@ -225,7 +236,7 @@
     }
 
     .field .creature .fieldAttribute {
-        width: 25px;
+        width: 40px;
         height: 25px;
         position: relative;
         border-radius: 50%;
@@ -233,8 +244,10 @@
         float: left;
         text-align: center;
         vertical-align: middle;
-        bottom: -40px;
+        bottom: -65px;
         color: white;
+        /* font-weight: bold; */
+        font-size: 18px;
     }
 
 .creature .fieldAttribute.atk {
