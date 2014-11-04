@@ -3,9 +3,19 @@
     height: 100%;
 }
 
+a:hover
+{
+    text-decoration: none;
+}
+
+*{
+	padding:0;
+	margin:0;
+	font-family:"Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
 body, #body {
     background-image: url('../Images/background-init.jpg');
-    background-size: 130%;
     background-repeat: no-repeat;
     background-position-y: -290px;
     width: 100%;
@@ -29,16 +39,11 @@ body, #body {
     margin: auto;
 }
 
-    .initialMenu a:hover {
-        text-decoration: none;
-        border: none;
-    }
-
     .initialMenu li {
-        width: 255px;
-        height: 255px;
         float: left;
         margin: 15px 15px;
+        width: 900px;
+        text-align: center;
     }
 
     .initialMenu div {
@@ -50,15 +55,21 @@ body, #body {
     }
 
     .initialMenu .newGame {
-        background-image: url('../Images/new_game2.png');
+        background: url(../Images/iniciar-jogo.png) center center no-repeat;
+        width: 900px;
+        height: 200px;
+    }
+    
+    .initialMenu .newGame:hover {
+        background: url(../Images/iniciar-jogo-hover2.png) center center no-repeat;
     }
 
     .initialMenu .settings {
-        background-image: url('../Images/nil_config2.png');
+        
     }
 
     .initialMenu .credits {
-        background-image: url('../Images/CreditsIcon.png');
+       
     }
 
 

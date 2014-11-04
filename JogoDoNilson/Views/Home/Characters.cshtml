@@ -56,40 +56,39 @@
                 $(this).addClass("active");
                 $("#hfCharacterId").val($(this).data("charid"));
                 setTimeout(function () {
-                    $(".jsStart").click();
+                    var frm = $('form');
+                    frm.submit();
                 }, 150);
-            });
-
-            $(".jsStart").click(function () {
-                var frm = $('form');
-                alert(frm.html());
-                frm.submit();
             });
         });
 
         
     </script>
 }
-<div>Choose Your Avatar</div>
+<div style="text-align: center;"><img src="@Url.Content("~/Images/title_choose_avatar.png")" /><div class="newGame"></div></div>
 
-<div>
-    <ul class="content-list">
-        @for (int i = 1; i <= 8; i++)
-        {
-            <li data-charid="@(i)"
-                style="background:url('@Url.Content(string.Format("~/Images/Avatars/{0}.jpg", i))');@((i == 5) ? "clear:left;\"" : "")"
-                class="picFrame float-left  jsAvatar" >
-            </li>
-        }
-    </ul>
-    <div class="btnStart float-right jsStart">
-        <img src="@Url.Content("~/Images/StartIcon.png")">
-        <form action="@Url.Action("StartGame")" method="post">
-            <input type="hidden" name="CharacterId" id="hfCharacterId" />
-            <input type="submit" id="btnStart" style="display:none" formaction="@Url.Action("StartGame")" value="Iniciar" />
-        </form>
-    </div>
+<div style="text-align: center;
+float: left;
+width: 752px;
+left: 50%;
+position: absolute;
+top: 50%;
+margin-left: -376px;
+height: 476px;
+margin-top: -238px;">
+    <form action="@Url.Action("StartGame")" method="post">
+        <ul class="content-list">
+            @for (int i = 1; i <= 8; i++)
+            {
+                <li data-charid="@(i)"
+                    style="background:url('@Url.Content(string.Format("~/Images/Avatars/{0}.jpg", i))');@((i == 5) ? "clear:left;\"" : "")"
+                    class="picFrame float-left  jsAvatar" >
+                </li>
+            }
+        </ul>
+        <input type="hidden" name="CharacterId" id="hfCharacterId" />
 
+    </form>
 </div>
 <audio autoplay loop>
   <source src="@Url.Content("~/Content/audio/characters.mp3")" type="audio/mpeg">
