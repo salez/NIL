@@ -176,6 +176,8 @@
         $.ajax({
             url: "@Url.Action("chooseattackers","battle")",
             data: JSON.stringify({ cardIds: attackIds }),
+            contentType: "application/json",
+            traditional: true,
             success: function (result) {
                 if (result == 1) {
                     player.turnPhase = 3;//todo wait for defense;
@@ -540,6 +542,12 @@
                                     computerAttack(attakers);
                                     player.isDefenseSet = true;
                                 }
+                                break;
+                            case 5:
+                                defenseMatchUps = $.parseJSON(result.data);
+                                //to do set classes with timeout
+                                finishDefense();
+
                                 break;
                             default:
                                 break;

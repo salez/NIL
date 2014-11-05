@@ -178,6 +178,8 @@ namespace JogoDoNilson.Controllers
 
                 battle.Turn.SetAttackers(cards);
                 battle.EndPhase();
+                var ai = new AIPlayer(battle.player1,battle);
+                ai.PrepareDefense(cardIds);
             }
             else
             {
@@ -198,7 +200,7 @@ namespace JogoDoNilson.Controllers
             Player defPlayer = (battle.Turn.Player == battle.player1) ? battle.player2 : battle.player1;
             
 
-            if (defPlayer.IsAIControlled || defCardIds.Count() > 2)
+            if (defCardIds.Count() > 2)
                 return null;
 
             if (battle.Phase != BattlePhase.Defense)
