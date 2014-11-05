@@ -15,7 +15,7 @@
 [Bb]in*/
 [Dd]ebug*/
 *.sbr
-JogoDoNilson/obj/
+JogoDoNilson/obj/*
 [Rr]elease*/
 _ReSharper*/
 Web.config
