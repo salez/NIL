@@ -187,7 +187,9 @@ namespace JogoDoNilson.Controllers
             return 1;
         }
 
-        public int ChooseDefenders(int atkCardId, int[] defCardIds)
+
+        //Original Returns Int
+        public JsonResult ChooseDefenders(int atkCardId, int[] defCardIds)
         {
             GameEngine engine = new GameEngine(Session);
 
@@ -197,10 +199,10 @@ namespace JogoDoNilson.Controllers
             
 
             if (defPlayer.IsAIControlled || defCardIds.Count() > 2)
-                return 0;
+                return null;
 
             if (battle.Phase != BattlePhase.Defense)
-                return 0;
+                return null;
 
             //todo: deffend cards
             Carta atkCard = battle.Turn.Atackers.First(x => x.Id == atkCardId);
@@ -208,6 +210,7 @@ namespace JogoDoNilson.Controllers
             List<Carta> defCards = defPlayer.ChooseDefenders(defCardIds);
 
             BattleFight battleFight = new BattleFight(atkCard, defCards);
+            var result = battleFight.Result;
 
             if (atkCard.IsDead)
             {
@@ -218,17 +221,49 @@ namespace JogoDoNilson.Controllers
             foreach (var defCard in defCards)
             {
                 if (defCard.IsDead)
+                {
                     defPlayer.Graveyard.Add(defCard);
-
-                defPlayer.DefenseField.Remove(defCard);
+                    defPlayer.DefenseField.Remove(defCard);
+                }
             }
-
+            defPlayer.Life -= result.PlayerLifeDamage;
             //todo: battleResult
-            var result = battleFight.Result;
 
-            return 1;
+
+            return Json(new { 
+            atkId = result.Atacker.Id,
+            atkIsDead = result.Atacker.IsDead,
+            atkLife = result.Atacker.Defesa,
+            defIds= result.Defender.Select(x=> x.Id),
+            defIsDead = result.Defender.Select(x=> x.IsDead),
+            defLife = result.Defender.Select(x=> x.Defesa)
+            });
+        }
+        public void DirectHit(int atkCardId)
+        {
+            GameEngine engine = new GameEngine(Session);
+
+            Battle battle = engine.Battle;
+            Player atkPlayer = battle.Turn.Player;
+            Player defPlayer = (battle.Turn.Player == battle.player1) ? battle.player2 : battle.player1;
+
+            Carta atkCard = battle.Turn.Atackers.First(x => x.Id == atkCardId);
+
+            defPlayer.Life -= atkCard.Ataque;
+
         }
 
+        public JsonResult GetPlayerLifes()
+        {
+            GameEngine engine = new GameEngine(Session);
+
+
+            return Json(new
+            {
+                computer = engine.PlayerOne.Life,
+                player = engine.PlayerTwo.Life
+            });
+        }
 
         public void EndComputerTurn()
         {

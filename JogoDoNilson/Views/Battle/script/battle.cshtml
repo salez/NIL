@@ -1,5 +1,5 @@
 ﻿<script type="text/javascript">
-
+    var debug;
     var player = {
         isTurn: false,
         turnPhase: 0,
@@ -245,24 +245,24 @@
         var hasMatch = false;
         var atkCreature = $(".creature[data-id=" + atkId + "]");
         var match = {
-            atk: 0,
-            def: []
+            atkCardId: 0,
+            defCardIds: []
         }
 
 
 
         $(defenseMatchUps).each(function (i, obj) {
-            if (obj.def[0] == defenseSelect || obj.def[1] == defenseSelect) {
+            if (obj.defCardIds[0] == defenseSelect || obj.defCardIds[1] == defenseSelect) {
                 var tempAttaker = $(".creature[data-id=" + obj.atk + "]")
-                if (obj.def.length == 1) {
+                if (obj.defCardIds.length == 1) {
                     tempAttaker.removeClass("defended");
                     defenseMatchUps.splice(i, 1);
                 }
                 else {
-                    if (obj.def[0] == defenseSelect)
-                        obj.def.splice(0, 1);
+                    if (obj.defCardIds[0] == defenseSelect)
+                        obj.defCardIds.splice(0, 1);
                     else
-                        obj.def.pop();
+                        obj.defCardIds.pop();
 
                     tempAttaker.removeClass("doubleDefended");
                     tempAttaker.addClass("defended");
@@ -270,16 +270,16 @@
             }
         });
         $(defenseMatchUps).each(function (i, obj) {
-            if (obj.atk == atkId) {
+            if (obj.atkCardId == atkId) {
                 hasMatch = true;
-                if (obj.def.length < 2)
-                    obj.def.push(defenseSelect);
+                if (obj.defCardIds.length < 2)
+                    obj.defCardIds.push(defenseSelect);
             }
         });
 
         if (!hasMatch) {
-            match.atk = atkId;
-            match.def.push(defenseSelect);
+            match.atkCardId = atkId;
+            match.defCardIds.push(defenseSelect);
             defenseMatchUps.push(match);
         }
 
@@ -298,6 +298,82 @@
         defenseSelect = 0;
 
     }
+
+
+    function setDirectHit(id){
+        $.ajax({
+            url: "@Url.Action("DirectHit", "battle")",
+            data: { atkCardId: id }
+        });
+    }
+
+
+    function finishDefense() {
+        $(".creature.used").each(function (i, objCreature) {
+            var hasDefense = false;
+            var id = $(objCreature).attr("data-id");
+            $(defenseMatchUps).each(function (i, obj) {
+                if (obj.atkCardId == id)
+                    hasDefense = true;
+            });
+            if (!hasDefense)
+                setDirectHit(id);
+                
+        })
+        $(defenseMatchUps).each(function (i, obj) {
+            $.ajax({
+                url: "@Url.Action("ChooseDefenders", "battle")",
+                data: JSON.stringify(obj),
+                contentType: "application/json",
+                traditional: true,
+                type: "POST",
+                success: function (result) {
+                    var atkCreature = $(".creature[data-id=" + result.atkId + "]");
+                    if (result.atkIsDead)
+                        atkCreature.remove();
+                    else {
+                        atkCreature.find(".def").html(result.atkLife);
+                    }
+                    for (var j = 0; j < result.defIds.length; j++) {
+                        var obj = result.defIds[j];
+                        var defCreature = $(".creature[data-id=" + obj + "]");
+                        if (result.defIsDead[j])
+                            defCreature.remove();
+                        else {
+                            debug = result;
+                            defCreature.find(".def").html(result.defLife[j]);
+                        }
+
+                    }
+
+                    if (i == defenseMatchUps.length - 1) {
+                        updatePlayerLife();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        })
+
+        if (defenseMatchUps.length <= 0) {
+            setTimeout(function () {
+                updatePlayerLife();
+            }, 6000);
+        }
+    }
+
+    function updatePlayerLife() {
+        $.ajax({
+            url: "@Url.Action("GetPlayerLifes", "battle")",
+            type:"POST",
+            success: function (result) {
+                $(".player1 .playerLifeBar").html(result.computer);
+                $(".player2 .playerLifeBar").html(result.player);
+            }
+        });
+    }
+
 
     function computerAttack(attackers) {
         $(attackers).each(function (i, obj) {
@@ -409,6 +485,9 @@
         });
         $(".finishButton").click(function () {
             finishAttack();
+        });
+        $(".finishDefenseButton").click(function () {
+            finishDefense();
         });
 
         $(".playerHand").click(function (ev) {

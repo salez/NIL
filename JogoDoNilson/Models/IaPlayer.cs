@@ -40,7 +40,8 @@ namespace JogoDoNilson.Models
 
             _battle.EndPhase();
 
-            var Attackers = (from item in PrepareAttack()
+            var AtkCards = PrepareAttack();
+            var Attackers = (from item in AtkCards
                              select new
                                {
                                    item.Id,
@@ -49,6 +50,9 @@ namespace JogoDoNilson.Models
                                    Position = "defense"
                                });
 
+
+            _battle.Turn.SetAttackers(AtkCards);
+            
             Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(Attackers));
             _battle.EndPhase();
 
