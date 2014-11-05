@@ -234,6 +234,19 @@
         -webkit-box-shadow: 0 0 20px 5px #9C880B;
         box-shadow: 0 0 20px 5px #9C880B;
     }
+    .field .creature.defending {
+        -webkit-box-shadow: 0 0 20px 5px #6AAD99;
+        box-shadow: 0 0 20px 5px #6AAD99;
+    }
+    .field .creature.defended {
+        -webkit-box-shadow: 0 0 20px 5px #A6430D;
+        box-shadow: 0 0 20px 5px #A6430D;
+    }
+
+    .field .creature.doubleDefended {
+        -webkit-box-shadow: 0 0 20px 5px #000;
+        box-shadow: 0 0 20px 5px #000;
+    }
 
     .field .creature .fieldAttribute {
         width: 40px;

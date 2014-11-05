@@ -5,6 +5,7 @@
         turnPhase: 0,
         isDefenseSet: false
     }
+    var defenseSelect;
 
     var defenseMatchUps = [];
 
@@ -110,23 +111,23 @@
                 if (result == '1') {
                     $(".player1 .playerManaBar").html(playerMana);
 
-                var creatureObj = buildCreatureHtml(creature);
+                    var creatureObj = buildCreatureHtml(creature);
 
-                field.append(creatureObj);
+                    field.append(creatureObj);
 
-                card.css('transform-origin','center center');
-                card.css('margin-top','150px');
-                
-                card.css('transform','scale(0.6)');
-                card.css('opacity','0');
-                
-                setTimeout(function(){
-                    card.remove();
+                    card.css('transform-origin', 'center center');
+                    card.css('margin-top', '150px');
 
-                    creatureObj.css('transform','scale(1)');
-                    creatureObj.css('opacity','1');
-                    organizeCreatures();
-                },500);
+                    card.css('transform', 'scale(0.6)');
+                    card.css('opacity', '0');
+
+                    setTimeout(function () {
+                        card.remove();
+
+                        creatureObj.css('transform', 'scale(1)');
+                        creatureObj.css('opacity', '1');
+                        organizeCreatures(".playerField");
+                    }, 500);
 
                 }
             },
@@ -137,31 +138,31 @@
 
     }
 
-function organizeCreatures(){
-    var creatures = $(".playerField .defenseField .creature");
+    function organizeCreatures(wrapper) {
+        var creatures = $(wrapper + " .defenseField .creature");
 
-    var countTotal = creatures.length;
-    var totalSpace = 150 * countTotal;
-    var spaceForEach = totalSpace / countTotal;
+        var countTotal = creatures.length;
+        var totalSpace = 150 * countTotal;
+        var spaceForEach = totalSpace / countTotal;
 
-    var countAtual = creatures.length;
-    
-    var space = -((countAtual / 2) * spaceForEach);
+        var countAtual = creatures.length;
 
-    creatures.each(function(){
-        $(this).css('margin-left',space + 'px');
+        var space = -((countAtual / 2) * spaceForEach);
 
-        space = space + spaceForEach;
-    });
-}
+        creatures.each(function () {
+            $(this).css('margin-left', space + 'px');
+
+            space = space + spaceForEach;
+        });
+    }
 
     function buildCreatureHtml(creature) {
-    var creatureHtml = "<div class='creature' data-id=" + creature.id + " style='opacity: 0; transform: scale(2); background-image:" + creature.image + "'>";
+        var creatureHtml = "<div class='creature' data-id=" + creature.id + " style='opacity: 0; transform: scale(2); background-image:" + creature.image + "'>";
         creatureHtml += "<div class='fieldAttribute atk'>" + creature.atk + "</div>";
         creatureHtml += "<div class='fieldAttribute def'>" + creature.def + "</div>";
         creatureHtml += "</div>";
 
-    return $(creatureHtml);
+        return $(creatureHtml);
     }
 
     function finishAttack() {
@@ -191,7 +192,7 @@ function organizeCreatures(){
         if (forward(targetid, true)) {
             //creature.addClass("used");
             //put code on foward success block.
-            //If you find a way to put it back here it would be welcome 
+            //If you find a way to put it back here it would be welcome
         }
     }
     function forward(id, isAttack) {
@@ -238,6 +239,66 @@ function organizeCreatures(){
         });
     }
 
+    function createDefenseMatch(atkId) {
+        if (defenseSelect == 0 || defenseSelect == undefined || defenseSelect == null)
+            return;
+        var hasMatch = false;
+        var atkCreature = $(".creature[data-id=" + atkId + "]");
+        var match = {
+            atk: 0,
+            def: []
+        }
+
+
+
+        $(defenseMatchUps).each(function (i, obj) {
+            if (obj.def[0] == defenseSelect || obj.def[1] == defenseSelect) {
+                var tempAttaker = $(".creature[data-id=" + obj.atk + "]")
+                if (obj.def.length == 1) {
+                    tempAttaker.removeClass("defended");
+                    defenseMatchUps.splice(i, 1);
+                }
+                else {
+                    if (obj.def[0] == defenseSelect)
+                        obj.def.splice(0, 1);
+                    else
+                        obj.def.pop();
+
+                    tempAttaker.removeClass("doubleDefended");
+                    tempAttaker.addClass("defended");
+                }
+            }
+        });
+        $(defenseMatchUps).each(function (i, obj) {
+            if (obj.atk == atkId) {
+                hasMatch = true;
+                if (obj.def.length < 2)
+                    obj.def.push(defenseSelect);
+            }
+        });
+
+        if (!hasMatch) {
+            match.atk = atkId;
+            match.def.push(defenseSelect);
+            defenseMatchUps.push(match);
+        }
+
+
+
+        $(".creature[data-id=" + defenseSelect + "]").addClass("defending");
+        if (hasMatch) {
+            atkCreature.removeClass("defended");
+            atkCreature.addClass("doubleDefended");
+        }
+        else {
+            atkCreature.addClass("defended");
+        }
+
+
+        defenseSelect = 0;
+
+    }
+
     function computerAttack(attackers) {
         $(attackers).each(function (i, obj) {
             $(".creature[data-id=" + obj.Id + "]").addClass("used")
@@ -246,13 +307,18 @@ function organizeCreatures(){
     }
     function putComputerCards(data) {
         $(data).each(function (i, obj) {
-            var html = buildCreatureHtml({
+            var creatureObj = buildCreatureHtml({
                 id: obj.Id,
                 atk: obj.Ataque,
                 def: obj.Defesa,
                 image: 'url("@Url.Content("~/images/cartas/")' + obj.Id.toString() + '.jpg")'
             });
-            $(".computerField .defenseField").append(html);
+            $(".computerField .defenseField").append(creatureObj);
+            setTimeout(function () {
+                creatureObj.css('transform', 'scale(1)');
+                creatureObj.css('opacity', '1');
+                organizeCreatures(".computerField");
+            }, 500)
         });
     }
     function computerFoward(id) {
@@ -306,8 +372,6 @@ function organizeCreatures(){
 
         $(".playerField").click(function (ev) {
             var src = $(ev.srcElement);
-
-            debug = src;
             var posX = ev.pageX;
             var posY = ev.pageY;
 
@@ -319,9 +383,26 @@ function organizeCreatures(){
             }
 
             var menuType = src.parent().hasClass("defenseField") ? "jsDef" : "jsAtk";
-            showMenu(posX, posY, src.attr("data-id"), menuType);
+            if (!player.isDefenseSet)
+                showMenu(posX, posY, src.attr("data-id"), menuType);
+            else if (player.isDefenseSet && menuType == "jsDef") {
+                defenseSelect = src.attr("data-id");
+            }
 
         });
+        $(".computerField .atackField").click(function (ev) {
+            if (!player.isDefenseSet)
+                return;
+
+            var src = $(ev.srcElement);
+            while (!src.hasClass("creature")) {
+                src = src.parent();
+                if (src.html() == 'null' || src.html() == null || src == null)
+                    return;
+            }
+            createDefenseMatch(src.attr("data-id"));
+
+        })
 
         $(".modalMenu li").click(function () {
             hideMenu();
