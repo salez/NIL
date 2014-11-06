@@ -1,0 +1,10 @@
+﻿@model JogoDoNilson.Models.Carta
+
+@{
+    ViewBag.Title = "battle";
+    var carta = Model;
+}
+<div class='creature' data-id="@carta.Id" style="opacity: 1; transform: scale(2); background-image: url(@Url.Content("~/images/cartas/" + (carta.Id).ToString().PadLeft(2, '0') + ".jpg"))">
+    <div class='fieldAttribute atk'>@carta.Ataque</div>
+    <div class='fieldAttribute def'>@carta.Defesa</div>
+</div>

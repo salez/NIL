@@ -138,21 +138,23 @@
 
     }
 
-    function organizeCreatures(wrapper) {
-        var creatures = $(wrapper + " .defenseField .creature");
+    function organizeCreatures() {
+        $('.defenseField,.atackField').each(function(){
+            var creatures = $(this).find('.creature');
 
-        var countTotal = creatures.length;
-        var totalSpace = 150 * countTotal;
-        var spaceForEach = totalSpace / countTotal;
+            var countTotal = creatures.length;
+            var totalSpace = 150 * countTotal;
+            var spaceForEach = totalSpace / countTotal;
 
-        var countAtual = creatures.length;
+            var countAtual = creatures.length;
 
-        var space = -((countAtual / 2) * spaceForEach);
+            var space = -((countAtual / 2) * spaceForEach);
 
-        creatures.each(function () {
-            $(this).css('margin-left', space + 'px');
+            creatures.each(function () {
+                $(this).css('margin-left', space + 'px');
 
-            space = space + spaceForEach;
+                space = space + spaceForEach;
+            });
         });
     }
 
@@ -426,6 +428,9 @@
 
         var flipTimer = 500;
         var cardLeft = 200;
+
+        organizeCreatures(".computerField");
+        organizeCreatures(".playerField");
 
         $('.cardFlip').each(function () {
             var card = $(this);

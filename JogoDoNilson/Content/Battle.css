@@ -163,7 +163,20 @@
     box-shadow: 0px 0px 15px 5px rgba(255, 255, 190, .75);
 }
 
-.cardWrapper {
+.playerField .cardWrapper {
+    display: block;
+    /*disabling the translucent black bg on the main image*/
+    /*3d space for children*/
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+    transform: scale(0.2, 0.2);
+    transform-origin: bottom center;
+    /*position: absolute;
+    left: 1080px;
+    top: 119px;*/
+}
+
+.playerHand .cardWrapper {
     display: block;
     /*disabling the translucent black bg on the main image*/
     /*3d space for children*/
@@ -176,7 +189,7 @@
     top: 119px;
 }
 
-    .cardWrapper:hover {
+    .playerHand .cardWrapper:hover {
         display: block;
         /*disabling the translucent black bg on the main image*/
         /*3d space for children*/

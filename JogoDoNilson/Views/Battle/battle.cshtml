@@ -40,13 +40,31 @@
         </div>
 
         <div class="computerField">
-            <div class="defenseField"></div>
-            <div class="atackField"></div>
+            <div class="defenseField">
+                @foreach (var card in Model.PlayerOne.DefenseField) { 
+                    @Html.Partial("cardField", card);
+                }
+            </div>
+            <div class="atackField">
+                @foreach (var card in Model.PlayerOne.AtackField)
+                { 
+                    @Html.Partial("cardField", card);
+                }
+            </div>
         </div>
 
         <div class="playerField">
-            <div class="atackField"></div>
-            <div class="defenseField"></div>
+            <div class="atackField">
+                @foreach (var card in Model.PlayerTwo.AtackField) { 
+                    @Html.Partial("cardField", card);
+                }
+            </div>
+            <div class="defenseField">
+                @foreach (var card in Model.PlayerTwo.DefenseField)
+                { 
+                    @Html.Partial("cardField", card);
+                }
+            </div>
         </div>
 
         <div class="playerHand">
