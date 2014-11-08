@@ -6,7 +6,7 @@
         isDefenseSet: false
     }
     var defenseSelect;
-
+    var wait = false;
     var defenseMatchUps = [];
 
     function showTitle(title) {
@@ -172,12 +172,13 @@
         var attackIds = [];
 
         attackers.each(function (i, obj) {
-            attackIds.push($(obj).attr("data-id"));
+            attackIds.push(parseInt($(obj).attr("data-id")));
         });
 
         $.ajax({
             url: "@Url.Action("chooseattackers","battle")",
             data: JSON.stringify({ cardIds: attackIds }),
+            type:"POST",
             contentType: "application/json",
             traditional: true,
             success: function (result) {
@@ -314,16 +315,27 @@
 
     function finishDefense() {
         $(".creature.used").each(function (i, objCreature) {
+            if (defenseMatchUps == null)
+                defenseMatchUps = [];
+
+
+
             var hasDefense = false;
             var id = $(objCreature).attr("data-id");
             $(defenseMatchUps).each(function (i, obj) {
                 if (obj.atkCardId == id)
                     hasDefense = true;
             });
-            if (!hasDefense)
-                setDirectHit(id);
+            if (!hasDefense) {
+                defenseMatchUps.push({
+                    atkCardId: id,
+                    defCardIds: [0]
+                });
+            }
                 
-        })
+
+        });
+
         $(defenseMatchUps).each(function (i, obj) {
             $.ajax({
                 url: "@Url.Action("ChooseDefenders", "battle")",
@@ -339,13 +351,14 @@
                         atkCreature.find(".def").html(result.atkLife);
                     }
                     for (var j = 0; j < result.defIds.length; j++) {
-                        var obj = result.defIds[j];
-                        var defCreature = $(".creature[data-id=" + obj + "]");
-                        if (result.defIsDead[j])
-                            defCreature.remove();
-                        else {
-                            debug = result;
-                            defCreature.find(".def").html(result.defLife[j]);
+                        var objId = result.defIds[j];
+                        if (objId != 0) {
+                            var defCreature = $(".creature[data-id=" + objId + "]");
+                            if (result.defIsDead[j])
+                                defCreature.remove();
+                            else {
+                                defCreature.find(".def").html(result.defLife[j]);
+                            }
                         }
 
                     }
@@ -513,8 +526,13 @@
         });
 
         setInterval(function () {
-            if (player.isTurn && (player.turnPhase > 2 && !player.isTurn))
+            if ((player.isTurn && player.turnPhase <= 2) || player.isDefenseSet)
                 return;
+            
+            if (wait)
+                return;
+
+            wait = true;
 
             $.ajax({
                 url: "@Url.Action("verifyphase","battle")",
@@ -528,6 +546,12 @@
                             case 1:
                                 showTitle('SEU TURNO');
                                 drawCard();
+                                break;
+                            case 4:
+                                defenseMatchUps = $.parseJSON(result.data);
+                                //to do set classes with timeout
+                                finishDefense();
+                                break;
                             default:
                                 break;
                         }
@@ -548,16 +572,11 @@
                                     player.isDefenseSet = true;
                                 }
                                 break;
-                            case 5:
-                                defenseMatchUps = $.parseJSON(result.data);
-                                //to do set classes with timeout
-                                finishDefense();
-
-                                break;
                             default:
                                 break;
                         }
                     }
+                    wait = false;
                 },
                 error: function (result) {
 

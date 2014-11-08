@@ -187,15 +187,28 @@ namespace JogoDoNilson.Models
             notifications.Add(Phase, Data);
         }
 
-        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
+        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification(BattlePhase Phase)
         {
-            if (notifications.Count == 0)
+            var scope = notifications.Where(x => x.Key == Phase);
+            if (scope.Count() == 0)
                 return new KeyValuePair<BattlePhase, string>(BattlePhase.Draw, "ERROR");
 
             var notification = notifications.OrderBy(x => x.Key).First();
             notifications.Remove(notification.Key);
             return notification;
         }
+
+        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
+        {
+            if (notifications.Count() == 0)
+                return new KeyValuePair<BattlePhase, string>(BattlePhase.Draw, "ERROR");
+
+            var notification = notifications.OrderBy(x => x.Key).First();
+            notifications.Remove(notification.Key);
+            return notification;
+        }
+
+
     }
 
     public enum BattlePhase

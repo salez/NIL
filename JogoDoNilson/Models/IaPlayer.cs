@@ -24,6 +24,8 @@ namespace JogoDoNilson.Models
 
         public AIPlayer(Player Player, Battle Engine)
         {
+            if (!Player.IsAIControlled)
+                throw new Exception("ERROR");
             this.Player = Player;
             this._battle = Engine;
         }

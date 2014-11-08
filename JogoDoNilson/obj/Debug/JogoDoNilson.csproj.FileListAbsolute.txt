@@ -133,7 +133,6 @@ C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.WebHost.xml
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Net.Http.Formatting.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Http.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Http.WebHost.resources.dll
-E:\Projects\IA\JogoDoNilson\bin\EntityFramework.xml
 E:\Projects\IA\JogoDoNilson\bin\JogoDoNilson.dll.config
 E:\Projects\IA\JogoDoNilson\bin\JogoDoNilson.dll
 E:\Projects\IA\JogoDoNilson\bin\JogoDoNilson.pdb
@@ -163,6 +162,7 @@ E:\Projects\IA\JogoDoNilson\bin\System.Web.WebPages.Razor.dll
 E:\Projects\IA\JogoDoNilson\bin\WebGrease.dll
 E:\Projects\IA\JogoDoNilson\bin\WebMatrix.Data.dll
 E:\Projects\IA\JogoDoNilson\bin\WebMatrix.WebData.dll
+E:\Projects\IA\JogoDoNilson\bin\EntityFramework.xml
 E:\Projects\IA\JogoDoNilson\bin\Newtonsoft.Json.xml
 E:\Projects\IA\JogoDoNilson\bin\System.Net.Http.xml
 E:\Projects\IA\JogoDoNilson\bin\System.Net.Http.Formatting.xml

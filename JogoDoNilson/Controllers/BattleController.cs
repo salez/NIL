@@ -178,7 +178,7 @@ namespace JogoDoNilson.Controllers
 
                 battle.Turn.SetAttackers(cards);
                 battle.EndPhase();
-                var ai = new AIPlayer(battle.player1,battle);
+                var ai = new AIPlayer(battle.player1, battle);
                 ai.PrepareDefense(cardIds);
             }
             else
@@ -198,7 +198,7 @@ namespace JogoDoNilson.Controllers
             Battle battle = engine.Battle;
             Player atkPlayer = battle.Turn.Player;
             Player defPlayer = (battle.Turn.Player == battle.player1) ? battle.player2 : battle.player1;
-            
+
 
             if (defCardIds.Count() > 2)
                 return null;
@@ -208,6 +208,20 @@ namespace JogoDoNilson.Controllers
 
             //todo: deffend cards
             Carta atkCard = battle.Turn.Atackers.First(x => x.Id == atkCardId);
+
+            if (defCardIds[0] == 0)
+            {
+                DirectHit(atkCardId);
+                return Json(new
+                {
+                    atkId = atkCard.Id,
+                    atkIsDead = atkCard.IsDead,
+                    atkLife = atkCard.Defesa,
+                    defIds = 0,
+                    defIsDead = true,
+                    defLife = 0
+                });
+            }
 
             List<Carta> defCards = defPlayer.ChooseDefenders(defCardIds);
 
@@ -232,13 +246,14 @@ namespace JogoDoNilson.Controllers
             //todo: battleResult
 
 
-            return Json(new { 
-            atkId = result.Atacker.Id,
-            atkIsDead = result.Atacker.IsDead,
-            atkLife = result.Atacker.Defesa,
-            defIds= result.Defender.Select(x=> x.Id),
-            defIsDead = result.Defender.Select(x=> x.IsDead),
-            defLife = result.Defender.Select(x=> x.Defesa)
+            return Json(new
+            {
+                atkId = result.Atacker.Id,
+                atkIsDead = result.Atacker.IsDead,
+                atkLife = result.Atacker.Defesa,
+                defIds = result.Defender.Select(x => x.Id),
+                defIsDead = result.Defender.Select(x => x.IsDead),
+                defLife = result.Defender.Select(x => x.Defesa)
             });
         }
         public void DirectHit(int atkCardId)
@@ -267,13 +282,23 @@ namespace JogoDoNilson.Controllers
             });
         }
 
-        public void EndComputerTurn()
+        public JsonResult GetPlayerMana()
+        {
+
+            GameEngine engine = new GameEngine(Session);
+
+
+            return Json(new
+            {
+                computer = engine.PlayerOne.ManaCurrent,
+                player = engine.PlayerTwo.ManaCurrent
+            });
+        }
+
+        public void EndTurn()
         {
             GameEngine g = new GameEngine(Session);
-            if (g.Battle.Turn.Player.IsAIControlled)
-            {
-                g.Battle.EndTurn();
-            }
+            g.Battle.EndTurn();
         }
 
         public JsonResult VerifyPhase()
@@ -285,14 +310,27 @@ namespace JogoDoNilson.Controllers
 
             if (player.IsAIControlled)
             {
-                var notification = player.RetrieveFirstNotification();
-
-                return Json(new
+                var notification = engine.PlayerOne.RetrieveFirstNotification();
+                var result = Json(new
                 {
                     phase = notification.Key,
-                    isYourTurn = false,
+                    isYourTurn = player == engine.PlayerTwo,
                     data = notification.Value
                 });
+
+
+                return result;
+            }
+            else if (!player.IsAIControlled && battle.Phase == BattlePhase.Defense)
+            {
+                var notification = engine.PlayerOne.RetrieveFirstNotification(battle.Phase);
+                var result = Json(new
+                {
+                    phase = notification.Key,
+                    isYourTurn = player == engine.PlayerTwo,
+                    data = notification.Value
+                });
+                return result;
             }
             else
             {
