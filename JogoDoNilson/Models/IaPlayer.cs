@@ -9,12 +9,8 @@ namespace JogoDoNilson.Models
 
     public class FEBattleMatch
     {
-        public FEBattleMatch()
-        {
-            defCardIds = new List<int>();
-        }
         public int atkCardId { get; set; }
-        public List<int> defCardIds { get; set; }
+        public int defCardId { get; set; }
     }
     public class AIPlayer
     {
@@ -114,12 +110,11 @@ namespace JogoDoNilson.Models
 
             while (def.Count > 0 && atk.Count > 0)
             {
-                var mup = new FEBattleMatch()
+                matchUps.Add(new FEBattleMatch()
                 {
                     atkCardId = atk.Pop(),
-                };
-                mup.defCardIds.Add(def.Pop().Id);
-                matchUps.Add(mup);
+                    defCardId = def.Pop().Id
+                });
             }
             Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(matchUps));
         }

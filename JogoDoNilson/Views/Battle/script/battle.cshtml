@@ -92,7 +92,7 @@
         var image = $(card).find('.conteudo_imagem').css("background-image");
         var atk = parseInt(card.find(".ataque").html());
         var def = parseInt(card.find(".defesa").html());
-        var playerMana = parseInt($(".player1 .playerManaBar").html());
+        var playerMana = parseInt($(".player2 .playerManaBar").html());
         var field = $(".playerField .defenseField");
         if (cost > playerMana)
             return;
@@ -109,7 +109,7 @@
             data: { cardId: creature.id },
             success: function (result) {
                 if (result == '1') {
-                    $(".player1 .playerManaBar").html(playerMana);
+                    $(".player2 .playerManaBar").html(playerMana);
 
                     var creatureObj = buildCreatureHtml(creature);
 
@@ -139,7 +139,7 @@
     }
 
     function organizeCreatures() {
-        $('.defenseField,.atackField').each(function(){
+        $('.defenseField,.atackField').each(function () {
             var creatures = $(this).find('.creature');
 
             var countTotal = creatures.length;
@@ -178,7 +178,7 @@
         $.ajax({
             url: "@Url.Action("chooseattackers","battle")",
             data: JSON.stringify({ cardIds: attackIds }),
-            type:"POST",
+            type: "POST",
             contentType: "application/json",
             traditional: true,
             success: function (result) {
@@ -194,10 +194,12 @@
     function attack(id) {
         var targetid = id != undefined ? id : $(".modalMenu").data("target");
         var creature = $(".creature[data-id=" + targetid + "]");
-        if (forward(targetid, true)) {
-            //creature.addClass("used");
-            //put code on foward success block.
-            //If you find a way to put it back here it would be welcome
+        var isFieldAttack = creature.parent().hasClass("atackField");
+        if (isFieldAttack) {
+            creature.addClass("used");
+        }
+        else {
+            forward(targetid, true);
         }
     }
     function forward(id, isAttack) {
@@ -305,7 +307,7 @@
     }
 
 
-    function setDirectHit(id){
+    function setDirectHit(id) {
         $.ajax({
             url: "@Url.Action("DirectHit", "battle")",
             data: { atkCardId: id }
@@ -332,7 +334,7 @@
                     defCardIds: [0]
                 });
             }
-                
+
 
         });
 
@@ -364,11 +366,13 @@
                     }
 
                     if (i == defenseMatchUps.length - 1) {
-                        updatePlayerLife();
+                        endTurn();
                     }
                 },
                 error: function (data) {
                     console.log(data);
+                    alert(data + "ERROR");
+                    endTurn();
                 }
             });
         })
@@ -383,10 +387,21 @@
     function updatePlayerLife() {
         $.ajax({
             url: "@Url.Action("GetPlayerLifes", "battle")",
-            type:"POST",
+            type: "POST",
             success: function (result) {
                 $(".player1 .playerLifeBar").html(result.computer);
                 $(".player2 .playerLifeBar").html(result.player);
+            }
+        });
+    }
+
+    function updatePlayerMana() {
+        $.ajax({
+            url: "@Url.Action("GetPlayerMana", "battle")",
+            type: "POST",
+            success: function (result) {
+                $(".player1 .playerManaBar").html(result.computer);
+                $(".player2 .playerManaBar").html(result.player);
             }
         });
     }
@@ -422,10 +437,20 @@
         var creature = $(".creature[data-id=" + id + "]");
         $(".computerField .defenseField").append(creature);
     }
-    function endCpuTurn() {
+    function endTurn() {
+        defenseMatchUps = [];
+        defenseSelect = 0;
+
+        $(".creature").removeClass("used");
+        $(".creature").removeClass("defended");
+        $(".creature").removeClass("defending");
+        $(".creature").removeClass("doubleDefended");
+
+        updatePlayerLife();
+        updatePlayerMana();
         //EndComputerTurn
         $.ajax({
-            url: "@Url.Action("endcomputerturn","battle")",
+            url: "@Url.Action("EndTurn", "battle")",
             success: function (result) {
                 player.isDefenseSet = false;
                 player.turnPhase = 1;
@@ -528,7 +553,7 @@
         setInterval(function () {
             if ((player.isTurn && player.turnPhase <= 2) || player.isDefenseSet)
                 return;
-            
+
             if (wait)
                 return;
 
@@ -544,13 +569,26 @@
                     if (result.isYourTurn) {
                         switch (result.phase) {
                             case 1:
+                                updatePlayerMana();
+                                updatePlayerLife();
                                 showTitle('SEU TURNO');
                                 drawCard();
                                 break;
                             case 4:
-                                defenseMatchUps = $.parseJSON(result.data);
-                                //to do set classes with timeout
-                                finishDefense();
+                                var atkDefList = $.parseJSON(result.data);
+                                var defaultInterval = 1000;
+                                $(atkDefList).each(function (i, obj) {
+                                    setTimeout(function () {
+                                        defenseSelect = obj.defCardId;
+                                        createDefenseMatch(obj.atkCardId);
+                                        if (i == atkDefList.length - 1) {
+                                            finishDefense();
+                                        }
+                                    }, defaultInterval * i);
+                                });
+                                if (atkDefList.length == 0) {
+                                    finishDefense();
+                                }
                                 break;
                             default:
                                 break;
@@ -565,7 +603,7 @@
                                 var attakers = $.parseJSON(result.data);
 
                                 if (attakers.length == 0) {
-                                    endCpuTurn();
+                                    endTurn();
                                 }
                                 else {
                                     computerAttack(attakers);
