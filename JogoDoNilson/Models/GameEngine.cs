@@ -208,6 +208,11 @@ namespace JogoDoNilson.Models
             return notification;
         }
 
+        public void ClearNotificationList()
+        {
+            this.notifications.Clear();
+        }
+
 
     }
 
@@ -326,6 +331,8 @@ namespace JogoDoNilson.Models
 
         public void EndTurn(Player player1, Player player2)
         {
+            player1.ClearNotificationList();
+            player2.ClearNotificationList();
             if (this.Player == player1)
             {
                 this.Player = player2;

@@ -432,6 +432,7 @@
     function computerFoward(id) {
         var creature = $(".creature[data-id=" + id + "]");
         $(".computerField .atackField").append(creature);
+        organizeCreatures(".computerField");
     }
     function computerRetreat(id) {
         var creature = $(".creature[data-id=" + id + "]");

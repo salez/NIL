@@ -55,12 +55,23 @@ namespace JogoDoNilson.Models
                                    item.Id,
                                    item.Ataque,
                                    item.Defesa,
-                                   Position = "defense"
+                                   Position = "Offense"
                                });
 
 
             _battle.Turn.SetAttackers(AtkCards);
-            
+
+            foreach (var item in AtkCards)
+            {
+                var idx = Player.DefenseField.IndexOf(item);
+                if (idx != -1)
+                {
+                    Player.DefenseField.Remove(item);
+                    Player.AtackField.Add(item);
+                }
+
+            }
+
             Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(Attackers));
             _battle.EndPhase();
 
