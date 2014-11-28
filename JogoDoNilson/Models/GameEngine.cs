@@ -55,7 +55,7 @@ namespace JogoDoNilson.Models
 
     public class Player
     {
-        public Player(Deck deck, int number, bool IsAI,string Avatar = "")
+        public Player(Deck deck, int number, bool IsAI, string Avatar = "")
         {
             this.Deck = deck;
             this.Number = number;
@@ -70,7 +70,7 @@ namespace JogoDoNilson.Models
             this.Graveyard = new List<Carta>();
         }
 
-        private Dictionary<BattlePhase, string> notifications = new Dictionary<BattlePhase,string>();
+        private Dictionary<BattlePhase, string> notifications = new Dictionary<BattlePhase, string>();
 
 
         public Deck Deck { get; private set; }
@@ -79,7 +79,7 @@ namespace JogoDoNilson.Models
         public List<Carta> DefenseField { get; private set; }
         public List<Carta> Graveyard { get; private set; }
 
-        
+
 
         public int Number { get; private set; }
         public string AvatarImage { get; private set; }
@@ -102,8 +102,8 @@ namespace JogoDoNilson.Models
         {
             Carta card = this.Hands.FirstOrDefault(c => c.Id == cardId);
 
-            if(card == null)
-                return new ReturnStatus(EnumResult.Error,"Invalid Card");
+            if (card == null)
+                return new ReturnStatus(EnumResult.Error, "Invalid Card");
 
             if (this.ManaCurrent < card.Custo)
                 return new ReturnStatus(EnumResult.Error, "Insuficcient Mana");
@@ -145,7 +145,7 @@ namespace JogoDoNilson.Models
             if (card == null)
                 return new ReturnStatus(EnumResult.Error, "Invalid card");
 
-            if(!card.CanBeMoved)
+            if (!card.CanBeMoved)
                 return new ReturnStatus(EnumResult.Error, "Card can't be moved");
 
             this.AtackField.Add(card);
@@ -174,27 +174,46 @@ namespace JogoDoNilson.Models
             return new ReturnStatus(EnumResult.Ok);
         }
 
-        public void IncrementTurnCount(){
+        public void IncrementTurnCount()
+        {
             this.Turn.IncrementCount();
         }
 
         public void AddNotification(BattlePhase Phase, string Data)
         {
-            if(notifications.Count(x => x.Key == Phase)>0)
+            if (notifications.Count(x => x.Key == Phase) > 0)
                 return;
 
             notifications.Add(Phase, Data);
         }
 
-        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
+        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification(BattlePhase Phase)
         {
-            if (notifications.Count == 0)
+            var scope = notifications.Where(x => x.Key == Phase);
+            if (scope.Count() == 0)
                 return new KeyValuePair<BattlePhase, string>(BattlePhase.Draw, "ERROR");
-     
+
             var notification = notifications.OrderBy(x => x.Key).First();
             notifications.Remove(notification.Key);
             return notification;
         }
+
+        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
+        {
+            if (notifications.Count() == 0)
+                return new KeyValuePair<BattlePhase, string>(BattlePhase.Draw, "ERROR");
+
+            var notification = notifications.OrderBy(x => x.Key).First();
+            notifications.Remove(notification.Key);
+            return notification;
+        }
+
+        public void ClearNotificationList()
+        {
+            this.notifications.Clear();
+        }
+
+
     }
 
     public enum BattlePhase
@@ -233,7 +252,7 @@ namespace JogoDoNilson.Models
 
         public Player player2 { get; private set; }
 
-        
+
         public BattleTurn Turn { get; private set; }
 
         public BattlePhase Phase { get; private set; }
@@ -281,18 +300,20 @@ namespace JogoDoNilson.Models
 
         public void EndTurn()
         {
-            this.Turn.EndTurn(player1,player2);
+            this.Turn.EndTurn(player1, player2);
             InitNewTurn();
         }
     }
 
 
-    public class BattleTurn{
-        public int Count{get; private set;}
-        public Player Player{get;private set;}
+    public class BattleTurn
+    {
+        public int Count { get; private set; }
+        public Player Player { get; private set; }
         public List<Carta> Atackers { get; private set; }
 
-        public void SetCount(int count){
+        public void SetCount(int count)
+        {
             this.Count = count;
         }
 
@@ -310,6 +331,8 @@ namespace JogoDoNilson.Models
 
         public void EndTurn(Player player1, Player player2)
         {
+            player1.ClearNotificationList();
+            player2.ClearNotificationList();
             if (this.Player == player1)
             {
                 this.Player = player2;
@@ -335,13 +358,15 @@ namespace JogoDoNilson.Models
 
     public class PlayerTurn
     {
-        public PlayerTurn(){
+        public PlayerTurn()
+        {
             this.Count = 0;
         }
 
         public int Count { get; private set; }
 
-        public void IncrementCount(){
+        public void IncrementCount()
+        {
             this.Count++;
         }
     }
@@ -368,6 +393,7 @@ namespace JogoDoNilson.Models
 
         private BattleFightResult CalculateResult()
         {
+            /*
             foreach (var defender in Defenders)
             {
                 int ResultDamage = Math.Abs(defender.Defesa - Attacker.Ataque);
@@ -377,19 +403,50 @@ namespace JogoDoNilson.Models
             Attacker.Defesa = Attacker.Defesa - Defenders.Sum(d => d.Ataque);
 
             return new BattleFightResult(Attacker,Defenders);
+             */
+
+            int ResultDamage = 0;
+            foreach (var defender in Defenders)
+            {
+                int ParcialResultDamage = Math.Abs(defender.Defesa - Attacker.Ataque);
+                ResultDamage = ParcialResultDamage > ResultDamage ?
+                    ParcialResultDamage : ResultDamage;
+                defender.Defesa = defender.Defesa - Attacker.Ataque;
+            }
+
+            Attacker.Defesa = Attacker.Defesa - Defenders.Sum(d => d.Ataque);
+
+            return new BattleFightResult(Attacker, Defenders, ResultDamage);
         }
 
     }
 
     public class BattleFightResult
     {
-        public BattleFightResult(Carta Atacker, List<Carta> Defenders)
+        public BattleFightResult(Carta Atacker, List<Carta> Defenders, int PlayerLifeDamage)
         {
             this.Atacker = Atacker;
             this.Defender = Defenders;
+            this.PlayerLifeDamage = PlayerLifeDamage;
         }
         public Carta Atacker { get; private set; }
         public List<Carta> Defender { get; private set; }
+
+        int _playerLifeDamage;
+        public int PlayerLifeDamage
+        {
+            get
+            {
+                if (!Atacker.IsDead && Defender.All(x => x.IsDead))
+                    return _playerLifeDamage;
+                else
+                    return 0;
+            }
+            private set
+            {
+                _playerLifeDamage = value;
+            }
+        }
     }
 
     /// <summary>
@@ -433,8 +490,8 @@ namespace JogoDoNilson.Models
             {
                 var Decks = Deck.BuildDecks(Carta.GetAllCards());
                 Random rd = new Random();
-                
-                GameState.PlayerOne = new Player(Decks[0], 1, true, string.Format("~/Images/Avatars/{0}.jpg", rd.Next(1,8)));
+
+                GameState.PlayerOne = new Player(Decks[0], 1, true, string.Format("~/Images/Avatars/{0}.jpg", rd.Next(1, 8)));
                 GameState.PlayerTwo = new Player(Decks[1], 2, false, PlayerAvatar);
             }
         }
@@ -458,7 +515,7 @@ namespace JogoDoNilson.Models
                 {
                     battle.Turn.SetPlayer(this.PlayerTwo);
                 }
-                
+
             }
 
             return this.Battle;

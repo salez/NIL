@@ -1,12 +1,11 @@
 ﻿<script type="text/javascript">
-    var debug;
+
     var player = {
         isTurn: false,
         turnPhase: 0,
         isDefenseSet: false
     }
-    var defenseSelect;
-    var wait = false;
+
     var defenseMatchUps = [];
 
     function showTitle(title) {
@@ -30,6 +29,59 @@
             });
 
             setTimeout(function () {
+<<<<<<< HEAD
+                flipCard(left, card, cardWrapper);
+            }, 300)
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
+function putCard(sender) {
+    var card = $(".cardWrapper[data-id=" + $(".modalMenu").data("target") + "]");
+    var cost = parseInt(card.find(".custo_num").html());
+    var image = $(card).find('.conteudo_imagem').css("background-image");
+    var atk = parseInt(card.find(".ataque").html());
+    var def = parseInt(card.find(".defesa").html());
+    var playerMana = parseInt($(".player1 .playerManaBar").html());
+    var field = $(".playerField .defenseField");
+    if (cost > playerMana)
+        return;
+    var creature = {
+        id: $(".modalMenu").data("target"),
+        atk: atk,
+        def: def,
+        image: image
+    };
+    playerMana = playerMana - cost;
+
+    $.ajax({
+        url: "@Url.Action("putcardinfield","battle")",
+        data: { cardId: creature.id },
+        success: function (result) {
+            if (result == '1') {
+                $(".player1 .playerManaBar").html(playerMana);
+
+                var creatureObj = buildCreatureHtml(creature);
+
+                field.append(creatureObj);
+
+                card.css('transform-origin','center center');
+                card.css('margin-top','150px');
+                
+                card.css('transform','scale(0.6)');
+                card.css('opacity','0');
+                
+                setTimeout(function(){
+                    card.remove();
+
+                    creatureObj.css('transform','scale(1)');
+                    creatureObj.css('opacity','1');
+                    organizeCreatures();
+                },500);
+
+=======
                 $('.battleTitle').css('transition', 'all 0.5s');
                 $('.battleTitle').css('transform', 'scale(1)');
             }, 100);
@@ -83,6 +135,7 @@
             },
             error: function (data) {
                 console.log(data);
+>>>>>>> b2be12acb88a40d2a631b5dc0ff5eda11930f47b
             }
         });
     }
@@ -92,7 +145,7 @@
         var image = $(card).find('.conteudo_imagem').css("background-image");
         var atk = parseInt(card.find(".ataque").html());
         var def = parseInt(card.find(".defesa").html());
-        var playerMana = parseInt($(".player2 .playerManaBar").html());
+        var playerMana = parseInt($(".player1 .playerManaBar").html());
         var field = $(".playerField .defenseField");
         if (cost > playerMana)
             return;
@@ -109,26 +162,9 @@
             data: { cardId: creature.id },
             success: function (result) {
                 if (result == '1') {
-                    $(".player2 .playerManaBar").html(playerMana);
-
-                    var creatureObj = buildCreatureHtml(creature);
-
-                    field.append(creatureObj);
-
-                    card.css('transform-origin', 'center center');
-                    card.css('margin-top', '150px');
-
-                    card.css('transform', 'scale(0.6)');
-                    card.css('opacity', '0');
-
-                    setTimeout(function () {
-                        card.remove();
-
-                        creatureObj.css('transform', 'scale(1)');
-                        creatureObj.css('opacity', '1');
-                        organizeCreatures(".playerField");
-                    }, 500);
-
+                    $(".player1 .playerManaBar").html(playerMana);
+                    field.append(buildCreatureHtml(creature));
+                    card.remove();
                 }
             },
             error: function (data) {
@@ -136,35 +172,44 @@
             }
         });
 
-    }
+<<<<<<< HEAD
+function organizeCreatures(){
+    var creatures = $(".playerField .defenseField .creature");
 
-    function organizeCreatures() {
-        $('.defenseField,.atackField').each(function () {
-            var creatures = $(this).find('.creature');
+    var countTotal = creatures.length;
+    var totalSpace = 150 * countTotal;
+    var spaceForEach = totalSpace / countTotal;
 
-            var countTotal = creatures.length;
-            var totalSpace = 150 * countTotal;
-            var spaceForEach = totalSpace / countTotal;
+    var countAtual = creatures.length;
+    
+    var space = -((countAtual / 2) * spaceForEach);
 
-            var countAtual = creatures.length;
+    creatures.each(function(){
+        $(this).css('margin-left',space + 'px');
 
-            var space = -((countAtual / 2) * spaceForEach);
+        space = space + spaceForEach;
+    });
+}
 
-            creatures.each(function () {
-                $(this).css('margin-left', space + 'px');
+function buildCreatureHtml(creature) {
+    var creatureHtml = "<div class='creature' data-id=" + creature.id + " style='opacity: 0; transform: scale(2); background-image:" + creature.image + "'>";
+    creatureHtml += "<div class='fieldAttribute atk'>" + creature.atk + "</div>";
+    creatureHtml += "<div class='fieldAttribute def'>" + creature.def + "</div>";
+    creatureHtml += "</div>";
 
-                space = space + spaceForEach;
-            });
-        });
+    return $(creatureHtml);
+}
+=======
     }
 
     function buildCreatureHtml(creature) {
-        var creatureHtml = "<div class='creature' data-id=" + creature.id + " style='opacity: 0; transform: scale(2); background-image:" + creature.image + "'>";
+        var creatureHtml = "<div class='creature' data-id=" + creature.id + " style='background-image:" + creature.image + "'>";
         creatureHtml += "<div class='fieldAttribute atk'>" + creature.atk + "</div>";
         creatureHtml += "<div class='fieldAttribute def'>" + creature.def + "</div>";
         creatureHtml += "</div>";
+>>>>>>> b2be12acb88a40d2a631b5dc0ff5eda11930f47b
 
-        return $(creatureHtml);
+        return creatureHtml;
     }
 
     function finishAttack() {
@@ -172,15 +217,12 @@
         var attackIds = [];
 
         attackers.each(function (i, obj) {
-            attackIds.push(parseInt($(obj).attr("data-id")));
+            attackIds.push($(obj).attr("data-id"));
         });
 
         $.ajax({
             url: "@Url.Action("chooseattackers","battle")",
             data: JSON.stringify({ cardIds: attackIds }),
-            type: "POST",
-            contentType: "application/json",
-            traditional: true,
             success: function (result) {
                 if (result == 1) {
                     player.turnPhase = 3;//todo wait for defense;
@@ -194,12 +236,10 @@
     function attack(id) {
         var targetid = id != undefined ? id : $(".modalMenu").data("target");
         var creature = $(".creature[data-id=" + targetid + "]");
-        var isFieldAttack = creature.parent().hasClass("atackField");
-        if (isFieldAttack) {
-            creature.addClass("used");
-        }
-        else {
-            forward(targetid, true);
+        if (forward(targetid, true)) {
+            //creature.addClass("used");
+            //put code on foward success block.
+            //If you find a way to put it back here it would be welcome 
         }
     }
     function forward(id, isAttack) {
@@ -232,7 +272,7 @@
 
 
         $.ajax({
-            url: "@Url.Action("MoveCardToDefenseField", "battle")",
+            url: "@Url.Action("movecardtodefensevield","battle")",
             data: { cardId: targetid },
             success: function (result) {
                 if (result == 1) {
@@ -246,167 +286,6 @@
         });
     }
 
-    function createDefenseMatch(atkId) {
-        if (defenseSelect == 0 || defenseSelect == undefined || defenseSelect == null)
-            return;
-        var hasMatch = false;
-        var atkCreature = $(".creature[data-id=" + atkId + "]");
-        var match = {
-            atkCardId: 0,
-            defCardIds: []
-        }
-
-
-
-        $(defenseMatchUps).each(function (i, obj) {
-            if (obj.defCardIds[0] == defenseSelect || obj.defCardIds[1] == defenseSelect) {
-                var tempAttaker = $(".creature[data-id=" + obj.atk + "]")
-                if (obj.defCardIds.length == 1) {
-                    tempAttaker.removeClass("defended");
-                    defenseMatchUps.splice(i, 1);
-                }
-                else {
-                    if (obj.defCardIds[0] == defenseSelect)
-                        obj.defCardIds.splice(0, 1);
-                    else
-                        obj.defCardIds.pop();
-
-                    tempAttaker.removeClass("doubleDefended");
-                    tempAttaker.addClass("defended");
-                }
-            }
-        });
-        $(defenseMatchUps).each(function (i, obj) {
-            if (obj.atkCardId == atkId) {
-                hasMatch = true;
-                if (obj.defCardIds.length < 2)
-                    obj.defCardIds.push(defenseSelect);
-            }
-        });
-
-        if (!hasMatch) {
-            match.atkCardId = atkId;
-            match.defCardIds.push(defenseSelect);
-            defenseMatchUps.push(match);
-        }
-
-
-
-        $(".creature[data-id=" + defenseSelect + "]").addClass("defending");
-        if (hasMatch) {
-            atkCreature.removeClass("defended");
-            atkCreature.addClass("doubleDefended");
-        }
-        else {
-            atkCreature.addClass("defended");
-        }
-
-
-        defenseSelect = 0;
-
-    }
-
-
-    function setDirectHit(id) {
-        $.ajax({
-            url: "@Url.Action("DirectHit", "battle")",
-            data: { atkCardId: id }
-        });
-    }
-
-
-    function finishDefense() {
-        $(".creature.used").each(function (i, objCreature) {
-            if (defenseMatchUps == null)
-                defenseMatchUps = [];
-
-
-
-            var hasDefense = false;
-            var id = $(objCreature).attr("data-id");
-            $(defenseMatchUps).each(function (i, obj) {
-                if (obj.atkCardId == id)
-                    hasDefense = true;
-            });
-            if (!hasDefense) {
-                defenseMatchUps.push({
-                    atkCardId: id,
-                    defCardIds: [0]
-                });
-            }
-
-
-        });
-
-        $(defenseMatchUps).each(function (i, obj) {
-            $.ajax({
-                url: "@Url.Action("ChooseDefenders", "battle")",
-                data: JSON.stringify(obj),
-                contentType: "application/json",
-                traditional: true,
-                type: "POST",
-                success: function (result) {
-                    var atkCreature = $(".creature[data-id=" + result.atkId + "]");
-                    if (result.atkIsDead)
-                        atkCreature.remove();
-                    else {
-                        atkCreature.find(".def").html(result.atkLife);
-                    }
-                    for (var j = 0; j < result.defIds.length; j++) {
-                        var objId = result.defIds[j];
-                        if (objId != 0) {
-                            var defCreature = $(".creature[data-id=" + objId + "]");
-                            if (result.defIsDead[j])
-                                defCreature.remove();
-                            else {
-                                defCreature.find(".def").html(result.defLife[j]);
-                            }
-                        }
-
-                    }
-
-                    if (i == defenseMatchUps.length - 1) {
-                        endTurn();
-                    }
-                },
-                error: function (data) {
-                    console.log(data);
-                    alert(data + "ERROR");
-                    endTurn();
-                }
-            });
-        })
-
-        if (defenseMatchUps.length <= 0) {
-            setTimeout(function () {
-                updatePlayerLife();
-            }, 6000);
-        }
-    }
-
-    function updatePlayerLife() {
-        $.ajax({
-            url: "@Url.Action("GetPlayerLifes", "battle")",
-            type: "POST",
-            success: function (result) {
-                $(".player1 .playerLifeBar").html(result.computer);
-                $(".player2 .playerLifeBar").html(result.player);
-            }
-        });
-    }
-
-    function updatePlayerMana() {
-        $.ajax({
-            url: "@Url.Action("GetPlayerMana", "battle")",
-            type: "POST",
-            success: function (result) {
-                $(".player1 .playerManaBar").html(result.computer);
-                $(".player2 .playerManaBar").html(result.player);
-            }
-        });
-    }
-
-
     function computerAttack(attackers) {
         $(attackers).each(function (i, obj) {
             $(".creature[data-id=" + obj.Id + "]").addClass("used")
@@ -415,43 +294,27 @@
     }
     function putComputerCards(data) {
         $(data).each(function (i, obj) {
-            var creatureObj = buildCreatureHtml({
+            var html = buildCreatureHtml({
                 id: obj.Id,
                 atk: obj.Ataque,
                 def: obj.Defesa,
                 image: 'url("@Url.Content("~/images/cartas/")' + obj.Id.toString() + '.jpg")'
             });
-            $(".computerField .defenseField").append(creatureObj);
-            setTimeout(function () {
-                creatureObj.css('transform', 'scale(1)');
-                creatureObj.css('opacity', '1');
-                organizeCreatures(".computerField");
-            }, 500)
+            $(".computerField .defenseField").append(html);
         });
     }
     function computerFoward(id) {
         var creature = $(".creature[data-id=" + id + "]");
         $(".computerField .atackField").append(creature);
-        organizeCreatures(".computerField");
     }
     function computerRetreat(id) {
         var creature = $(".creature[data-id=" + id + "]");
         $(".computerField .defenseField").append(creature);
     }
-    function endTurn() {
-        defenseMatchUps = [];
-        defenseSelect = 0;
-
-        $(".creature").removeClass("used");
-        $(".creature").removeClass("defended");
-        $(".creature").removeClass("defending");
-        $(".creature").removeClass("doubleDefended");
-
-        updatePlayerLife();
-        updatePlayerMana();
+    function endCpuTurn() {
         //EndComputerTurn
         $.ajax({
-            url: "@Url.Action("EndTurn", "battle")",
+            url: "@Url.Action("endcomputerturn","battle")",
             success: function (result) {
                 player.isDefenseSet = false;
                 player.turnPhase = 1;
@@ -467,9 +330,6 @@
 
         var flipTimer = 500;
         var cardLeft = 200;
-
-        organizeCreatures(".computerField");
-        organizeCreatures(".playerField");
 
         $('.cardFlip').each(function () {
             var card = $(this);
@@ -494,6 +354,8 @@
 
         $(".playerField").click(function (ev) {
             var src = $(ev.srcElement);
+
+            debug = src;
             var posX = ev.pageX;
             var posY = ev.pageY;
 
@@ -505,35 +367,15 @@
             }
 
             var menuType = src.parent().hasClass("defenseField") ? "jsDef" : "jsAtk";
-            if (!player.isDefenseSet)
-                showMenu(posX, posY, src.attr("data-id"), menuType);
-            else if (player.isDefenseSet && menuType == "jsDef") {
-                defenseSelect = src.attr("data-id");
-            }
+            showMenu(posX, posY, src.attr("data-id"), menuType);
 
         });
-        $(".computerField .atackField").click(function (ev) {
-            if (!player.isDefenseSet)
-                return;
-
-            var src = $(ev.srcElement);
-            while (!src.hasClass("creature")) {
-                src = src.parent();
-                if (src.html() == 'null' || src.html() == null || src == null)
-                    return;
-            }
-            createDefenseMatch(src.attr("data-id"));
-
-        })
 
         $(".modalMenu li").click(function () {
             hideMenu();
         });
         $(".finishButton").click(function () {
             finishAttack();
-        });
-        $(".finishDefenseButton").click(function () {
-            finishDefense();
         });
 
         $(".playerHand").click(function (ev) {
@@ -552,13 +394,8 @@
         });
 
         setInterval(function () {
-            if ((player.isTurn && player.turnPhase <= 2) || player.isDefenseSet)
+            if (player.isTurn && (player.turnPhase > 2 && !player.isTurn))
                 return;
-
-            if (wait)
-                return;
-
-            wait = true;
 
             $.ajax({
                 url: "@Url.Action("verifyphase","battle")",
@@ -570,27 +407,8 @@
                     if (result.isYourTurn) {
                         switch (result.phase) {
                             case 1:
-                                updatePlayerMana();
-                                updatePlayerLife();
                                 showTitle('SEU TURNO');
                                 drawCard();
-                                break;
-                            case 4:
-                                var atkDefList = $.parseJSON(result.data);
-                                var defaultInterval = 1000;
-                                $(atkDefList).each(function (i, obj) {
-                                    setTimeout(function () {
-                                        defenseSelect = obj.defCardId;
-                                        createDefenseMatch(obj.atkCardId);
-                                        if (i == atkDefList.length - 1) {
-                                            finishDefense();
-                                        }
-                                    }, defaultInterval * i);
-                                });
-                                if (atkDefList.length == 0) {
-                                    finishDefense();
-                                }
-                                break;
                             default:
                                 break;
                         }
@@ -604,7 +422,7 @@
                                 var attakers = $.parseJSON(result.data);
 
                                 if (attakers.length == 0) {
-                                    endTurn();
+                                    endCpuTurn();
                                 }
                                 else {
                                     computerAttack(attakers);
@@ -615,7 +433,6 @@
                                 break;
                         }
                     }
-                    wait = false;
                 },
                 error: function (result) {
 

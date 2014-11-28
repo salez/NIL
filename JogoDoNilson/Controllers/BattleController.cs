@@ -178,6 +178,8 @@ namespace JogoDoNilson.Controllers
 
                 battle.Turn.SetAttackers(cards);
                 battle.EndPhase();
+                var ai = new AIPlayer(battle.player1, battle);
+                ai.PrepareDefense(cardIds);
             }
             else
             {
@@ -187,27 +189,44 @@ namespace JogoDoNilson.Controllers
             return 1;
         }
 
-        public int ChooseDefenders(int atkCardId, int[] defCardIds)
+
+        //Original Returns Int
+        public JsonResult ChooseDefenders(int atkCardId, int[] defCardIds)
         {
             GameEngine engine = new GameEngine(Session);
 
             Battle battle = engine.Battle;
             Player atkPlayer = battle.Turn.Player;
             Player defPlayer = (battle.Turn.Player == battle.player1) ? battle.player2 : battle.player1;
-            
 
-            if (defPlayer.IsAIControlled || defCardIds.Count() > 2)
-                return 0;
+
+            if (defCardIds.Count() > 2)
+                return null;
 
             if (battle.Phase != BattlePhase.Defense)
-                return 0;
+                return null;
 
             //todo: deffend cards
             Carta atkCard = battle.Turn.Atackers.First(x => x.Id == atkCardId);
 
+            if (defCardIds[0] == 0)
+            {
+                DirectHit(atkCardId);
+                return Json(new
+                {
+                    atkId = atkCard.Id,
+                    atkIsDead = atkCard.IsDead,
+                    atkLife = atkCard.Defesa,
+                    defIds = 0,
+                    defIsDead = true,
+                    defLife = 0
+                });
+            }
+
             List<Carta> defCards = defPlayer.ChooseDefenders(defCardIds);
 
             BattleFight battleFight = new BattleFight(atkCard, defCards);
+            var result = battleFight.Result;
 
             if (atkCard.IsDead)
             {
@@ -218,25 +237,68 @@ namespace JogoDoNilson.Controllers
             foreach (var defCard in defCards)
             {
                 if (defCard.IsDead)
+                {
                     defPlayer.Graveyard.Add(defCard);
-
-                defPlayer.DefenseField.Remove(defCard);
+                    defPlayer.DefenseField.Remove(defCard);
+                }
             }
-
+            defPlayer.Life -= result.PlayerLifeDamage;
             //todo: battleResult
-            var result = battleFight.Result;
 
-            return 1;
+
+            return Json(new
+            {
+                atkId = result.Atacker.Id,
+                atkIsDead = result.Atacker.IsDead,
+                atkLife = result.Atacker.Defesa,
+                defIds = result.Defender.Select(x => x.Id),
+                defIsDead = result.Defender.Select(x => x.IsDead),
+                defLife = result.Defender.Select(x => x.Defesa)
+            });
+        }
+        public void DirectHit(int atkCardId)
+        {
+            GameEngine engine = new GameEngine(Session);
+
+            Battle battle = engine.Battle;
+            Player atkPlayer = battle.Turn.Player;
+            Player defPlayer = (battle.Turn.Player == battle.player1) ? battle.player2 : battle.player1;
+
+            Carta atkCard = battle.Turn.Atackers.First(x => x.Id == atkCardId);
+
+            defPlayer.Life -= atkCard.Ataque;
+
         }
 
+        public JsonResult GetPlayerLifes()
+        {
+            GameEngine engine = new GameEngine(Session);
 
-        public void EndComputerTurn()
+
+            return Json(new
+            {
+                computer = engine.PlayerOne.Life,
+                player = engine.PlayerTwo.Life
+            });
+        }
+
+        public JsonResult GetPlayerMana()
+        {
+
+            GameEngine engine = new GameEngine(Session);
+
+
+            return Json(new
+            {
+                computer = engine.PlayerOne.ManaCurrent,
+                player = engine.PlayerTwo.ManaCurrent
+            });
+        }
+
+        public void EndTurn()
         {
             GameEngine g = new GameEngine(Session);
-            if (g.Battle.Turn.Player.IsAIControlled)
-            {
-                g.Battle.EndTurn();
-            }
+            g.Battle.EndTurn();
         }
 
         public JsonResult VerifyPhase()
@@ -248,14 +310,27 @@ namespace JogoDoNilson.Controllers
 
             if (player.IsAIControlled)
             {
-                var notification = player.RetrieveFirstNotification();
-
-                return Json(new
+                var notification = engine.PlayerOne.RetrieveFirstNotification();
+                var result = Json(new
                 {
                     phase = notification.Key,
-                    isYourTurn = false,
+                    isYourTurn = player == engine.PlayerTwo,
                     data = notification.Value
                 });
+
+
+                return result;
+            }
+            else if (!player.IsAIControlled && battle.Phase == BattlePhase.Defense)
+            {
+                var notification = engine.PlayerOne.RetrieveFirstNotification(battle.Phase);
+                var result = Json(new
+                {
+                    phase = notification.Key,
+                    isYourTurn = player == engine.PlayerTwo,
+                    data = notification.Value
+                });
+                return result;
             }
             else
             {

@@ -163,7 +163,20 @@
     box-shadow: 0px 0px 15px 5px rgba(255, 255, 190, .75);
 }
 
-.cardWrapper {
+.playerField .cardWrapper {
+    display: block;
+    /*disabling the translucent black bg on the main image*/
+    /*3d space for children*/
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+    transform: scale(0.2, 0.2);
+    transform-origin: bottom center;
+    /*position: absolute;
+    left: 1080px;
+    top: 119px;*/
+}
+
+.playerHand .cardWrapper {
     display: block;
     /*disabling the translucent black bg on the main image*/
     /*3d space for children*/
@@ -176,7 +189,7 @@
     top: 119px;
 }
 
-    .cardWrapper:hover {
+    .playerHand .cardWrapper:hover {
         display: block;
         /*disabling the translucent black bg on the main image*/
         /*3d space for children*/
@@ -185,6 +198,17 @@
         transform: scale(0.7, 0.7) translate(0,-70px);
         z-index: 100 !important;
         position: absolute;
+    }
+    
+    .creature
+    {
+        transition: all 0.5s;
+        position: absolute;
+    }
+    
+    .creature:hover
+    {
+        transform: scale(1.5, 1.5) !important;
     }
 
 .modalMenu {
@@ -210,12 +234,12 @@
     }
 
 .field .creature {
-    width: 50px;
-    height: 50px;
-    border-radius: 40%;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
     background: no-repeat center;
     background-size: cover;
-    margin: 25px;
+    margin: 5px;
     display: inline-block;
 }
 
@@ -223,9 +247,22 @@
         -webkit-box-shadow: 0 0 20px 5px #9C880B;
         box-shadow: 0 0 20px 5px #9C880B;
     }
+    .field .creature.defending {
+        -webkit-box-shadow: 0 0 20px 5px #6AAD99;
+        box-shadow: 0 0 20px 5px #6AAD99;
+    }
+    .field .creature.defended {
+        -webkit-box-shadow: 0 0 20px 5px #A6430D;
+        box-shadow: 0 0 20px 5px #A6430D;
+    }
+
+    .field .creature.doubleDefended {
+        -webkit-box-shadow: 0 0 20px 5px #000;
+        box-shadow: 0 0 20px 5px #000;
+    }
 
     .field .creature .fieldAttribute {
-        width: 25px;
+        width: 40px;
         height: 25px;
         position: relative;
         border-radius: 50%;
@@ -233,8 +270,10 @@
         float: left;
         text-align: center;
         vertical-align: middle;
-        bottom: -40px;
+        bottom: -65px;
         color: white;
+        /* font-weight: bold; */
+        font-size: 18px;
     }
 
 .creature .fieldAttribute.atk {
