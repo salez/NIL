@@ -124,15 +124,6 @@ C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\Microsoft.Web.WebPages.OAuth.resource
 C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\WebMatrix.WebData.resources.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\obj\Debug\JogoDoNilson.dll
 C:\Projetos\NIL\NIL\JogoDoNilson\obj\Debug\JogoDoNilson.pdb
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.Formatting.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.WebHost.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Net.Http.Formatting.xml
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.xml
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\System.Web.Http.WebHost.xml
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Net.Http.Formatting.resources.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Http.resources.dll
-C:\Projetos\NIL\NIL\JogoDoNilson\bin\pt-br\System.Web.Http.WebHost.resources.dll
 E:\Projects\IA\JogoDoNilson\bin\JogoDoNilson.dll.config
 E:\Projects\IA\JogoDoNilson\bin\JogoDoNilson.dll
 E:\Projects\IA\JogoDoNilson\bin\JogoDoNilson.pdb
@@ -201,3 +192,4 @@ E:\Projects\IA\JogoDoNilson\bin\pt-br\Microsoft.Web.WebPages.OAuth.resources.dll
 E:\Projects\IA\JogoDoNilson\bin\pt-br\WebMatrix.WebData.resources.dll
 E:\Projects\IA\JogoDoNilson\obj\Debug\JogoDoNilson.dll
 E:\Projects\IA\JogoDoNilson\obj\Debug\JogoDoNilson.pdb
+C:\Projetos\NIL\NIL\JogoDoNilson\obj\Debug\JogoDoNilson.csprojResolveAssemblyReference.cache
