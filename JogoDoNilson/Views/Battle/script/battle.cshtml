@@ -232,7 +232,7 @@
 
 
         $.ajax({
-            url: "@Url.Action("movecardtodefensevield","battle")",
+            url: "@Url.Action("MoveCardToDefenseField", "battle")",
             data: { cardId: targetid },
             success: function (result) {
                 if (result == 1) {

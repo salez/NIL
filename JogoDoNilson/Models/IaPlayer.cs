@@ -79,7 +79,7 @@ namespace JogoDoNilson.Models
 
         private List<Carta> PurCardsOnField()
         {
-            var CanDrawCards = this.Player.Hands.Where(x => x.Custo <= this.Player.ManaCurrent).OrderBy(x => x.Custo);
+            var CanDrawCards = this.Player.Hands.Where(x => x.Custo <= this.Player.ManaCurrent).OrderBy(x => (x.Ataque + x.Defesa)/x.Custo);
             List<Carta> DrawCards = new List<Carta>();
 
             for (int i = 0; i < CanDrawCards.Count(); i++)

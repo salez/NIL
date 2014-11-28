@@ -48,7 +48,7 @@ namespace JogoDoNilson.Models
         internal class PlayerSettings
         {
             public static int InitialLife { get { return 1000; } }
-            public static int InitialMana { get { return 20; } }
+            public static int InitialMana { get { return 2; } }
             public static int ManaGrowRate { get { return 1; } }
         }
     }
