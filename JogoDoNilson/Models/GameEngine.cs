@@ -341,8 +341,10 @@ namespace JogoDoNilson.Models
             {
                 this.Player = player1;
             }
-
-            this.Player.ManaTotal++;
+            if (this.Count > 1)
+            {
+                this.Player.ManaTotal++;
+            }
             this.Player.ManaCurrent = this.Player.ManaTotal;
 
             this.IncrementCount();
