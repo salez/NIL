@@ -48,7 +48,6 @@
 
 .battleWrapper {
     width: 1366px;
-    overflow: hidden;
     position: absolute;
     left: 50%;
     margin-left: -683px;
@@ -145,6 +144,18 @@
 	
 }
 
+.field .computerHand {
+    /*border: 3px solid black;
+    position: absolute;*/
+    /*height: 504px;
+    width: 1350px;*/
+    top: 0px;
+    left: 0;
+}
+
+    .field .computerHand .cardWrapper {
+    }
+
 .field .playerHand {
     /*border: 3px solid black;
     position: absolute;*/
@@ -191,6 +202,31 @@
 }
 
     .playerHand .cardWrapper:hover {
+        display: block;
+        /*disabling the translucent black bg on the main image*/
+        /*3d space for children*/
+        transform-style: preserve-3d;
+        transition: all 0.5s;
+        transform: scale(0.7, 0.7) translate(0,-70px);
+        z-index: 100 !important;
+        position: absolute;
+    }
+    
+    
+ .computerHand .cardWrapper {
+    display: block;
+    /*disabling the translucent black bg on the main image*/
+    /*3d space for children*/
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+    transform: scale(0.4, 0.4);
+    transform-origin: bottom center;
+    position: absolute;
+    left: -67px;
+    top: -295px;
+}
+
+    .computerHand .cardWrapper:hover {
         display: block;
         /*disabling the translucent black bg on the main image*/
         /*3d space for children*/

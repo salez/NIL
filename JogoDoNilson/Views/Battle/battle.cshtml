@@ -37,7 +37,21 @@
     </div>
     <div class="field">
         <div class="computerHand">
+            @{
+                int left = 200;
+                int rotate = -10;
+                int zindex = 5;
+            }
+            @foreach (var card in Model.PlayerOne.Hands)
+            {
+                ViewBag.Left = left;
+                ViewBag.ZIndex = zindex--;
 
+                @Html.Partial("card", card)
+
+
+                left = left + 150;
+            }
         </div>
 
         <div class="computerField">
@@ -71,9 +85,9 @@
         <div class="playerHand">
 
             @{
-                int left = 200;
-                int rotate = -10;
-                int zindex = 5;
+                left = 200;
+                rotate = -10;
+                zindex = 5;
             }
             @foreach (var card in Model.PlayerTwo.Hands)
             {
