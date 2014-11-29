@@ -75,7 +75,7 @@
             url: "@Url.Action("drawcard","battle")",
             success: function (result) {
                 $(".playerHand").append(result);
-                var card = $(".cardFlip.flipped");
+                var card = $(".playerHand .cardFlip.flipped");
                 var cardWrapper = card.parent().parent();
                 var left = (($(".playerHand .cardWrapper").length - 1) * 150) + 200;
                 setTimeout(function () {
@@ -87,6 +87,24 @@
             }
         });
     }
+
+
+
+    function computerDrawCard() {
+        var left = 200;
+        var cardHtml = $('#cardSample').html();
+
+        $(".computerHand .cardWrapper").each(function (i, obj) {
+            $(obj).css("left", left + "px");
+            left += 150;
+        });
+
+        $(".computerHand").append(cardHtml);
+        var card = $(".computerHand .cardFlip.flipped");
+        var cardWrapper = card.parent().parent();
+        var left = (($(".computerHand .cardWrapper").length - 1) * 150) + 200;
+    }
+
     function putCard(sender) {
         var card = $(".cardWrapper[data-id=" + $(".modalMenu").data("target") + "]");
         var cost = parseInt(card.find(".custo_num").html());
@@ -499,16 +517,16 @@
             var card = $(this);
             var cardWrapper = card.parent().parent();
 
+            
             setTimeout(function () {
 
                 setTimeout(function () {
                     //card.removeClass('flipped')
-                }, 50
-                );
+                }, 50);
 
-                cardWrapper.css('top', '-400px');
+                cardWrapper.css('top', '-500px');
                 cardWrapper.css('left', cardLeft2 + 'px');
-
+                
                 cardLeft2 = cardLeft2 + 150;
 
             }, flipTimer);

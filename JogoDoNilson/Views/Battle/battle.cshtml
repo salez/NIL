@@ -37,6 +37,7 @@
     </div>
     <div class="field">
         <div class="computerHand">
+            
             @{
                 int left = 200;
                 int rotate = -10;
@@ -149,3 +150,19 @@
 @section Scripts{
     @Scripts.Render("~/Scripts/battle.js");
 }
+
+<div style="display:none;" id="cardSample">
+                <div class="cardWrapper">
+
+                    <section class="cardContainer">
+                      <div class="cardFlip flipped">
+                            <div class="carta front">
+                            </div>
+                            <div class="back">
+                
+                            </div>
+                      </div>
+                    </section>
+    
+                </div>
+            </div>

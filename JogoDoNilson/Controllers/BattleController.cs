@@ -24,7 +24,10 @@ namespace JogoDoNilson.Controllers
             Player player = battle.Turn.Player;
 
             if (player.IsAIControlled)
+            {
+                player.DrawCard();
                 battle.EndTurn();
+            }
 
             return View(engine);
         }
