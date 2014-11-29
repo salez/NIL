@@ -120,10 +120,11 @@ namespace JogoDoNilson.Models
             }
             else
             {
-                int neededDPower = Opponent.AtackField.Max(x => x.Defesa);
+                int neededDPower = (Opponent.AtackField.Count() > 0)?Opponent.AtackField.Max(x => x.Defesa):0;
                 int ExcessOffense = GetMyCardsCount() - GetOpponentCardsCount();
 
-                if (Opponent.DefenseField.Max(x => x.Defesa) > neededDPower)
+                int oponnentMaxDefense = (Opponent.DefenseField.Count() > 0)?Opponent.DefenseField.Max(x => x.Defesa) : 0;
+                if (oponnentMaxDefense > neededDPower)
                     neededDPower = Opponent.DefenseField.Max(x => x.Defesa);
 
                 var DefenseSafetyGroup = AllMyCards.Where(x => x.Ataque >= neededDPower).ToList();
