@@ -58,7 +58,7 @@
         menu.fadeOut();
     }
     function flipCard(left, card, cardWrapper) {
-    
+
         card.removeClass('flipped');
 
         cardWrapper.css('top', '200px');
@@ -96,15 +96,15 @@
 
         $(".computerHand").append(cardHtml);
 
-        setTimeout(function(){
+        setTimeout(function () {
             $(".computerHand .cardWrapper").each(function (i, obj) {
                 $(obj).css("left", left + "px");
                 $(obj).css("top", "-500px");
                 left += 150;
             });
-        },300);
+        }, 300);
 
-        
+
     }
 
     function putCard(sender) {
@@ -237,7 +237,7 @@
                     if (isAttack)
                         $(creature).addClass("used");
 
-                        organizeCreatures(".computerField");
+                    organizeCreatures(".computerField");
                     return true;
                 }
             },
@@ -414,9 +414,9 @@
             type: "POST",
             success: function (result) {
                 $(".player2 .playerLifeBar").html(result.computer);
-                $(".player2 .playerLifeBar").css("width",(result.computer / 5.55) + "px");
+                $(".player2 .playerLifeBar").css("width", (result.computer / 5.55) + "px");
                 $(".player1 .playerLifeBar").html(result.player);
-                $(".player1 .playerLifeBar").css("width",(result.player / 5.55) + "px");
+                $(".player1 .playerLifeBar").css("width", (result.player / 5.55) + "px");
             }
         });
 
@@ -428,12 +428,12 @@
             url: "@Url.Action("GetPlayerLifes", "battle")",
             type: "POST",
             success: function (result) {
-                if(result.player <= 0){
+                if (result.player <= 0) {
                     alert('JOGADOR PERDEU!');
                     location.href = '@Url.Action("loose","battle")';
                 }
 
-                if(result.computer <= 0){
+                if (result.computer <= 0) {
                     alert('JOGADOR VENCEU!');
                     location.href = '@Url.Action("win","battle")';
                 }
@@ -447,9 +447,9 @@
             type: "POST",
             success: function (result) {
                 $(".player2 .playerManaBar").html(result.computer);
-                $(".player2 .playerManaBar").css("width",(result.computer * 10) + "px");
+                $(".player2 .playerManaBar").css("width", (result.computer * 10) + "px");
                 $(".player1 .playerManaBar").html(result.player);
-                $(".player1 .playerManaBar").css("width",(result.player * 10) + "px");
+                $(".player1 .playerManaBar").css("width", (result.player * 10) + "px");
             }
         });
     }
@@ -463,20 +463,26 @@
     }
     function putComputerCards(data) {
         $(data).each(function (i, obj) {
-            var creatureObj = buildCreatureHtml({
-                id: obj.Id,
-                atk: obj.Ataque,
-                def: obj.Defesa,
-                image: 'url("@Url.Content("~/images/cartas/")' + obj.Id.toString() + '.jpg")'
-            });
-            $(".computerField .defenseField").append(creatureObj);
-            setTimeout(function () {
-                creatureObj.css('transform', 'scale(1)');
-                creatureObj.css('opacity', '1');
-                organizeCreatures(".computerField");
-            }, 500);
 
-            $('.computerHand .cardWrapper').last().remove();
+            if ($(".creature[data-id=" + obj.Id + "]").length != 0) {
+                computerRetreat(obj.Id);
+            }
+            else {
+                var creatureObj = buildCreatureHtml({
+                    id: obj.Id,
+                    atk: obj.Ataque,
+                    def: obj.Defesa,
+                    image: 'url("@Url.Content("~/images/cartas/")' + obj.Id.toString() + '.jpg")'
+                });
+                $(".computerField .defenseField").append(creatureObj);
+                setTimeout(function () {
+                    creatureObj.css('transform', 'scale(1)');
+                    creatureObj.css('opacity', '1');
+                    organizeCreatures(".computerField");
+                }, 500);
+
+                $('.computerHand .cardWrapper').last().remove();
+            }
         });
     }
     function computerFoward(id) {
@@ -487,6 +493,7 @@
     function computerRetreat(id) {
         var creature = $(".creature[data-id=" + id + "]");
         $(".computerField .defenseField").append(creature);
+        organizeCreatures(".computerField");
     }
     function endTurn() {
         defenseMatchUps = [];
@@ -500,17 +507,19 @@
         updatePlayerLife();
         updatePlayerMana();
         //EndComputerTurn
-        $.ajax({
-            url: "@Url.Action("EndTurn", "battle")",
-            success: function (result) {
-                player.isDefenseSet = false;
-                player.turnPhase = 1;
-                player.isTurn = false;
-            },
-            error: function (data) {
-                console.log(data);
-            }
-        });
+        setTimeout(function () {
+            $.ajax({
+                url: "@Url.Action("EndTurn", "battle")",
+                success: function (result) {
+                    player.isDefenseSet = false;
+                    player.turnPhase = 1;
+                    player.isTurn = false;
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }, 500);
     }
 
     $(document).ready(function () {
@@ -548,7 +557,7 @@
             var card = $(this);
             var cardWrapper = card.parent().parent();
 
-            
+
             setTimeout(function () {
 
                 setTimeout(function () {
@@ -557,7 +566,7 @@
 
                 cardWrapper.css('top', '-500px');
                 cardWrapper.css('left', cardLeft2 + 'px');
-                
+
                 cardLeft2 = cardLeft2 + 150;
 
             }, flipTimer);
@@ -654,7 +663,7 @@
                                 $('.finishButton').hide();
                                 $('.finishDefenseButton').show();
                                 var atkDefList = $.parseJSON(result.data);
-                                var defaultInterval = 1000;
+                                var defaultInterval = 30;0
                                 $(atkDefList).each(function (i, obj) {
                                     setTimeout(function () {
                                         defenseSelect = obj.defCardId;

@@ -103,19 +103,19 @@ namespace JogoDoNilson.Models
         {
             List<Carta> Attackers = new List<Carta>();
             var minimunSafeLife = this.Opponent.DefenseField.Max(x => x.Ataque);
-            
-                this.Player.DefenseField.ForEach(c =>
-                {
-                    if (c.CanBeMoved && c.Defesa >= minimunSafeLife)
-                    {
-                        Attackers.Add(c);
-                    }
-                });
-                Attackers.AddRange(this.Player.AtackField.Where(x => x.Defesa >= minimunSafeLife));
-            
-           
 
-            
+            this.Player.DefenseField.ForEach(c =>
+            {
+                if (c.CanBeMoved && c.Defesa >= minimunSafeLife)
+                {
+                    Attackers.Add(c);
+                }
+            });
+            Attackers.AddRange(this.Player.AtackField.Where(x => x.Defesa >= minimunSafeLife));
+
+
+
+
 
             return Attackers;
         }
@@ -125,8 +125,14 @@ namespace JogoDoNilson.Models
             var def = Player.DefenseField;
             var atk = this._battle.Turn.Atackers;
             List<int> usedDeffenders = new List<int>();
+            Func<Carta,bool> IsWeak  = c=> {
+                return c.Ataque <= 100 || c.Defesa <= 100;
+            };
+
+            int WeekCardsCount = def.Count(c =>IsWeak(c));
+            
             List<FEBattleMatch> matchUps = new List<FEBattleMatch>();
-            foreach (var _attacker in atk.OrderBy(x => x.Defesa))
+            foreach (var _attacker in atk.OrderByDescending(x => x.Defesa))
             {
                 var defId = 0;
 
@@ -147,7 +153,8 @@ namespace JogoDoNilson.Models
                         scope = (from item in def
                                  where
                                  item.Ataque > _attacker.Defesa &&
-                                 item.Ataque + 50 <= _attacker.Ataque
+                                 item.Ataque + 50 <= _attacker.Ataque && 
+                                 !usedDeffenders.Contains(item.Id)
                                  select item).ToList();
                     }
                     else
@@ -155,9 +162,11 @@ namespace JogoDoNilson.Models
                         scope = (from item in def
                                  where
                                  item.Ataque > _attacker.Defesa &&
-                                 item.Ataque + 50 <= _attacker.Ataque
+                                 !usedDeffenders.Contains(item.Id)
                                  select item).ToList();
                     }
+
+
                     if (scope.Count > 0)
                     {
                         defId = scope.OrderBy(x => x.Ataque).First().Id;
@@ -171,6 +180,14 @@ namespace JogoDoNilson.Models
                     }
                 }
 
+                if (defId == 0 && WeekCardsCount > 0)
+                {
+                    var wrapper = this.Player.DefenseField.FirstOrDefault(x=> IsWeak(x) && 
+                                 !usedDeffenders.Contains(x.Id));
+                    if (wrapper != null)
+                        defId = wrapper.Id;
+                }
+
                 if (defId != 0)
                 {
                     matchUps.Add(new FEBattleMatch()
@@ -181,14 +198,7 @@ namespace JogoDoNilson.Models
                     usedDeffenders.Add(defId);
                 }
             }
-            //while (def.Count > 0 && atk.Count > 0)
-            //{
-            //    matchUps.Add(new FEBattleMatch()
-            //    {
-            //        atkCardId = atk.Pop(),
-            //        defCardId = def.Pop().Id
-            //    });
-            //}
+
             Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(matchUps));
         }
 
