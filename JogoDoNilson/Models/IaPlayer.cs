@@ -110,7 +110,7 @@ namespace JogoDoNilson.Models
                 }
             });
 
-            Attackers.AddRange(this.Player.AtackField);
+            //Attackers.AddRange(this.Player.AtackField);
 
             return Attackers;
         }
