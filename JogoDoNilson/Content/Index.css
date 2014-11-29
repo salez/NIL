@@ -31,7 +31,16 @@ body, #body {
 	height:280px;
 	top: 50%;
 	margin-top: -300px;
+    background: url(../images/nil-logo.png) center center no-repeat;
+    transition: all 4.0s;
+}
+
+.gameNameWrapper.brilho1 {
     background: url(../images/nil-logo2.png) center center no-repeat;
+}
+
+.gameNameWrapper.brilho2 {
+    background: url(../images/nil-logo3.png) center center no-repeat;
 }
 
 .menuWrapper {
@@ -67,9 +76,10 @@ body, #body {
     }
 
     .initialMenu .newGame {
-        background: url(../Images/iniciar-jogo.png) center center no-repeat;
+        background: url(../Images/iniciar-jogo_desat.png) center center no-repeat;
         width: 900px;
         height: 200px;
+        transition: all 1.0s;
     }
     
     .initialMenu .newGame:hover {

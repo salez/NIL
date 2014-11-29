@@ -102,15 +102,20 @@ namespace JogoDoNilson.Models
         public List<Carta> PrepareAttack()
         {
             List<Carta> Attackers = new List<Carta>();
-            this.Player.DefenseField.ForEach(c =>
-            {
-                if (c.CanBeMoved)
+            var minimunSafeLife = this.Opponent.DefenseField.Max(x => x.Ataque);
+            
+                this.Player.DefenseField.ForEach(c =>
                 {
-                    Attackers.Add(c);
-                }
-            });
+                    if (c.CanBeMoved && c.Defesa >= minimunSafeLife)
+                    {
+                        Attackers.Add(c);
+                    }
+                });
+                Attackers.AddRange(this.Player.AtackField.Where(x => x.Defesa >= minimunSafeLife));
+            
+           
 
-            Attackers.AddRange(this.Player.AtackField);
+            
 
             return Attackers;
         }
@@ -156,6 +161,13 @@ namespace JogoDoNilson.Models
                     if (scope.Count > 0)
                     {
                         defId = scope.OrderBy(x => x.Ataque).First().Id;
+                    }
+                    else
+                    {
+                        if (_attacker.Ataque >= 250 || _attacker.Defesa >= 200)
+                        {
+                            defId = this.Player.DefenseField.OrderByDescending(x => x.Ataque).FirstOrDefault().Id;
+                        }
                     }
                 }
 

@@ -1,0 +1,398 @@
+﻿body {
+    position: absolute;
+    background: url(../images/battle/field_background.jpg) center center;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.battleWrapperAbsolute {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+@font-face {
+    font-family: angel;
+    src: url(font/angel.ttf);
+}
+
+.battleTitle 
+{
+    display: none;
+    position: absolute;
+    width: 1400px;
+    height: 400px;
+    overflow: hidden;
+    text-align: center;
+    font-size: 150px;
+    left: 50%;
+    margin-left: -700px;
+    top: 50%;
+    margin-top: -200px;
+    font-family: angel;
+    z-index: 99;
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+    transform: scale(1);
+    transform-origin: center center;
+}
+
+.battleTitle span
+{
+    -webkit-stroke-width: 5.3px;
+   -webkit-stroke-color: #FFFFFF;
+   -webkit-fill-color: #FFFFFF;
+   text-shadow: 1px 0px 20px #fff;
+}
+
+.battleWrapper {
+    width: 1366px;
+    position: absolute;
+    left: 50%;
+    margin-left: -683px;
+    top: 50%;
+    margin-top: -300px;
+    background-image: url(../images/battle/field_background2.png);
+}
+
+.statusPlayer {
+    width: 200px;
+    height: 768px;
+    float: left;
+}
+
+.field {
+    width: 945px;
+    float: left;
+    height: 663px;
+}
+
+
+.statusPlayer .deck {
+    width: 150px;
+    height: 200px;
+    background: red url(../images/battle/card_background.jpg) center center;
+    border-radius: 15px;
+    margin: 10px 10px 10px 30px;
+    border: 3px solid;
+}
+
+
+.statusPlayer .graveyard {
+    width: 150px;
+    height: 200px;
+    /*background: red url(../images/battle/card_background.jpg) center center;*/
+    border: 2px solid gray;
+    background: rgba(0,0,0,0.5);
+    border-radius: 15px;
+    margin: 10px 10px 10px 30px;
+}
+
+.statusPlayer.player1 .status {
+    margin: 200px 0 0 0;
+}
+
+.statusPlayer .status {
+    width: 180px;
+    height: 208px;
+    border-radius: 50%;
+    margin: 10px;
+    background-size: 120% 110% !important;
+    border: 3px solid;
+}
+
+    .statusPlayer .status .playerLifeBar {
+        height: 25px;
+        width: 170px;
+        color: White;
+        font-weight: bold;
+        text-align: right;
+        padding: 0 5px;
+        background-color: Red;
+        line-height: 25px;
+        margin: 150px 0 0 0;
+    }
+
+    .statusPlayer .status .playerManaBar {
+        height: 25px;
+        width: 90px;
+        color: White;
+        font-weight: bold;
+        text-align: right;
+        padding: 0 5px;
+        background-color: blue;
+        line-height: 25px;
+        margin: 0px 0 0 80px;
+    }
+
+.field .computerHand {
+    /*border: 3px solid black;*/
+    height: 50px;
+}
+
+.field .atackField {
+<<<<<<< HEAD
+    height: 110px;
+    border: 1px solid red;
+=======
+    height: 100px;
+    /*border: 1px solid red;*/
+>>>>>>> 27c1cb245c7d29b57f431eca3be35efb25af69a4
+    text-align: center;
+}
+
+.field .defenseField {
+<<<<<<< HEAD
+    height: 110px;
+    border: 1px solid yellow;
+=======
+    height: 100px;
+    
+>>>>>>> 27c1cb245c7d29b57f431eca3be35efb25af69a4
+    text-align: center;
+	
+}
+
+.field .computerHand {
+    /*border: 3px solid black;
+    position: absolute;*/
+    /*height: 504px;
+    width: 1350px;*/
+    top: 0px;
+    left: 0;
+}
+
+    .field .computerHand .cardWrapper {
+    }
+
+.field .playerHand {
+    /*border: 3px solid black;
+    position: absolute;*/
+    /*height: 504px;
+    width: 1350px;*/
+    top: 200px;
+    left: 0;
+}
+
+    .field .playerHand .cardWrapper {
+    }
+
+.carta {
+    perspective: 1000px;
+    -webkit-box-shadow: 0px 0px 15px 5px rgba(255, 255, 190, .75);
+    -moz-box-shadow: 0px 0px 15px 5px rgba(255, 255, 190, .75);
+    box-shadow: 0px 0px 15px 5px rgba(255, 255, 190, .75);
+}
+
+.playerField .cardWrapper {
+    display: block;
+    /*disabling the translucent black bg on the main image*/
+    /*3d space for children*/
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+    transform: scale(0.2, 0.2);
+    transform-origin: bottom center;
+    /*position: absolute;
+    left: 1080px;
+    top: 119px;*/
+}
+
+.playerHand .cardWrapper {
+    display: block;
+    /*disabling the translucent black bg on the main image*/
+    /*3d space for children*/
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+    transform: scale(0.4, 0.4);
+    transform-origin: bottom center;
+    position: absolute;
+    left: 1080px;
+    top: 119px;
+}
+
+    .playerHand .cardWrapper:hover {
+        display: block;
+        /*disabling the translucent black bg on the main image*/
+        /*3d space for children*/
+        transform-style: preserve-3d;
+        transition: all 0.5s;
+        transform: scale(0.7, 0.7) translate(0,-70px);
+        z-index: 100 !important;
+        position: absolute;
+    }
+    
+    
+ .computerHand .cardWrapper {
+    display: block;
+    /*disabling the translucent black bg on the main image*/
+    /*3d space for children*/
+    transform-style: preserve-3d;
+    transition: all 0.5s;
+    transform: scale(0.4, 0.4);
+    transform-origin: bottom center;
+    position: absolute;
+    left: -67px;
+    top: -295px;
+}
+
+    .computerHand .cardWrapper:hover {
+        display: block;
+        /*disabling the translucent black bg on the main image*/
+        /*3d space for children*/
+        transform-style: preserve-3d;
+        transition: all 0.5s;
+        transform: scale(0.7, 0.7) translate(0,-70px);
+        z-index: 100 !important;
+        position: absolute;
+    }
+    
+    .creature
+    {
+        transition: all 0.5s;
+        position: absolute;
+    }
+    
+    .creature:hover
+    {
+        transform: scale(1.5, 1.5) !important;
+    }
+
+.modalMenu {
+    position: absolute;
+    display: none;
+    border-radius: 15px;
+    z-index: 999;
+    width: 150px;
+    background-color: white;
+}
+
+    .modalMenu ul {
+        list-style: none;
+        margin: 0px;
+        padding: 5px;
+        text-align: center;
+    }
+
+    .modalMenu li:hover {
+        background-color: lightsteelblue;
+        border-radius: 15px;
+        cursor: pointer;
+    }
+
+.field .creature {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: no-repeat center;
+    background-size: cover;
+    margin: 5px;
+    display: inline-block;
+}
+
+    .field .creature.used {
+        -webkit-box-shadow: 0 0 20px 5px #9C880B;
+        box-shadow: 0 0 20px 5px #9C880B;
+    }
+    .field .creature.defending {
+        -webkit-box-shadow: 0 0 20px 5px #6AAD99;
+        box-shadow: 0 0 20px 5px #6AAD99;
+    }
+    .field .creature.defended {
+        -webkit-box-shadow: 0 0 20px 5px #A6430D;
+        box-shadow: 0 0 20px 5px #A6430D;
+    }
+
+    .field .creature.doubleDefended {
+        -webkit-box-shadow: 0 0 20px 5px #000;
+        box-shadow: 0 0 20px 5px #000;
+    }
+
+    .field .creature .fieldAttribute {
+        width: 40px;
+        height: 25px;
+        position: relative;
+        border-radius: 50%;
+        color: black;
+        float: left;
+        text-align: center;
+        vertical-align: middle;
+        bottom: -65px;
+        color: white;
+        /* font-weight: bold; */
+        font-size: 18px;
+    }
+
+.creature .fieldAttribute.atk {
+    background-color: darkblue;
+    background: url(ataque.png) no-repeat center;
+    background-size: contain;
+    left: -5px;
+}
+
+.creature .fieldAttribute.def {
+    background-color: firebrick;
+    background: url(escudo.png) no-repeat center;
+    background-size: contain;
+    left: 5px;
+}
+
+
+.finishButton {
+    width: 150px;
+    height: 50px;
+    background: firebrick;
+    vertical-align: middle;
+    text-align: center;
+    padding-top: 27px;
+    margin: 60px 0 60px 30px;
+    color: white;
+    font-weight: 500;
+    background: url(../images/battle/atack_button.png) center center no-repeat;
+    cursor: pointer;
+}
+
+.finishButton:hover {
+    background: url(../images/battle/atack_button_hover.png) center center no-repeat;
+}
+
+.cardContainer {
+    width: 350px;
+    height: 504px;
+    position: relative;
+    perspective: 800px;
+}
+
+.cardFlip {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    transform-style: preserve-3d;
+    transition: transform 1s;
+}
+
+    .cardFlip .front, .cardFlip .back {
+        display: block;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+    .cardFlip .front {
+    }
+
+    .cardFlip .back {
+        transform: rotateY( 180deg );
+        background: black url(../images/battle/card_background.jpg) center center;
+        background-size: 120%;
+        border-radius: 30px;
+        border: 5px solid #333;
+        width: 350px;
+        height: 504px;
+        position: absolute;
+    }
+
+    .cardFlip.flipped {
+        transform: rotateY( 180deg );
+    }
