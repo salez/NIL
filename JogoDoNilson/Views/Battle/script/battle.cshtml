@@ -6,7 +6,7 @@
         isDefenseSet: false
     }
     var defenseSelect;
-
+    var wait = false;
     var defenseMatchUps = [];
 
     function showTitle(title) {
@@ -58,6 +58,7 @@
         menu.fadeOut();
     }
     function flipCard(left, card, cardWrapper) {
+    
         card.removeClass('flipped');
 
         cardWrapper.css('top', '200px');
@@ -139,7 +140,7 @@
     }
 
     function organizeCreatures() {
-        $('.defenseField,.atackField').each(function(){
+        $('.defenseField,.atackField').each(function () {
             var creatures = $(this).find('.creature');
 
             var countTotal = creatures.length;
@@ -172,12 +173,13 @@
         var attackIds = [];
 
         attackers.each(function (i, obj) {
-            attackIds.push($(obj).attr("data-id"));
+            attackIds.push(parseInt($(obj).attr("data-id")));
         });
 
         $.ajax({
             url: "@Url.Action("chooseattackers","battle")",
             data: JSON.stringify({ cardIds: attackIds }),
+            type: "POST",
             contentType: "application/json",
             traditional: true,
             success: function (result) {
@@ -193,10 +195,12 @@
     function attack(id) {
         var targetid = id != undefined ? id : $(".modalMenu").data("target");
         var creature = $(".creature[data-id=" + targetid + "]");
-        if (forward(targetid, true)) {
-            //creature.addClass("used");
-            //put code on foward success block.
-            //If you find a way to put it back here it would be welcome
+        var isFieldAttack = creature.parent().hasClass("atackField");
+        if (isFieldAttack) {
+            creature.addClass("used");
+        }
+        else {
+            forward(targetid, true);
         }
     }
     function forward(id, isAttack) {
@@ -229,7 +233,7 @@
 
 
         $.ajax({
-            url: "@Url.Action("movecardtodefensevield","battle")",
+            url: "@Url.Action("MoveCardToDefenseField", "battle")",
             data: { cardId: targetid },
             success: function (result) {
                 if (result == 1) {
@@ -304,7 +308,7 @@
     }
 
 
-    function setDirectHit(id){
+    function setDirectHit(id) {
         $.ajax({
             url: "@Url.Action("DirectHit", "battle")",
             data: { atkCardId: id }
@@ -314,16 +318,27 @@
 
     function finishDefense() {
         $(".creature.used").each(function (i, objCreature) {
+            if (defenseMatchUps == null)
+                defenseMatchUps = [];
+
+
+
             var hasDefense = false;
             var id = $(objCreature).attr("data-id");
             $(defenseMatchUps).each(function (i, obj) {
                 if (obj.atkCardId == id)
                     hasDefense = true;
             });
-            if (!hasDefense)
-                setDirectHit(id);
-                
-        })
+            if (!hasDefense) {
+                defenseMatchUps.push({
+                    atkCardId: id,
+                    defCardIds: [0]
+                });
+            }
+
+
+        });
+
         $(defenseMatchUps).each(function (i, obj) {
             $.ajax({
                 url: "@Url.Action("ChooseDefenders", "battle")",
@@ -339,23 +354,26 @@
                         atkCreature.find(".def").html(result.atkLife);
                     }
                     for (var j = 0; j < result.defIds.length; j++) {
-                        var obj = result.defIds[j];
-                        var defCreature = $(".creature[data-id=" + obj + "]");
-                        if (result.defIsDead[j])
-                            defCreature.remove();
-                        else {
-                            debug = result;
-                            defCreature.find(".def").html(result.defLife[j]);
+                        var objId = result.defIds[j];
+                        if (objId != 0) {
+                            var defCreature = $(".creature[data-id=" + objId + "]");
+                            if (result.defIsDead[j])
+                                defCreature.remove();
+                            else {
+                                defCreature.find(".def").html(result.defLife[j]);
+                            }
                         }
 
                     }
 
                     if (i == defenseMatchUps.length - 1) {
-                        updatePlayerLife();
+                        endTurn();
                     }
                 },
                 error: function (data) {
                     console.log(data);
+                    alert(data + "ERROR");
+                    endTurn();
                 }
             });
         })
@@ -370,10 +388,21 @@
     function updatePlayerLife() {
         $.ajax({
             url: "@Url.Action("GetPlayerLifes", "battle")",
-            type:"POST",
+            type: "POST",
             success: function (result) {
-                $(".player1 .playerLifeBar").html(result.computer);
-                $(".player2 .playerLifeBar").html(result.player);
+                $(".player2 .playerLifeBar").html(result.computer);
+                $(".player1 .playerLifeBar").html(result.player);
+            }
+        });
+    }
+
+    function updatePlayerMana() {
+        $.ajax({
+            url: "@Url.Action("GetPlayerMana", "battle")",
+            type: "POST",
+            success: function (result) {
+                $(".player2 .playerManaBar").html(result.computer);
+                $(".player1 .playerManaBar").html(result.player);
             }
         });
     }
@@ -404,15 +433,26 @@
     function computerFoward(id) {
         var creature = $(".creature[data-id=" + id + "]");
         $(".computerField .atackField").append(creature);
+        organizeCreatures(".computerField");
     }
     function computerRetreat(id) {
         var creature = $(".creature[data-id=" + id + "]");
         $(".computerField .defenseField").append(creature);
     }
-    function endCpuTurn() {
+    function endTurn() {
+        defenseMatchUps = [];
+        defenseSelect = 0;
+
+        $(".creature").removeClass("used");
+        $(".creature").removeClass("defended");
+        $(".creature").removeClass("defending");
+        $(".creature").removeClass("doubleDefended");
+
+        updatePlayerLife();
+        updatePlayerMana();
         //EndComputerTurn
         $.ajax({
-            url: "@Url.Action("endcomputerturn","battle")",
+            url: "@Url.Action("EndTurn", "battle")",
             success: function (result) {
                 player.isDefenseSet = false;
                 player.turnPhase = 1;
@@ -432,7 +472,7 @@
         organizeCreatures(".computerField");
         organizeCreatures(".playerField");
 
-        $('.cardFlip').each(function () {
+        $('.playerHand .cardFlip').each(function () {
             var card = $(this);
             var cardWrapper = card.parent().parent();
 
@@ -447,6 +487,29 @@
                 cardWrapper.css('left', cardLeft + 'px');
 
                 cardLeft = cardLeft + 150;
+
+            }, flipTimer);
+
+            flipTimer += 300;
+        });
+
+        var cardLeft2 = 200;
+
+        $('.computerHand .cardFlip').each(function () {
+            var card = $(this);
+            var cardWrapper = card.parent().parent();
+
+            setTimeout(function () {
+
+                setTimeout(function () {
+                    //card.removeClass('flipped')
+                }, 50
+                );
+
+                cardWrapper.css('top', '-400px');
+                cardWrapper.css('left', cardLeft2 + 'px');
+
+                cardLeft2 = cardLeft2 + 150;
 
             }, flipTimer);
 
@@ -513,8 +576,13 @@
         });
 
         setInterval(function () {
-            if (player.isTurn && (player.turnPhase > 2 && !player.isTurn))
+            if ((player.isTurn && player.turnPhase <= 2) || player.isDefenseSet)
                 return;
+
+            if (wait)
+                return;
+
+            wait = true;
 
             $.ajax({
                 url: "@Url.Action("verifyphase","battle")",
@@ -526,13 +594,39 @@
                     if (result.isYourTurn) {
                         switch (result.phase) {
                             case 1:
+                                updatePlayerMana();
+                                updatePlayerLife();
                                 showTitle('SEU TURNO');
                                 drawCard();
+                                $('.finishButton').show();
+                                $('.finishDefenseButton').hide();
+                                break;
+                            case 4:
+                                $('.finishButton').hide();
+                                $('.finishDefenseButton').show();
+                                var atkDefList = $.parseJSON(result.data);
+                                var defaultInterval = 1000;
+                                $(atkDefList).each(function (i, obj) {
+                                    setTimeout(function () {
+                                        defenseSelect = obj.defCardId;
+                                        createDefenseMatch(obj.atkCardId);
+                                        if (i == atkDefList.length - 1) {
+                                            finishDefense();
+                                        }
+                                    }, defaultInterval * i);
+                                });
+                                if (atkDefList.length == 0) {
+                                    finishDefense();
+                                }
+                                break;
                             default:
                                 break;
                         }
                     }
                     else {
+                        $('.finishButton').hide();
+                        $('.finishDefenseButton').show();
+
                         switch (result.phase) {
                             case 2:
                                 putComputerCards($.parseJSON(result.data));
@@ -541,23 +635,19 @@
                                 var attakers = $.parseJSON(result.data);
 
                                 if (attakers.length == 0) {
-                                    endCpuTurn();
+                                    endTurn();
                                 }
                                 else {
                                     computerAttack(attakers);
                                     player.isDefenseSet = true;
                                 }
                                 break;
-                            case 5:
-                                defenseMatchUps = $.parseJSON(result.data);
-                                //to do set classes with timeout
-                                finishDefense();
-
-                                break;
                             default:
+
                                 break;
                         }
                     }
+                    wait = false;
                 },
                 error: function (result) {
 

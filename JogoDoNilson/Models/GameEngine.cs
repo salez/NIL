@@ -48,7 +48,7 @@ namespace JogoDoNilson.Models
         internal class PlayerSettings
         {
             public static int InitialLife { get { return 1000; } }
-            public static int InitialMana { get { return 20; } }
+            public static int InitialMana { get { return 2; } }
             public static int ManaGrowRate { get { return 1; } }
         }
     }
@@ -187,15 +187,33 @@ namespace JogoDoNilson.Models
             notifications.Add(Phase, Data);
         }
 
-        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
+        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification(BattlePhase Phase)
         {
-            if (notifications.Count == 0)
+            var scope = notifications.Where(x => x.Key == Phase);
+            if (scope.Count() == 0)
                 return new KeyValuePair<BattlePhase, string>(BattlePhase.Draw, "ERROR");
 
             var notification = notifications.OrderBy(x => x.Key).First();
             notifications.Remove(notification.Key);
             return notification;
         }
+
+        public KeyValuePair<BattlePhase, string> RetrieveFirstNotification()
+        {
+            if (notifications.Count() == 0)
+                return new KeyValuePair<BattlePhase, string>(BattlePhase.Draw, "ERROR");
+
+            var notification = notifications.OrderBy(x => x.Key).First();
+            notifications.Remove(notification.Key);
+            return notification;
+        }
+
+        public void ClearNotificationList()
+        {
+            this.notifications.Clear();
+        }
+
+
     }
 
     public enum BattlePhase
@@ -313,6 +331,8 @@ namespace JogoDoNilson.Models
 
         public void EndTurn(Player player1, Player player2)
         {
+            player1.ClearNotificationList();
+            player2.ClearNotificationList();
             if (this.Player == player1)
             {
                 this.Player = player2;

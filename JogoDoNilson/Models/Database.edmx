@@ -4,19 +4,27 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="JogoDoNilsonModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+    <Schema Namespace="JogoDoNilsonModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/02/edm/ssdl">
+        <EntityContainer Name="JogoDoNilsonModelStoreContainer">
+          <EntitySet Name="jdn_cartas" EntityType="JogoDoNilsonModel.Store.jdn_cartas" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="jdn_ClassificacaoCarta" EntityType="JogoDoNilsonModel.Store.jdn_ClassificacaoCarta" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="FK__jdn_carta__class__182C9B23" Association="JogoDoNilsonModel.Store.FK__jdn_carta__class__182C9B23">
+            <End Role="jdn_ClassificacaoCarta" EntitySet="jdn_ClassificacaoCarta" />
+            <End Role="jdn_cartas" EntitySet="jdn_cartas" />
+          </AssociationSet>
+        </EntityContainer>
         <EntityType Name="jdn_cartas">
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="Nome" Type="varchar" MaxLength="100" Nullable="false" />
+          <Property Name="Id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="Nome" Type="varchar" Nullable="false" MaxLength="100" />
           <Property Name="Custo" Type="int" Nullable="false" />
           <Property Name="Ataque" Type="int" Nullable="false" />
           <Property Name="Defesa" Type="int" Nullable="false" />
           <Property Name="Descricao" Type="varchar" MaxLength="400" />
           <Property Name="Classe" Type="varchar" MaxLength="50" />
-          <Property Name="Raça" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="Raça" Type="varchar" Nullable="false" MaxLength="50" />
           <Property Name="DataInclusao" Type="datetime" Nullable="false" />
           <Property Name="Active" Type="bit" Nullable="false" />
           <Property Name="classificacao" Type="int" Nullable="false" />
@@ -25,12 +33,12 @@
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="nome" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="nome" Type="varchar" Nullable="false" MaxLength="50" />
         </EntityType>
-        <Association Name="FK__jdn_carta__class__4AB81AF0">
-          <End Role="jdn_ClassificacaoCarta" Type="Self.jdn_ClassificacaoCarta" Multiplicity="1" />
-          <End Role="jdn_cartas" Type="Self.jdn_cartas" Multiplicity="*" />
+        <Association Name="FK__jdn_carta__class__182C9B23">
+          <End Role="jdn_ClassificacaoCarta" Type="JogoDoNilsonModel.Store.jdn_ClassificacaoCarta" Multiplicity="1" />
+          <End Role="jdn_cartas" Type="JogoDoNilsonModel.Store.jdn_cartas" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="jdn_ClassificacaoCarta">
               <PropertyRef Name="id" />
@@ -40,14 +48,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="JogoDoNilsonModelStoreContainer">
-          <EntitySet Name="jdn_cartas" EntityType="Self.jdn_cartas" Schema="dbo" store:Type="Tables" />
-          <EntitySet Name="jdn_ClassificacaoCarta" EntityType="Self.jdn_ClassificacaoCarta" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__jdn_carta__class__4AB81AF0" Association="Self.FK__jdn_carta__class__4AB81AF0">
-            <End Role="jdn_ClassificacaoCarta" EntitySet="jdn_ClassificacaoCarta" />
-            <End Role="jdn_cartas" EntitySet="jdn_cartas" />
-          </AssociationSet>
-        </EntityContainer>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
