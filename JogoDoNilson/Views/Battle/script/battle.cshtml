@@ -574,8 +574,12 @@
                                 updatePlayerLife();
                                 showTitle('SEU TURNO');
                                 drawCard();
+                                $('.finishButton').show();
+                                $('.finishDefenseButton').hide();
                                 break;
                             case 4:
+                                $('.finishButton').hide();
+                                $('.finishDefenseButton').show();
                                 var atkDefList = $.parseJSON(result.data);
                                 var defaultInterval = 1000;
                                 $(atkDefList).each(function (i, obj) {
@@ -596,6 +600,9 @@
                         }
                     }
                     else {
+                        $('.finishButton').hide();
+                        $('.finishDefenseButton').show();
+
                         switch (result.phase) {
                             case 2:
                                 putComputerCards($.parseJSON(result.data));
@@ -612,6 +619,7 @@
                                 }
                                 break;
                             default:
+
                                 break;
                         }
                     }

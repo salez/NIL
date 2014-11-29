@@ -25,14 +25,15 @@
             </div>
         </div>
 
-        <div class="status" style="background: url(@Url.Content(Model.PlayerOne.AvatarImage))">
+        <div class="status" style="background: url(@Url.Content(Model.PlayerTwo.AvatarImage))">
             <div class="playerLifeBar">
-                @Model.PlayerOne.Life
+                @Model.PlayerTwo.Life
             </div>
             <div class="playerManaBar">
-                @Model.PlayerOne.ManaCurrent
+                @Model.PlayerTwo.ManaCurrent
             </div>
         </div>
+        
     </div>
     <div class="field">
         <div class="computerHand">
@@ -89,18 +90,20 @@
 
     <div class="statusPlayer player2">
 
-        <div class="status" style="background: url(@Url.Content(Model.PlayerTwo.AvatarImage))">
+        
+        <div class="status" style="background: url(@Url.Content(Model.PlayerOne.AvatarImage))">
             <div class="playerLifeBar">
-                @Model.PlayerTwo.Life
+                @Model.PlayerOne.Life
             </div>
             <div class="playerManaBar">
-                @Model.PlayerTwo.ManaCurrent
+                @Model.PlayerOne.ManaCurrent
             </div>
         </div>
+
         <div class="finishButton">
             Finalizar Ofensiva
         </div>
-        <div class="finishDefenseButton" style="width:100px;height:100px">
+        <div class="finishButton finishDefenseButton" style="display:none;">
             Finalizar Defesa
         </div>
         <div class="deck">
