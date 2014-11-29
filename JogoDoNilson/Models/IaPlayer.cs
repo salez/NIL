@@ -102,17 +102,52 @@ namespace JogoDoNilson.Models
         public List<Carta> PrepareAttack()
         {
             List<Carta> Attackers = new List<Carta>();
+            var AllMyCards = this.Player.AtackField;
+            AllMyCards.AddRange(this.Player.DefenseField);
             var minimunSafeLife = this.Opponent.DefenseField.Max(x => x.Ataque);
-
-            this.Player.DefenseField.ForEach(c =>
+            if (HasLessCardsThanOpponentInField())
             {
-                if (c.CanBeMoved && c.Defesa >= minimunSafeLife)
-                {
-                    Attackers.Add(c);
-                }
-            });
-            Attackers.AddRange(this.Player.AtackField.Where(x => x.Defesa >= minimunSafeLife));
+               
 
+                AllMyCards.ForEach(c =>
+                {
+                    if (c.CanBeMoved && c.Defesa >= minimunSafeLife)
+                    {
+                        Attackers.Add(c);
+                    }
+                });
+                //Attackers.AddRange(this.Player.AtackField.Where(x => x.Defesa >= minimunSafeLife));
+            }
+            else
+            {
+                int neededDPower = Opponent.AtackField.Max(x => x.Defesa);
+                int ExcessOffense = GetMyCardsCount() - GetOpponentCardsCount();
+
+                if (Opponent.DefenseField.Max(x => x.Defesa) > neededDPower)
+                    neededDPower = Opponent.DefenseField.Max(x => x.Defesa);
+
+                var DefenseSafetyGroup = AllMyCards.Where(x => x.Ataque >= neededDPower).ToList();
+                Carta StrongDefender = new Carta();
+                if (DefenseSafetyGroup.Count > 0)
+                {
+                    StrongDefender = DefenseSafetyGroup.OrderBy(x => x.Ataque).First();
+                }
+                AllMyCards.ForEach(c =>
+                {
+                    if (c.CanBeMoved && c.Defesa >= minimunSafeLife && !c.Equals(StrongDefender))
+                    {
+                        Attackers.Add(c);
+                    }
+                });
+                var OrdedByLife = AllMyCards.Where(c => !Attackers.Contains(c) && !c.Equals(StrongDefender)).OrderBy(c => c.Defesa).ToList();
+                var count = 0;
+                while (AllMyCards.Count < (ExcessOffense-count))
+                {
+                    Attackers.Add(OrdedByLife[count]);
+                    count++;
+                }
+                    
+            }
 
 
 
@@ -125,12 +160,13 @@ namespace JogoDoNilson.Models
             var def = Player.DefenseField;
             var atk = this._battle.Turn.Atackers;
             List<int> usedDeffenders = new List<int>();
-            Func<Carta,bool> IsWeak  = c=> {
+            Func<Carta, bool> IsWeak = c =>
+            {
                 return c.Ataque <= 100 || c.Defesa <= 100;
             };
 
-            int WeekCardsCount = def.Count(c =>IsWeak(c));
-            
+            int WeekCardsCount = def.Count(c => IsWeak(c));
+
             List<FEBattleMatch> matchUps = new List<FEBattleMatch>();
             foreach (var _attacker in atk.OrderByDescending(x => x.Defesa))
             {
@@ -153,7 +189,7 @@ namespace JogoDoNilson.Models
                         scope = (from item in def
                                  where
                                  item.Ataque > _attacker.Defesa &&
-                                 item.Ataque + 50 <= _attacker.Ataque && 
+                                 item.Ataque + 50 <= _attacker.Ataque &&
                                  !usedDeffenders.Contains(item.Id)
                                  select item).ToList();
                     }
@@ -182,7 +218,7 @@ namespace JogoDoNilson.Models
 
                 if (defId == 0 && WeekCardsCount > 0)
                 {
-                    var wrapper = this.Player.DefenseField.FirstOrDefault(x=> IsWeak(x) && 
+                    var wrapper = this.Player.DefenseField.FirstOrDefault(x => IsWeak(x) &&
                                  !usedDeffenders.Contains(x.Id));
                     if (wrapper != null)
                         defId = wrapper.Id;
