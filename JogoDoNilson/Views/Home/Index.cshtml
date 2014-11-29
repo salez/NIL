@@ -4,6 +4,63 @@
 @section header{
     <link href="~/Content/Index.css" rel="stylesheet" />
 }
+
+@section scripts{
+    <script>
+        var clickSound = document.getElementById('mdSfxNav');
+        $(document).ready(function () {
+            $(".credits").click(function () {
+                var $CreditsNames = $(".jsCrContentName");
+                var $CreditsImages = $(".jsCrContentImage");
+                var scrollHeight = ($(document).height() + $CreditsNames.height()) * -1;
+                var ImageScroll = (($(document).height() / 2) + ($CreditsImages.height() / 2)) * -1;
+                $(".menuWrapper").fadeOut();
+                $(".bgBlack").fadeIn();
+                $CreditsNames.css("display", "block");
+                $CreditsNames.animate({ top: scrollHeight }, 9000, "linear", function () {
+                    $CreditsImages.css("display", "block");
+                    $CreditsImages.animate({ top: ImageScroll }, 8000, "linear", function () {
+                        setTimeout(function () {
+                            $(".menuWrapper").fadeIn();
+                            $(".bgBlack").fadeOut();
+                            $CreditsNames.css("display", "none");
+                            $CreditsImages.css("display", "none");
+                        }, 4000);
+                    })
+                });
+
+            });
+
+            $(".initialMenu li").click(function () {
+
+                //clickSound.play();
+                var url = $(this).parent().find('a').attr("data-url");
+                setTimeout(function () {
+                    location.replace(url);
+                }, 200);
+            })
+        })
+
+        var brilho = 1;
+
+        setInterval(function () {
+            if (brilho == 1) {
+                $('.gameNameWrapper').addClass('brilho1');
+                $('.gameNameWrapper').removeClass('brilho2');
+                brilho = 2;
+            } else if (brilho == 2) {
+                $('.gameNameWrapper').removeClass('brilho1');
+                $('.gameNameWrapper').addClass('brilho2');
+                brilho = 0;
+            } else {
+                $('.gameNameWrapper').removeClass('brilho1');
+                $('.gameNameWrapper').removeClass('brilho2');
+                brilho = 1;
+            }
+        }, 4200);
+    </script>
+}
+
 <audio autoplay loop>
   <source src="@Url.Content("~/Content/audio/init.mp3")" type="audio/mpeg">
 </audio>
@@ -47,40 +104,3 @@
     <img src="@Url.Content("~/Images/nilsaogames2.png")" />
 </div>
 
-@section scripts{
-    <script>
-        var clickSound = document.getElementById('mdSfxNav');
-        $(document).ready(function () {
-            $(".credits").click(function () {
-                var $CreditsNames = $(".jsCrContentName");
-                var $CreditsImages = $(".jsCrContentImage");
-                var scrollHeight = ($(document).height() + $CreditsNames.height()) * -1;
-                var ImageScroll = (($(document).height() / 2) + ($CreditsImages.height() / 2)) * -1;
-                $(".menuWrapper").fadeOut();
-                $(".bgBlack").fadeIn();
-                $CreditsNames.css("display", "block");
-                $CreditsNames.animate({ top: scrollHeight }, 9000, "linear", function () {
-                    $CreditsImages.css("display", "block");
-                    $CreditsImages.animate({ top: ImageScroll }, 8000, "linear", function () {
-                        setTimeout(function () {
-                            $(".menuWrapper").fadeIn();
-                            $(".bgBlack").fadeOut();
-                            $CreditsNames.css("display", "none");
-                            $CreditsImages.css("display", "none");
-                        }, 4000);
-                    })
-                });
-                
-            });
-
-            $(".initialMenu li").click(function () {
-                
-                //clickSound.play();
-                var url = $(this).parent().find('a').attr("data-url");
-                setTimeout(function () {
-                    location.replace(url);
-                },200);
-            })
-        })
-    </script>
-}
