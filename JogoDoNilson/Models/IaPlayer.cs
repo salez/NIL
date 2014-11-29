@@ -16,6 +16,7 @@ namespace JogoDoNilson.Models
     {
 
         public Player Player { get; private set; }
+        private Player Opponent { get; set; }
         private Battle _battle;
 
         public AIPlayer(Player Player, Battle Engine)
@@ -24,6 +25,11 @@ namespace JogoDoNilson.Models
                 throw new Exception("ERROR");
             this.Player = Player;
             this._battle = Engine;
+
+            if (this.Player == _battle.player1)
+                Opponent = _battle.player2;
+            else
+                Opponent = _battle.player1;
         }
 
 
@@ -32,9 +38,28 @@ namespace JogoDoNilson.Models
             this.Player.DrawCard();
             _battle.EndPhase();
 
+            var AtkCards = PrepareAttack();
+
+            List<Carta> DefensePrep = new List<Carta>();// PurCardsOnField();
+
+            foreach (var card in this.Player.AtackField)
+            {
+                if (!AtkCards.Contains(card))
+                {
+                    DefensePrep.Add(card);
+                }
+            }
+            DefensePrep.ForEach(x =>
+                {
+                    this.Player.AtackField.Remove(x);
+                    this.Player.DefenseField.Add(x);
+                });
+
+
+            DefensePrep.AddRange(PurCardsOnField());
 
             //Basic just to program responses;
-            var FEcreatures = (from item in PurCardsOnField()
+            var FEcreatures = (from item in DefensePrep
                                select new
                                {
                                    item.Id,
@@ -48,7 +73,7 @@ namespace JogoDoNilson.Models
 
             _battle.EndPhase();
 
-            var AtkCards = PrepareAttack();
+            
             var Attackers = (from item in AtkCards
                              select new
                                {
@@ -59,8 +84,19 @@ namespace JogoDoNilson.Models
                                });
 
 
+            MoveAttackerstToAttackField(AtkCards);
+
             _battle.Turn.SetAttackers(AtkCards);
 
+            
+
+            Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(Attackers));
+            _battle.EndPhase();
+
+        }
+
+        private void MoveAttackerstToAttackField(List<Carta> AtkCards)
+        {
             foreach (var item in AtkCards)
             {
                 var idx = Player.DefenseField.IndexOf(item);
@@ -71,10 +107,6 @@ namespace JogoDoNilson.Models
                 }
 
             }
-
-            Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(Attackers));
-            _battle.EndPhase();
-
         }
 
         private List<Carta> PurCardsOnField()
@@ -115,18 +147,66 @@ namespace JogoDoNilson.Models
 
         public void PrepareDefense(IEnumerable<int> Attackers)
         {
-            var def = new Stack<Carta>(Player.DefenseField);
-            var atk = new Stack<int>(Attackers);
+            var def = Player.DefenseField;
+            var atk = this._battle.Turn.Atackers;
+            List<int> usedDeffenders = new List<int>();
             List<FEBattleMatch> matchUps = new List<FEBattleMatch>();
-
-            while (def.Count > 0 && atk.Count > 0)
+            foreach (var _attacker in atk.OrderBy(x => x.Defesa))
             {
-                matchUps.Add(new FEBattleMatch()
+                var defId = 0;
+               
+                var prioritaryD = (from item in def
+                                   where item.Defesa > _attacker.Ataque &&
+                                   item.Ataque > _attacker.Defesa &&
+                                   !usedDeffenders.Contains(item.Id)
+                                   select item).OrderBy(x => x.Defesa).FirstOrDefault();
+                if (prioritaryD != null)
                 {
-                    atkCardId = atk.Pop(),
-                    defCardId = def.Pop().Id
-                });
+                    defId = prioritaryD.Id;
+                }
+                else
+                {
+                    List<Carta> scope = new List<Carta>();
+                    if ((Opponent.AtackField.Count + Opponent.DefenseField.Count) > this.Player.AtackField.Count + this.Player.DefenseField.Count)
+                    {
+                        scope = (from item in def
+                                 where
+                                 item.Ataque > _attacker.Defesa &&
+                                 item.Ataque + 50 <= _attacker.Ataque
+                                 select item).ToList();
+                    }
+                    else
+                    {
+                        scope = (from item in def
+                                 where
+                                 item.Ataque > _attacker.Defesa &&
+                                 item.Ataque + 50 <= _attacker.Ataque
+                                 select item).ToList();
+                    }
+                    if (scope.Count > 0)
+                    {
+                        defId = scope.OrderBy(x => x.Ataque).First().Id;
+                    }
+                }
+
+                if (defId != 0)
+                {
+                    matchUps.Add(new FEBattleMatch()
+                    {
+                        atkCardId = _attacker.Id,
+                        defCardId = defId
+                    });
+                    usedDeffenders.Add(defId);
+                }
             }
+            //while (def.Count > 0 && atk.Count > 0)
+            //{
+            //    matchUps.Add(new FEBattleMatch()
+            //    {
+            //        atkCardId = atk.Pop(),
+            //        defCardId = def.Pop().Id
+            //    });
+            //}
             Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(matchUps));
         }
 
