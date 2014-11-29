@@ -132,13 +132,13 @@
 }
 
 .field .atackField {
-    height: 120px;
+    height: 110px;
     border: 1px solid red;
     text-align: center;
 }
 
 .field .defenseField {
-    height: 120px;
+    height: 110px;
     border: 1px solid yellow;
     text-align: center;
 	
