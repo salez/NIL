@@ -16,6 +16,7 @@ namespace JogoDoNilson.Models
     {
 
         public Player Player { get; private set; }
+        private Player Opponent { get; set; }
         private Battle _battle;
 
         public AIPlayer(Player Player, Battle Engine)
@@ -24,6 +25,11 @@ namespace JogoDoNilson.Models
                 throw new Exception("ERROR");
             this.Player = Player;
             this._battle = Engine;
+
+            if (this.Player == _battle.player1)
+                Opponent = _battle.player2;
+            else
+                Opponent = _battle.player1;
         }
 
 
@@ -32,9 +38,28 @@ namespace JogoDoNilson.Models
             this.Player.DrawCard();
             _battle.EndPhase();
 
+            var AtkCards = PrepareAttack();
+
+            List<Carta> DefensePrep = new List<Carta>();// PurCardsOnField();
+
+            foreach (var card in this.Player.AtackField)
+            {
+                if (!AtkCards.Contains(card))
+                {
+                    DefensePrep.Add(card);
+                }
+            }
+            DefensePrep.ForEach(x =>
+                {
+                    this.Player.AtackField.Remove(x);
+                    this.Player.DefenseField.Add(x);
+                });
+
+
+            DefensePrep.AddRange(PurCardsOnField());
 
             //Basic just to program responses;
-            var FEcreatures = (from item in PurCardsOnField()
+            var FEcreatures = (from item in DefensePrep
                                select new
                                {
                                    item.Id,
@@ -48,7 +73,7 @@ namespace JogoDoNilson.Models
 
             _battle.EndPhase();
 
-            var AtkCards = PrepareAttack();
+
             var Attackers = (from item in AtkCards
                              select new
                                {
@@ -59,43 +84,20 @@ namespace JogoDoNilson.Models
                                });
 
 
+            MoveAttackerstToAttackField(AtkCards);
+
             _battle.Turn.SetAttackers(AtkCards);
 
-            foreach (var item in AtkCards)
-            {
-                var idx = Player.DefenseField.IndexOf(item);
-                if (idx != -1)
-                {
-                    Player.DefenseField.Remove(item);
-                    Player.AtackField.Add(item);
-                }
 
-            }
 
             Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(Attackers));
             _battle.EndPhase();
 
         }
 
-        private List<Carta> PurCardsOnField()
-        {
-            var CanDrawCards = this.Player.Hands.Where(x => x.Custo <= this.Player.ManaCurrent).OrderBy(x => (x.Ataque + x.Defesa)/x.Custo);
-            List<Carta> DrawCards = new List<Carta>();
 
-            for (int i = 0; i < CanDrawCards.Count(); i++)
-            {
-                if (CanDrawCards.Count() <= 0)
-                    break;
-                if (Player.ManaCurrent < CanDrawCards.Max(x => x.Custo))
-                    break;
 
-                var card = CanDrawCards.First();
-                DrawCards.Add(card);
-                Player.PutCardInField(card.Id);
 
-            }
-            return DrawCards;
-        }
 
         public List<Carta> PrepareAttack()
         {
@@ -115,20 +117,121 @@ namespace JogoDoNilson.Models
 
         public void PrepareDefense(IEnumerable<int> Attackers)
         {
-            var def = new Stack<Carta>(Player.DefenseField);
-            var atk = new Stack<int>(Attackers);
+            var def = Player.DefenseField;
+            var atk = this._battle.Turn.Atackers;
+            List<int> usedDeffenders = new List<int>();
             List<FEBattleMatch> matchUps = new List<FEBattleMatch>();
-
-            while (def.Count > 0 && atk.Count > 0)
+            foreach (var _attacker in atk.OrderBy(x => x.Defesa))
             {
-                matchUps.Add(new FEBattleMatch()
+                var defId = 0;
+
+                var prioritaryD = (from item in def
+                                   where item.Defesa > _attacker.Ataque &&
+                                   item.Ataque > _attacker.Defesa &&
+                                   !usedDeffenders.Contains(item.Id)
+                                   select item).OrderBy(x => x.Defesa).FirstOrDefault();
+                if (prioritaryD != null)
                 {
-                    atkCardId = atk.Pop(),
-                    defCardId = def.Pop().Id
-                });
+                    defId = prioritaryD.Id;
+                }
+                else
+                {
+                    List<Carta> scope = new List<Carta>();
+                    if (HasLessCardsThanOpponentInField())
+                    {
+                        scope = (from item in def
+                                 where
+                                 item.Ataque > _attacker.Defesa &&
+                                 item.Ataque + 50 <= _attacker.Ataque
+                                 select item).ToList();
+                    }
+                    else
+                    {
+                        scope = (from item in def
+                                 where
+                                 item.Ataque > _attacker.Defesa &&
+                                 item.Ataque + 50 <= _attacker.Ataque
+                                 select item).ToList();
+                    }
+                    if (scope.Count > 0)
+                    {
+                        defId = scope.OrderBy(x => x.Ataque).First().Id;
+                    }
+                }
+
+                if (defId != 0)
+                {
+                    matchUps.Add(new FEBattleMatch()
+                    {
+                        atkCardId = _attacker.Id,
+                        defCardId = defId
+                    });
+                    usedDeffenders.Add(defId);
+                }
             }
+            //while (def.Count > 0 && atk.Count > 0)
+            //{
+            //    matchUps.Add(new FEBattleMatch()
+            //    {
+            //        atkCardId = atk.Pop(),
+            //        defCardId = def.Pop().Id
+            //    });
+            //}
             Player.AddNotification(_battle.Phase, JsonConvert.SerializeObject(matchUps));
         }
 
+        private List<Carta> PurCardsOnField()
+        {
+            var CanDrawCards = this.Player.Hands.Where(x => x.Custo <= this.Player.ManaCurrent);
+            List<Carta> DrawCards = new List<Carta>();
+
+
+            if (HasLessCardsThanOpponentInField())
+                CanDrawCards.OrderBy(x => x.Custo);
+            else
+                CanDrawCards.OrderBy(x => (x.Ataque + x.Defesa) / x.Custo);
+
+            for (int i = 0; i < CanDrawCards.Count(); i++)
+            {
+                if (CanDrawCards.Count() <= 0)
+                    break;
+                if (Player.ManaCurrent < CanDrawCards.Max(x => x.Custo))
+                    break;
+
+                var card = CanDrawCards.First();
+                DrawCards.Add(card);
+                Player.PutCardInField(card.Id);
+
+            }
+            return DrawCards;
+        }
+
+
+        private bool HasLessCardsThanOpponentInField()
+        {
+            return GetOpponentCardsCount() > GetMyCardsCount();
+        }
+
+        private void MoveAttackerstToAttackField(List<Carta> AtkCards)
+        {
+            foreach (var item in AtkCards)
+            {
+                var idx = Player.DefenseField.IndexOf(item);
+                if (idx != -1)
+                {
+                    Player.DefenseField.Remove(item);
+                    Player.AtackField.Add(item);
+                }
+
+            }
+        }
+        private int GetMyCardsCount()
+        {
+            return this.Player.AtackField.Count + this.Player.DefenseField.Count;
+        }
+        private int GetOpponentCardsCount()
+        {
+            return (Opponent.AtackField.Count + Opponent.DefenseField.Count);
+        }
     }
 }
