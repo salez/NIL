@@ -25,9 +25,10 @@ namespace JogoDoNilson.Controllers
 
             if (player.IsAIControlled)
             {
-                player.DrawCard();
                 battle.EndTurn();
             }
+
+            
 
             return View(engine);
         }
@@ -92,6 +93,10 @@ namespace JogoDoNilson.Controllers
                 return Content("0");
 
             Carta card = player.DrawCard();
+
+            if (card == null)
+                return null;
+
             battle.EndPhase();
             ViewBag.Left = ((player.Hands.Count - 1) * 150) + 200;
             return PartialView("card", card);
@@ -344,6 +349,16 @@ namespace JogoDoNilson.Controllers
                     data = ""
                 });
             }
+        }
+
+        public ActionResult Win()
+        {
+            return View();
+        }
+
+        public ActionResult Loose()
+        {
+            return View();
         }
     }
 }

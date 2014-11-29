@@ -94,15 +94,17 @@
         var left = 200;
         var cardHtml = $('#cardSample').html();
 
-        $(".computerHand .cardWrapper").each(function (i, obj) {
-            $(obj).css("left", left + "px");
-            left += 150;
-        });
-
         $(".computerHand").append(cardHtml);
-        var card = $(".computerHand .cardFlip.flipped");
-        var cardWrapper = card.parent().parent();
-        var left = (($(".computerHand .cardWrapper").length - 1) * 150) + 200;
+
+        setTimeout(function(){
+            $(".computerHand .cardWrapper").each(function (i, obj) {
+                $(obj).css("left", left + "px");
+                $(obj).css("top", "-500px");
+                left += 150;
+            });
+        },300);
+
+        
     }
 
     function putCard(sender) {
@@ -234,6 +236,8 @@
                     $(".playerField .atackField").append(creature);
                     if (isAttack)
                         $(creature).addClass("used");
+
+                        organizeCreatures(".computerField");
                     return true;
                 }
             },
@@ -257,6 +261,7 @@
                 if (result == 1) {
                     creature.removeClass("used");
                     $(".playerField .defenseField").append(creature);
+                    organizeCreatures(".computerField");
                 }
             },
             error: function (data) {
@@ -409,7 +414,29 @@
             type: "POST",
             success: function (result) {
                 $(".player2 .playerLifeBar").html(result.computer);
+                $(".player2 .playerLifeBar").css("width",(result.computer / 5.55) + "px");
                 $(".player1 .playerLifeBar").html(result.player);
+                $(".player1 .playerLifeBar").css("width",(result.player / 5.55) + "px");
+            }
+        });
+
+        verifyPlayerLife();
+    }
+
+    function verifyPlayerLife() {
+        $.ajax({
+            url: "@Url.Action("GetPlayerLifes", "battle")",
+            type: "POST",
+            success: function (result) {
+                if(result.player <= 0){
+                    alert('JOGADOR PERDEU!');
+                    location.href = '@Url.Action("loose","battle")';
+                }
+
+                if(result.computer <= 0){
+                    alert('JOGADOR VENCEU!');
+                    location.href = '@Url.Action("win","battle")';
+                }
             }
         });
     }
@@ -420,7 +447,9 @@
             type: "POST",
             success: function (result) {
                 $(".player2 .playerManaBar").html(result.computer);
+                $(".player2 .playerManaBar").css("width",(result.computer * 10) + "px");
                 $(".player1 .playerManaBar").html(result.player);
+                $(".player1 .playerManaBar").css("width",(result.player * 10) + "px");
             }
         });
     }
@@ -445,7 +474,9 @@
                 creatureObj.css('transform', 'scale(1)');
                 creatureObj.css('opacity', '1');
                 organizeCreatures(".computerField");
-            }, 500)
+            }, 500);
+
+            $('.computerHand .cardWrapper').last().remove();
         });
     }
     function computerFoward(id) {
@@ -647,6 +678,7 @@
 
                         switch (result.phase) {
                             case 2:
+                                computerDrawCard();
                                 putComputerCards($.parseJSON(result.data));
                                 break;
                             case 3:

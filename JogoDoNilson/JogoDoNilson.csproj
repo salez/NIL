@@ -303,6 +303,8 @@
     <Content Include="Views\Battle\card.cshtml" />
     <Content Include="Views\Battle\script\battle.cshtml" />
     <Content Include="Views\Battle\cardField.cshtml" />
+    <Content Include="Views\Battle\loose.cshtml" />
+    <Content Include="Views\Battle\win.cshtml" />
     <None Include="Web.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

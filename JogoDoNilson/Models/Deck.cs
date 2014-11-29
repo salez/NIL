@@ -87,6 +87,9 @@ namespace JogoDoNilson.Models
         /// <returns>Card on top</returns>
         public Carta RetrieveCard()
         {
+            if (_Deck.Count() == 0)
+                return null;
+
             return _Deck.Pop();
         }
         /// <summary>

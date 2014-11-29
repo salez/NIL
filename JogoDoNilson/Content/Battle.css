@@ -112,6 +112,8 @@
         background-color: Red;
         line-height: 25px;
         margin: 150px 0 0 0;
+        float: right;
+        transition: all 0.5s;
     }
 
     .statusPlayer .status .playerManaBar {
@@ -124,6 +126,8 @@
         background-color: blue;
         line-height: 25px;
         margin: 0px 0 0 80px;
+        float: right;
+        transition: all 0.5s;
     }
 
 .field .computerHand {
