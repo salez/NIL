@@ -104,7 +104,15 @@ namespace JogoDoNilson.Models
             List<Carta> Attackers = new List<Carta>();
             var AllMyCards = this.Player.AtackField;
             AllMyCards.AddRange(this.Player.DefenseField);
-            var minimunSafeLife = this.Opponent.DefenseField.Max(x => x.Ataque);
+            var minimunSafeLife = 0;
+            try
+            {
+                this.Opponent.DefenseField.Max(x => x.Ataque);
+            }
+            catch
+            {
+                minimunSafeLife = 0;
+            }
             if (HasLessCardsThanOpponentInField())
             {
                
@@ -144,8 +152,14 @@ namespace JogoDoNilson.Models
                 var count = 0;
                 while (AllMyCards.Count < (ExcessOffense-count))
                 {
-                    Attackers.Add(OrdedByLife[count]);
-                    count++;
+                    try
+                    {
+                        Attackers.Add(OrdedByLife[count]);
+                        count++;
+                    }
+                    catch {
+                        break;
+                    }
                 }
                     
             }
